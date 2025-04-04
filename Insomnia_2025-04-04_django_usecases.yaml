@@ -19,6 +19,91 @@ collection:
           modified: 1727471112323
           sortKey: -1724328075878
         children:
+          - name: Permission
+            meta:
+              id: fld_bc870c3700f5444188ada467b5a33c86
+              created: 1743769680089
+              modified: 1743769847470
+              sortKey: -1709726615339
+            children:
+              - url: "{{ _.URL_V1 }}/admin-only/"
+                name: admin only
+                meta:
+                  id: req_2e04c23b797843f79dea7a66e3af1856
+                  created: 1743769597134
+                  modified: 1743769873855
+                  isPrivate: false
+                  sortKey: -1743769873775
+                method: GET
+                body:
+                  mimeType: application/json
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/8.6.1
+                  - name: Authorization
+                    value: Token {{ _.TOKEN_API_CORE }}
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: "{{ _.URL_V1 }}/user-only/"
+                name: user only
+                meta:
+                  id: req_8d78a760335148748b9aa0ec79911318
+                  created: 1743769605286
+                  modified: 1743769877823
+                  isPrivate: false
+                  sortKey: -1743769873875
+                method: GET
+                body:
+                  mimeType: application/json
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/8.6.1
+                  - name: Authorization
+                    value: Token {{ _.TOKEN_API_CORE }}
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: "{{ _.URL_V1 }}/support-only/"
+                name: support only
+                meta:
+                  id: req_28edb5fe51494b6da69bd379a994d63c
+                  created: 1743769615294
+                  modified: 1743769880183
+                  isPrivate: false
+                  sortKey: -1743769873975
+                method: GET
+                body:
+                  mimeType: application/json
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/8.6.1
+                  - name: Authorization
+                    value: Token {{ _.TOKEN_API_CORE }}
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
           - url: "{{ _.URL_V1 }}/auth-user/"
             name: login
             meta:
