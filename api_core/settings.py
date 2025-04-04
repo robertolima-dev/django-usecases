@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'apps.permissions.apps.PermissionsConfig',
     'apps.chat.apps.ChatConfig',
     'apps.notifications.apps.NotificationsConfig',
+    'apps.auditlog.apps.AuditlogConfig'
 ]
 
 

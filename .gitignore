@@ -138,6 +138,7 @@ GitHub.sublime-settings
 .history
 
 venv.sh
+old_start_server.sh
 
 static/
 

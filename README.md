@@ -1,8 +1,8 @@
 # Projeto Django
 
-## Estudos Avançados com Celery, Concorrência, Filtros, Permissões e WebSocket
+## Estudos Avançados com Celery, Concorrência, Filtros, Permissões, WebSocket e Logs
 
-Este projeto é um repositório de estudos organizados em 6 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
+Este projeto é um repositório de estudos organizados em 7 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
 
 ## 📁 Estrutura dos Apps
 
@@ -38,6 +38,13 @@ Este projeto é um repositório de estudos organizados em 6 apps Django distinto
 - Criação de notificações no banco
 - Broadcast para usuários conectados com grupo `user_<id>`
 - Integração com `course` para envio de novas notificações quando um curso é criado
+
+### `auditlog` - Sistema de Auditoria e Logs de Eventos
+- Captura automaticamente ações de `create`, `update` e `delete`
+- Armazena: usuário, modelo afetado, ID, representação e mudanças
+- Uso de `signals` genéricos e `model_to_dict` com `DjangoJSONEncoder`
+- Visualização somente leitura no Django Admin
+- Ideal para rastreabilidade e conformidade de segurança
 
 ---
 

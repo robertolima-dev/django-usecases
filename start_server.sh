@@ -8,6 +8,14 @@ python manage.py collectstatic --noinput
 echo "Apply database migrations"
 python manage.py migrate
 
-# Start server
-echo "Start server"
-gunicorn --preload --bind :8000 --workers 3 --timeout 900 api_core.wsgi:application
+# Inicia o Daphne (ASGI)
+daphne -b 0.0.0.0 -p 8000 api_core.asgi:application &
+
+# Inicia o Celery Worker
+celery -A api_core worker --loglevel=info &
+
+# (Opcional) Inicia o Celery Beat
+# celery -A api_core beat --loglevel=info &
+
+# Fica em foreground para manter o container vivo
+tail -f /dev/null
