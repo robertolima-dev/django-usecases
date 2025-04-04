@@ -46,6 +46,12 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Visualização somente leitura no Django Admin
 - Ideal para rastreabilidade e conformidade de segurança
 
+### `tenants` - Suporte a Multitenancy (multi-clientes)
+- Model `Tenant` com vínculo a múltiplos usuários
+- Middleware que injeta `request.tenant` automaticamente
+- Mixin `TenantQuerysetMixin` para isolamento por queryset
+- Exemplo de uso com model `Project`, vinculado ao tenant
+
 ---
 
 ## ⚙️ Como rodar o projeto
@@ -172,10 +178,10 @@ wscat -c "ws://localhost:8000/ws/notifications/?token=TOKEN_AQUI"
 ## 📆 Populando dados
 
 ```bash
-python manage.py populate_courses
+python manage.py populate_courses         # Cria 30 cursos aleatórios
+python manage.py populate_tenants         # Cria tenants com usuários
+python manage.py populate_projects        # Cria projetos associados aos tenants
 ```
-
-Cria 30 cursos aleatórios com categorias, tags, instrutores, preços e datas.
 
 ---
 
@@ -197,3 +203,4 @@ Desenvolvido para estudos aprofundados em Django com casos reais e foco em perfo
 - 💼 **LinkedIn**: [Roberto Lima](https://www.linkedin.com/in/roberto-lima-01/)
 - 💼 **Website**: [Roberto Lima](https://robertolima-developer.vercel.app/)
 - 💼 **Gravatar**: [Roberto Lima](https://gravatar.com/deliciouslyautomaticf57dc92af0)
+
