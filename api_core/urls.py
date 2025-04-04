@@ -27,6 +27,9 @@ from apps.book.api.comment.viewsets import CommentViewSet
 from apps.course.api.course.viewsets import CourseViewSet
 from apps.ecommerce.api.order.viewsets import OrderViewSet
 from apps.ecommerce.api.product.viewsets import ProductViewSet
+from apps.permissions.api.permission.viewsets import (AdminOnlyView,
+                                                      SupportOnlyView,
+                                                      UserOnlyView)
 from apps.report.api.report.viewstes import ReportRequestViewSet
 from apps.users.api.auth.viewsets import AuthenticationApiView  # noqa501
 from apps.users.api.auth.viewsets import (ChangePasswordView, ConfirmEmailView,
@@ -124,4 +127,14 @@ urlpatterns.append(
 )
 urlpatterns.append(
     path('api/v1/professional/<int:user_id>/', ProfessionalParamApiView.as_view(), name='professional'), # noqa E501
+)
+
+urlpatterns.append(
+    path("api/v1/admin-only/", AdminOnlyView.as_view(), name='admin-only') # noqa E501
+)
+urlpatterns.append(
+    path("api/v1/user-only/", UserOnlyView.as_view(), name='user-only') # noqa E501
+)
+urlpatterns.append(
+    path("api/v1/support-only/", SupportOnlyView.as_view(), name='support-only') # noqa E501
 )

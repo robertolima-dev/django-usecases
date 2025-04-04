@@ -1,6 +1,6 @@
 # Projeto Django - Estudos Avançados com Celery, Concorrência e Filtros
 
-Este projeto é um repositório de estudos organizados em 4 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
+Este projeto é um repositório de estudos organizados em 5 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
 
 ## 📁 Estrutura dos Apps
 
@@ -23,6 +23,12 @@ Este projeto é um repositório de estudos organizados em 4 apps Django distinto
 - Filtros por textos, datas, números, booleanos, relacionamentos
 - Filtros combináveis e ordenação flexível
 - Integração com `django-filter` + DRF
+
+### `permissions` - Sistema de Permissões por Perfil de Acesso
+- Baseado no campo `access_level` do model `Profile`
+- Permissões com `IsAdmin`, `IsSupport`, `IsUser`, etc.
+- Controle de acesso por papel via DRF (`has_permission`)
+- Pode ser expandido para RBAC ou ACL no futuro
 
 ---
 
@@ -160,3 +166,4 @@ Desenvolvido para estudos aprofundados em Django com casos reais e foco em perfo
 - 💼 **LinkedIn**: [Roberto Lima](https://www.linkedin.com/in/roberto-lima-01/)
 - 💼 **Website**: [Roberto Lima](https://robertolima-developer.vercel.app/)
 - 💼 **Gravatar**: [Roberto Lima](https://gravatar.com/deliciouslyautomaticf57dc92af0)
+

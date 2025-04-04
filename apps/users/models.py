@@ -10,10 +10,8 @@ from django.utils.translation import gettext_lazy as _
 
 ACCESS_LEVEL_CHOICES = (
     ('user', 'user'),
-    ('professional_free', 'professional_free'),
-    ('professional_basic', 'professional_basic'),
-    ('professional_premium', 'professional_premium'),
     ('admin', 'admin'),
+    ('support', 'support'),
     ('super_admin', 'super_admin'),
 )
 

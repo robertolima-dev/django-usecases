@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'apps.ecommerce.apps.EcommerceConfig',
     'apps.report.apps.ReportConfig',
     'apps.course.apps.CourseConfig',
+    'apps.permissions.apps.PermissionsConfig',
 ]
 
 
