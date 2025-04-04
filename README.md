@@ -1,4 +1,8 @@
-# Projeto Django - Estudos Avançados com Celery, Concorrência e Filtros
+# Projeto Django
+
+---
+
+## Estudos Avançados com Celery, Concorrência, Filtros e Permissões
 
 Este projeto é um repositório de estudos organizados em 5 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
 
