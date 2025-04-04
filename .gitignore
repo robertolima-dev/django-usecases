@@ -149,3 +149,5 @@ setup_app.py
 setup_admin.py
 setup_model.py
 setup_basemodel.py
+
+.vscode/

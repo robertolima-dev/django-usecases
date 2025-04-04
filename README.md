@@ -1,8 +1,8 @@
 # Projeto Django
 
-## Estudos Avançados com Celery, Concorrência, Filtros e Permissões
+## Estudos Avançados com Celery, Concorrência, Filtros, Permissões e WebSocket
 
-Este projeto é um repositório de estudos organizados em 5 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
+Este projeto é um repositório de estudos organizados em 6 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
 
 ## 📁 Estrutura dos Apps
 
@@ -25,12 +25,19 @@ Este projeto é um repositório de estudos organizados em 5 apps Django distinto
 - Filtros por textos, datas, números, booleanos, relacionamentos
 - Filtros combináveis e ordenação flexível
 - Integração com `django-filter` + DRF
+- **Notificações em tempo real** quando um novo curso é criado, usando WebSocket
 
 ### `permissions` - Sistema de Permissões por Perfil de Acesso
 - Baseado no campo `access_level` do model `Profile`
 - Permissões com `IsAdmin`, `IsSupport`, `IsUser`, etc.
 - Controle de acesso por papel via DRF (`has_permission`)
 - Pode ser expandido para RBAC ou ACL no futuro
+
+### `notifications` - Notificações em Tempo Real com WebSocket
+- WebSocket com autenticação via token (`/ws/notifications/`)
+- Criação de notificações no banco
+- Broadcast para usuários conectados com grupo `user_<id>`
+- Integração com `course` para envio de novas notificações quando um curso é criado
 
 ---
 
@@ -42,8 +49,14 @@ source .env/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
-python manage.py runserver
 ```
+
+### Rodar com WebSocket (Daphne):
+```bash
+daphne api_core.asgi:application
+```
+
+> O projeto usa Django Channels com ASGI, necessário para WebSockets.
 
 ---
 
@@ -74,7 +87,7 @@ Simular compras simultâneas com ajuste seguro de estoque.
 import threading, requests
 
 def comprar(token):
-    r = requests.post("http://localhost:8000/api/orders/", headers={"Authorization": f"Bearer {token}"}, json={"product_id": 1, "quantity": 1})
+    r = requests.post("http://localhost:8000/api/v1/orders/", headers={"Authorization": f"Bearer {token}"}, json={"product_id": 1, "quantity": 1})
     print(r.status_code, r.json())
 
 threading.Thread(target=comprar, args=(token1,)).start()
@@ -138,6 +151,15 @@ Evite `SerializerMethodField` com queries internas. Use dados pré-carregados ou
 GET /api/courses/?price_min=50&tags=1,3&is_free=false&ordering=-price
 ```
 
+### 🔔 Notificações automáticas:
+Ao criar um curso via `POST /api/courses/`, todos os usuários conectados via `/ws/notifications/` recebem notificações em tempo real com o título do curso!
+
+Utilize o wscat para testar no terminal:
+
+```bash
+wscat -c "ws://localhost:8000/ws/notifications/?token=TOKEN_AQUI"
+```
+
 ---
 
 ## 📆 Populando dados
@@ -151,7 +173,7 @@ Cria 30 cursos aleatórios com categorias, tags, instrutores, preços e datas.
 ---
 
 ## 📄 Utilidade
-Desenvolvido para estudos aprofundados em Django com casos reais e foco em performance, concorrência e boas práticas.
+Desenvolvido para estudos aprofundados em Django com casos reais e foco em performance, concorrência, boas práticas e comunicação em tempo real.
 
 ---
 
@@ -168,4 +190,3 @@ Desenvolvido para estudos aprofundados em Django com casos reais e foco em perfo
 - 💼 **LinkedIn**: [Roberto Lima](https://www.linkedin.com/in/roberto-lima-01/)
 - 💼 **Website**: [Roberto Lima](https://robertolima-developer.vercel.app/)
 - 💼 **Gravatar**: [Roberto Lima](https://gravatar.com/deliciouslyautomaticf57dc92af0)
-

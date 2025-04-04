@@ -34,7 +34,6 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
-    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,12 +47,15 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_summernote',
     'django_select2',
+    "channels",
     'apps.users.apps.UsersConfig',
     'apps.book.apps.BookConfig',
     'apps.ecommerce.apps.EcommerceConfig',
     'apps.report.apps.ReportConfig',
     'apps.course.apps.CourseConfig',
     'apps.permissions.apps.PermissionsConfig',
+    'apps.chat.apps.ChatConfig',
+    'apps.notifications.apps.NotificationsConfig',
 ]
 
 
@@ -72,6 +74,8 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend'] # noqa501
 
+
+ASGI_APPLICATION = "api_core.asgi.application"
 
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True  # False
@@ -119,6 +123,12 @@ TEMPLATES = [
     },
 ]
 
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 WSGI_APPLICATION = "api_core.wsgi.application"
 
