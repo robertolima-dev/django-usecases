@@ -32,6 +32,7 @@ from apps.permissions.api.permission.viewsets import (AdminOnlyView,
                                                       UserOnlyView)
 from apps.report.api.report.viewstes import ReportRequestViewSet
 from apps.tenants.api.project.viewsets import ProjectViewSet
+from apps.throttle.api.viewsets import UploadViewSet
 from apps.users.api.auth.viewsets import AuthenticationApiView  # noqa501
 from apps.users.api.auth.viewsets import (ChangePasswordView, ConfirmEmailView,
                                           CreateUserView, ForgotPasswordView,
@@ -82,6 +83,7 @@ route_api_v1.register(r'products', ProductViewSet, basename='products')  # noqa 
 route_api_v1.register(r'reports', ReportRequestViewSet, basename='reports')  # noqa E501
 route_api_v1.register(r'courses', CourseViewSet, basename='courses')  # noqa E501
 route_api_v1.register(r'projects', ProjectViewSet, basename='projects')  # noqa E501
+route_api_v1.register(r'uploads', UploadViewSet, basename='uploads')  # noqa E501
 
 urlpatterns.append(path("api/v1/", include(route_api_v1.urls)))
 

@@ -15,5 +15,4 @@ class ReportRequestViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         report = serializer.save(user=self.request.user, status="pending")
-        print(report)
         generate_user_report.delay(report.id)

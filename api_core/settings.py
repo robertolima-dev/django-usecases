@@ -58,15 +58,18 @@ INSTALLED_APPS = [
     'apps.notifications.apps.NotificationsConfig',
     'apps.auditlog.apps.AuditlogConfig',
     'apps.tenants.apps.TenantsConfig',
+    'apps.throttle.apps.ThrottleConfig',
 ]
 
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    'apps.throttle.middleware.QuotaMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     'corsheaders.middleware.CorsMiddleware',
@@ -331,7 +334,8 @@ else:
 
     # Static files settings
     STATIC_URL = f'https://{CLOUDFRONT_DOMAIN}/static/'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # noqa501
+    # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = "static"
 
 

@@ -52,6 +52,14 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Mixin `TenantQuerysetMixin` para isolamento por queryset
 - Exemplo de uso com model `Project`, vinculado ao tenant
 
+### `throttle` - Sistema de Cotas e Limites por Usuário (Rate Limiting)
+- Criação de cotas de uso por tipo de ação (ex: `upload`)
+- Validação automática via `middleware`
+- Armazena consumo diário em `UserQuota`
+- Middleware consulta e bloqueia se limite for atingido
+- Customização por tipo de ação, quantidade e reset diário
+- Exemplo prático: limitar uploads por usuário autenticado
+
 ---
 
 ## ⚙️ Como rodar o projeto
@@ -147,6 +155,25 @@ Book.objects.all()  # causa N+1
 
 ### Serializer otimizado:
 Evite `SerializerMethodField` com queries internas. Use dados pré-carregados ou `annotate()`.
+
+---
+
+## 📖 App `throttle`: consultas com relacionamentos
+
+```python
+from apps.throttle.utils import check_and_increment_quota
+
+
+class UploadViewSet(ModelViewSet):
+    serializer_class = ReportRequestSerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        # função => check_and_increment_quota(request.user, "upload") 
+        check_and_increment_quota(request.user, "upload")
+        return Response({"message": "Upload feito com sucesso!"}, status=status.HTTP_201_CREATED)
+```
 
 ---
 
