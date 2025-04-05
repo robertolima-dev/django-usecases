@@ -158,7 +158,7 @@ Evite `SerializerMethodField` com queries internas. Use dados pré-carregados ou
 
 ---
 
-## 📖 App `throttle`: consultas com relacionamentos
+## 📖 App `throttle`: limites de requeisições
 
 ```python
 from apps.throttle.utils import check_and_increment_quota
