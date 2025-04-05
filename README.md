@@ -1,6 +1,6 @@
 # Projeto Django
 
-## Estudos Avançados com Celery, Concorrência, Filtros, Permissões, WebSocket e Logs
+## Estudos Avançados com Celery, Concorrência, Filtros, Permissões, WebSocket, Logs e throttle
 
 Este projeto é um repositório de estudos organizados em 7 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
 
