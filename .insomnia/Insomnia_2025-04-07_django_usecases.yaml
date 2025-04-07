@@ -1760,6 +1760,38 @@ collection:
                 send: true
                 store: true
               rebuildPath: true
+      - name: Presence
+        meta:
+          id: fld_3daa28b972d04ccca172d0450df8433d
+          created: 1744034713991
+          modified: 1744034721800
+          sortKey: -1709907279622.1445
+        children:
+          - url: "{{ _.URL_V1 }}/online-users/"
+            name: list
+            meta:
+              id: req_8f307d9d2e96434684378d09e97ed7d8
+              created: 1744034727220
+              modified: 1744035091011
+              isPrivate: false
+              sortKey: -1744034727220
+            method: GET
+            headers:
+              - name: User-Agent
+                value: insomnia/11.0.0
+                id: pair_1265212d38b146f7ab497a05f14df24e
+              - id: pair_59c45fcd38c5461ea21ca0da3f91c648
+                name: Authorization
+                value: Token {{ _.TOKEN_API_CORE }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
