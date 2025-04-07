@@ -66,6 +66,12 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Customização por tipo de ação, quantidade e reset diário
 - Exemplo prático: limitar uploads por usuário autenticado
 
+### `presence` - Presença Online com WebSocket
+- WebSocket `/ws/presence/`
+- Rastreia usuários online
+- API: `GET /api/v1/online-users/`
+- Model `UserPresence`: `user`, `is_online`, `last_seen`
+
 ---
 
 ## ⚙️ Como rodar o projeto
@@ -197,13 +203,26 @@ class UploadViewSet(ModelViewSet):
 GET /api/courses/?price_min=50&tags=1,3&is_free=false&ordering=-price
 ```
 
+---
+
 ### 🔔 Notificações automáticas:
-Ao criar um curso via `POST /api/courses/`, todos os usuários conectados via `/ws/notifications/` recebem notificações em tempo real com o título do curso!
+Ao criar um curso via `POST /api/v1/courses/`, todos os usuários conectados via `/ws/notifications/` recebem notificações em tempo real com o título do curso!
 
 Utilize o wscat para testar no terminal:
 
 ```bash
 wscat -c "ws://localhost:8000/ws/notifications/?token=TOKEN_AQUI"
+```
+
+---
+
+## 🎓 App `presence`: lista de presença de usuários online
+Uma lista usuários online no `GET /api/v1/online-users/`, todos os usuários conectados via `/ws/presence/` entram numa lista de users online!
+
+Utilize o wscat para conectar um usário:
+
+```bash
+wscat -c "ws://localhost:8000/ws/presence/?token=TOKEN_AQUI"
 ```
 
 ---

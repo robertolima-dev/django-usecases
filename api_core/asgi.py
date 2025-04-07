@@ -28,6 +28,7 @@ from django.core.asgi import get_asgi_application  # noqa
 
 import apps.chat.routing  # noqa
 import apps.notifications.routing  # noqa
+import apps.presence.routing  # noqa
 
 print("[ASGI] Aplicação ASGI iniciada")
 
@@ -36,7 +37,8 @@ application = ProtocolTypeRouter({
     "websocket": AuthMiddlewareStack(
         URLRouter(
             apps.chat.routing.websocket_urlpatterns +
-            apps.notifications.routing.websocket_urlpatterns
+            apps.notifications.routing.websocket_urlpatterns +
+            apps.presence.routing.websocket_urlpatterns
         )
     ),
 })

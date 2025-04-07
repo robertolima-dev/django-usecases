@@ -31,6 +31,7 @@ from apps.notifications.api.notification.viewsets import NotificationViewSet
 from apps.permissions.api.permission.viewsets import (AdminOnlyView,
                                                       SupportOnlyView,
                                                       UserOnlyView)
+from apps.presence.api.presence.viewsets import OnlineUsersView
 from apps.report.api.report.viewstes import ReportRequestViewSet
 from apps.tenants.api.project.viewsets import ProjectViewSet
 from apps.throttle.api.viewsets import UploadViewSet
@@ -143,4 +144,8 @@ urlpatterns.append(
 )
 urlpatterns.append(
     path("api/v1/support-only/", SupportOnlyView.as_view(), name='support-only') # noqa E501
+)
+
+urlpatterns.append(
+    path("api/v1/online-users/", OnlineUsersView.as_view(), name='online-users') # noqa E501
 )

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'apps.auditlog.apps.AuditlogConfig',
     'apps.tenants.apps.TenantsConfig',
     'apps.throttle.apps.ThrottleConfig',
+    'apps.presence.apps.PresenceConfig',
 ]
 
 
