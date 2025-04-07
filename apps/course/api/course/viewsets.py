@@ -27,22 +27,25 @@ class CourseViewSet(ModelViewSet):
     def perform_create(self, serializer):
         course = serializer.save()
 
-        users = User.objects.all()
-        for user in users:
-            Notification.objects.create(
-                user=user,
-                title="Novo Curso Publicado!",
-                message=f"{course.title} já está disponível."
-            )
+        notification = Notification.objects.create(
+            title="Novo Curso Publicado!",
+            message=f"{course.title} já está disponível.",
+            obj_code="platform",
+            obj_id=None,
+        )
 
         channel_layer = get_channel_layer()
-        for user in users:
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        for user in User.objects.all():
             async_to_sync(channel_layer.group_send)(
                 f"user_{user.id}",
                 {
                     "type": "send_notification",
-                    "title": "Novo Curso Publicado!",
-                    "message": f"{course.title} já está disponível.",
-                    "created_at": str(course.created_at)
+                    "title": notification.title,
+                    "message": notification.message,
+                    "created_at": str(notification.created_at),
+                    "obj_code": notification.obj_code,
+                    "obj_id": notification.obj_id,
                 }
             )

@@ -1,11 +1,28 @@
 from django.contrib import admin
 
-from .models import Notification
+from apps.notifications.models import (Notification, UserNotificationDeleted,
+                                       UserNotificationRead)
 
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "title", "is_read", "created_at")
-    list_filter = ("is_read", "created_at")
-    search_fields = ("title", "message", "user__username")
-    ordering = ("-created_at",)
+    list_display = ('id', 'obj_code', 'obj_id', 'message', 'created_at')
+    search_fields = ('message', 'obj_code')
+    list_filter = ('obj_code', 'created_at')
+    ordering = ('-created_at',)
+
+
+@admin.register(UserNotificationRead)
+class UserNotificationReadAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'notification', 'created_at')
+    search_fields = ('user__email', 'notification__message')
+    autocomplete_fields = ('user', 'notification')
+    ordering = ('-created_at',)
+
+
+@admin.register(UserNotificationDeleted)
+class UserNotificationDeletedAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'notification', 'created_at')
+    search_fields = ('user__email', 'notification__message')
+    autocomplete_fields = ('user', 'notification')
+    ordering = ('-created_at',)

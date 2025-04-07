@@ -27,6 +27,7 @@ from apps.book.api.comment.viewsets import CommentViewSet
 from apps.course.api.course.viewsets import CourseViewSet
 from apps.ecommerce.api.order.viewsets import OrderViewSet
 from apps.ecommerce.api.product.viewsets import ProductViewSet
+from apps.notifications.api.notification.viewsets import NotificationViewSet
 from apps.permissions.api.permission.viewsets import (AdminOnlyView,
                                                       SupportOnlyView,
                                                       UserOnlyView)
@@ -84,6 +85,7 @@ route_api_v1.register(r'reports', ReportRequestViewSet, basename='reports')  # n
 route_api_v1.register(r'courses', CourseViewSet, basename='courses')  # noqa E501
 route_api_v1.register(r'projects', ProjectViewSet, basename='projects')  # noqa E501
 route_api_v1.register(r'uploads', UploadViewSet, basename='uploads')  # noqa E501
+route_api_v1.register(r'notifications', NotificationViewSet, basename='notifications')  # noqa E501
 
 urlpatterns.append(path("api/v1/", include(route_api_v1.urls)))
 

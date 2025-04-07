@@ -35,9 +35,15 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 
 ### `notifications` - Notificações em Tempo Real com WebSocket
 - WebSocket com autenticação via token (`/ws/notifications/`)
-- Criação de notificações no banco
-- Broadcast para usuários conectados com grupo `user_<id>`
-- Integração com `course` para envio de novas notificações quando um curso é criado
+- Suporte a **notificações globais** (`obj_code='platform'`, `obj_id=None`) e **individuais** (`obj_code='user'`, `obj_id=user.id`)
+- Broadcast da mensagem para todos os usuários online, mas com **uma única instância persistida**
+- Modelos auxiliares:
+  - `UserNotificationRead`: marca notificações como lidas por usuário
+  - `UserNotificationDeleted`: armazena quais usuários "excluíram" notificações
+- Notificações retornadas já indicam se foram lidas (`read: true/false`) e ocultam as que foram marcadas como excluídas
+- Integração com `course`: ao criar um novo curso, é disparada uma notificação em tempo real
+- Método PATCH para marcar como lida:  
+  `PATCH /api/v1/notifications/<id>/mark-as-read/`
 
 ### `auditlog` - Sistema de Auditoria e Logs de Eventos
 - Captura automaticamente ações de `create`, `update` e `delete`
@@ -230,4 +236,3 @@ Desenvolvido para estudos aprofundados em Django com casos reais e foco em perfo
 - 💼 **LinkedIn**: [Roberto Lima](https://www.linkedin.com/in/roberto-lima-01/)
 - 💼 **Website**: [Roberto Lima](https://robertolima-developer.vercel.app/)
 - 💼 **Gravatar**: [Roberto Lima](https://gravatar.com/deliciouslyautomaticf57dc92af0)
-
