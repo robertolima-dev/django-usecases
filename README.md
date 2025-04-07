@@ -6,10 +6,17 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 
 ## 📁 Estrutura dos Apps
 
-### `book` - Consultas Otimizadas com Relacionamentos
-- Demonstra uso de `select_related` e `prefetch_related`
-- Evita problemas de N+1
-- Usa `SerializerMethodField` com desempenho aprimorado
+### `book` 📚 - Consultas Otimizadas, Comentários e Agregações
+- Modela livros com autor, tags e comentários
+- Usa `select_related`, `prefetch_related` e `annotate` para otimizar queries
+- Permite filtros por título, autor, tags e número de comentários
+- Conta e ordena livros por número de comentários (`comments_count`)
+- Utiliza `SerializerMethodField` apenas quando necessário
+- Comandos para gerar dados fictícios:
+  ```bash
+  python manage.py populate_books       # Cria livros com tags e autores
+  python manage.py populate_comments    # Gera comentários aleatórios
+  ```
 
 ### `ecommerce` - Concorrência e Transações Atômicas
 - Simula checkout com ajuste de estoque seguro
@@ -157,7 +164,26 @@ Gerar relatórios de usuários ativos em background
 
 ### Correto:
 ```python
-Book.objects.select_related("author").prefetch_related("tags", "comments")
+Book.objects.select_related("author").prefetch_related("tags", "comments").annotate(
+    comments_count=Count("comments")
+)
+
+```
+#### Resposta:
+```json
+{
+  "id": 1,
+  "title": "Harry Potter",
+  "author": {
+    "id": 2,
+    "username": "autor"
+  },
+  "tags": [
+    {"id": 1, "name": "Fantasia"},
+    {"id": 2, "name": "Magia"}
+  ],
+  "comments_count": 12
+}
 ```
 
 ### Errado:
@@ -230,6 +256,8 @@ wscat -c "ws://localhost:8000/ws/presence/?token=TOKEN_AQUI"
 ## 📆 Populando dados
 
 ```bash
+python manage.py populate_books
+python manage.py populate_comments
 python manage.py populate_courses         # Cria 30 cursos aleatórios
 python manage.py populate_tenants         # Cria tenants com usuários
 python manage.py populate_projects        # Cria projetos associados aos tenants
@@ -253,5 +281,5 @@ Desenvolvido para estudos aprofundados em Django com casos reais e foco em perfo
 
 - 📧 **Email**: robertolima.izphera@gmail.com
 - 💼 **LinkedIn**: [Roberto Lima](https://www.linkedin.com/in/roberto-lima-01/)
-- 💼 **Website**: [Roberto Lima](https://robertolima-developer.vercel.app/)
-- 💼 **Gravatar**: [Roberto Lima](https://gravatar.com/deliciouslyautomaticf57dc92af0)
+- 🌐 **Website**: [Roberto Lima](https://robertolima-developer.vercel.app/)
+- 👤 **Gravatar**: [Roberto Lima](https://gravatar.com/deliciouslyautomaticf57dc92af0)
