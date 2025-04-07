@@ -79,7 +79,7 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - API: `GET /api/v1/online-users/`
 - Model `UserPresence`: `user`, `is_online`, `last_seen`
 
-### 📊 `dashboard` - Painel Administrativo em Tempo Real
+### `dashboard` - Painel Administrativo em Tempo Real
 - WebSocket com autenticação via token `/ws/dashboard/`
 - Envia dados agregados: total de users, cursos, livros, relatórios
 - Atualiza automaticamente ao criar `user`, `course`, `book`, `report` ou `notification`
