@@ -170,7 +170,7 @@ Evite `SerializerMethodField` com queries internas. Use dados pré-carregados ou
 
 ---
 
-## 📖 App `throttle`: limites de requisições
+## 🚦 App `throttle`: limites de requisições
 
 ```python
 from apps.throttle.utils import check_and_increment_quota
@@ -216,7 +216,7 @@ wscat -c "ws://localhost:8000/ws/notifications/?token=TOKEN_AQUI"
 
 ---
 
-## 🎓 App `presence`: lista de presença de usuários online
+## 👥 App `presence`: lista de presença de usuários online
 Uma lista usuários online no `GET /api/v1/online-users/`, todos os usuários conectados via `/ws/presence/` entram numa lista de users online!
 
 Utilize o wscat para conectar um usário:
