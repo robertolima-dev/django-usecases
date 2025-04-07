@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'apps.tenants.apps.TenantsConfig',
     'apps.throttle.apps.ThrottleConfig',
     'apps.presence.apps.PresenceConfig',
+    'apps.dashboard.apps.DashboardConfig',
 ]
 
 

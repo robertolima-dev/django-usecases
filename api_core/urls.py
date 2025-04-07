@@ -25,6 +25,8 @@ from rest_framework import permissions, routers
 from apps.book.api.book.viewsets import BookViewSet
 from apps.book.api.comment.viewsets import CommentViewSet
 from apps.course.api.course.viewsets import CourseViewSet
+from apps.dashboard.api.broadcast.viewsets import DashboardBroadcastView
+from apps.dashboard.api.dashboard.viewsets import DashboardAPIView
 from apps.ecommerce.api.order.viewsets import OrderViewSet
 from apps.ecommerce.api.product.viewsets import ProductViewSet
 from apps.notifications.api.notification.viewsets import NotificationViewSet
@@ -148,4 +150,12 @@ urlpatterns.append(
 
 urlpatterns.append(
     path("api/v1/online-users/", OnlineUsersView.as_view(), name='online-users') # noqa E501
+)
+
+urlpatterns.append(
+    path("api/v1/dashboard/overview/", DashboardAPIView.as_view(), name="dashboard-overview") # noqa501
+)
+
+urlpatterns.append(
+    path("api/v1/dashboard/broadcast/", DashboardBroadcastView.as_view(), name="dashboard-broadcast") # noqa501
 )

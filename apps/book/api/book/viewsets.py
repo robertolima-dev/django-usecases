@@ -7,6 +7,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from apps.book.api.book.serializers import BookSerializer
 from apps.book.models import Book
+from apps.dashboard.events import send_admin_event
+from apps.dashboard.utils import send_dashboard_data
 
 
 class BookFilterSet(FilterSet):
@@ -39,4 +41,12 @@ class BookViewSet(ModelViewSet):
     ordering = ["-comments_count"]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        book = serializer.save(author=self.request.user)
+
+        send_dashboard_data()
+
+        send_admin_event("book_created", {
+            "id": book.id,
+            "title": book.title,
+            "author": book.author.username,
+        })

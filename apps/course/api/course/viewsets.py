@@ -8,6 +8,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from apps.course.filters import CourseFilter
 from apps.course.models import Course
+from apps.dashboard.events import send_admin_event
+from apps.dashboard.utils import send_dashboard_data
 from apps.notifications.models import Notification
 
 from .serializers import CourseSerializer
@@ -26,6 +28,15 @@ class CourseViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         course = serializer.save()
+
+        send_dashboard_data()
+
+        send_admin_event("course_created", {
+            "id": course.id,
+            "title": course.title,
+            "price": course.price,
+            "created_at": str(course.created_at),
+        })
 
         notification = Notification.objects.create(
             title="Novo Curso Publicado!",

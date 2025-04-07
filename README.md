@@ -41,7 +41,7 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Pode ser expandido para RBAC ou ACL no futuro
 
 ### `notifications` - Notificações em Tempo Real com WebSocket
-- WebSocket com autenticação via token (`/ws/notifications/`)
+- WebSocket com autenticação via token `/ws/notifications/`
 - Suporte a **notificações globais** (`obj_code='platform'`, `obj_id=None`) e **individuais** (`obj_code='user'`, `obj_id=user.id`)
 - Broadcast da mensagem para todos os usuários online, mas com **uma única instância persistida**
 - Modelos auxiliares:
@@ -74,10 +74,16 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Exemplo prático: limitar uploads por usuário autenticado
 
 ### `presence` - Presença Online com WebSocket
-- WebSocket `/ws/presence/`
+- WebSocket com autenticação via token `/ws/presence/`
 - Rastreia usuários online
 - API: `GET /api/v1/online-users/`
 - Model `UserPresence`: `user`, `is_online`, `last_seen`
+
+### 📊 `dashboard` - Painel Administrativo em Tempo Real
+- WebSocket com autenticação via token `/ws/dashboard/`
+- Envia dados agregados: total de users, cursos, livros, relatórios
+- Atualiza automaticamente ao criar `user`, `course`, `book`, `report` ou `notification`
+- Ideal para visualização de métricas sem recarregar a página
 
 ---
 
@@ -162,13 +168,18 @@ Gerar relatórios de usuários ativos em background
 
 ## 📖 App `book`: consultas com relacionamentos
 
+### Errado:
+```python
+Book.objects.all()  # causa N+1
+```
+
 ### Correto:
 ```python
 Book.objects.select_related("author").prefetch_related("tags", "comments").annotate(
     comments_count=Count("comments")
 )
-
 ```
+
 #### Resposta:
 ```json
 {
@@ -184,11 +195,6 @@ Book.objects.select_related("author").prefetch_related("tags", "comments").annot
   ],
   "comments_count": 12
 }
-```
-
-### Errado:
-```python
-Book.objects.all()  # causa N+1
 ```
 
 ### Serializer otimizado:
@@ -232,6 +238,7 @@ GET /api/courses/?price_min=50&tags=1,3&is_free=false&ordering=-price
 ---
 
 ### 🔔 Notificações automáticas:
+
 Ao criar um curso via `POST /api/v1/courses/`, todos os usuários conectados via `/ws/notifications/` recebem notificações em tempo real com o título do curso!
 
 Utilize o wscat para testar no terminal:
@@ -243,6 +250,7 @@ wscat -c "ws://localhost:8000/ws/notifications/?token=TOKEN_AQUI"
 ---
 
 ## 👥 App `presence`: lista de presença de usuários online
+
 Uma lista usuários online no `GET /api/v1/online-users/`, todos os usuários conectados via `/ws/presence/` entram numa lista de users online!
 
 Utilize o wscat para conectar um usário:
@@ -253,11 +261,39 @@ wscat -c "ws://localhost:8000/ws/presence/?token=TOKEN_AQUI"
 
 ---
 
+## 📊 App `dashboard`: Painel Administrativo em Tempo Real
+
+Este app fornece dados agregados de forma dinâmica para um painel administrativo, usando **WebSocket** para envio de informações em tempo real.
+
+### ✅ Casos de Uso
+
+#### 📡 Conexão via WebSocket
+
+O WebSocket do painel administrativo pode ser acessado com:
+
+```bash
+wscat -c "ws://localhost:8000/ws/dashboard/?token=TOKEN_AQUI"
+```
+
+#### Resposta:
+
+```json
+{
+  "type": "dashboard_data",
+  "users_count": 51,
+  "courses_count": 40,
+  "reports_count": 21,
+  "books_count": 85
+}
+```
+
+---
+
 ## 📆 Populando dados
 
 ```bash
-python manage.py populate_books
-python manage.py populate_comments
+python manage.py populate_books           # Cria 100 livros aleatórios
+python manage.py populate_comments        # Cria comentários aleatórios nos livros
 python manage.py populate_courses         # Cria 30 cursos aleatórios
 python manage.py populate_tenants         # Cria tenants com usuários
 python manage.py populate_projects        # Cria projetos associados aos tenants
