@@ -1,4 +1,3 @@
-# reports/tasks.py
 import csv
 import os
 
@@ -19,29 +18,22 @@ def generate_user_report(report_id):
         if not report:
             return
 
-        print(report)
         report.status = "processing"
         report.save()
 
-        # Busca os usuários ativos
         users = User.objects.filter(is_active=True)
-        print(users)
 
-        # Define o diretório e o nome do arquivo
         file_name = f"users_report_{report.id}.csv"
         file_dir = os.path.join("media", "reports")
         os.makedirs(file_dir, exist_ok=True)
         file_path = os.path.join(file_dir, file_name)
-        print(file_path)
 
-        # Gera o CSV
         with open(file_path, "w", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["ID", "Username", "Email", "Data de Criação"])
             for user in users:
-                writer.writerow([user.id, user.username, user.email, user.date_joined]) # noqa501
+                writer.writerow([user.id, user.username, user.email, user.date_joined.strftime("%Y-%m-%d %H:%M:%S")]) # noqa501
 
-        # Atualiza o relatório como concluído
         report.status = "done"
         report.file_path = f"/{file_path}"
         report.completed_at = now()

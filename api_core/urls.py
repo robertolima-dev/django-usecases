@@ -14,6 +14,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 # from django.conf import settings
 # from django.conf.urls.static import static
 from django.contrib import admin
@@ -29,6 +31,8 @@ from apps.dashboard.api.broadcast.viewsets import DashboardBroadcastView
 from apps.dashboard.api.dashboard.viewsets import DashboardAPIView
 from apps.ecommerce.api.order.viewsets import OrderViewSet
 from apps.ecommerce.api.product.viewsets import ProductViewSet
+from apps.image_processing.api.image.viewsets import (ImageUploadAPIView,
+                                                      UserImageListAPIView)
 from apps.notifications.api.notification.viewsets import NotificationViewSet
 from apps.permissions.api.permission.viewsets import (AdminOnlyView,
                                                       SupportOnlyView,
@@ -76,6 +80,7 @@ urlpatterns = [
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'), # noqa501
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'), # noqa501
 ]
+
 # + static(settings.MEDIA_URL, document_root=settings.STATIC_URL)
 #  ADMIN
 
@@ -159,3 +164,13 @@ urlpatterns.append(
 urlpatterns.append(
     path("api/v1/dashboard/broadcast/", DashboardBroadcastView.as_view(), name="dashboard-broadcast") # noqa501
 )
+
+urlpatterns.append(
+    path("api/v1/images/upload/", ImageUploadAPIView.as_view(), name="images") # noqa501
+)
+
+urlpatterns.append(
+    path("api/v1/uploads-images/", UserImageListAPIView.as_view(), name="uploads-images") # noqa501
+)
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'apps.throttle.apps.ThrottleConfig',
     'apps.presence.apps.PresenceConfig',
     'apps.dashboard.apps.DashboardConfig',
+    'apps.mailer.apps.MailerConfig',
+    'apps.image_processing.apps.ImageProcessingConfig',
 ]
 
 

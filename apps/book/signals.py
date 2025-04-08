@@ -2,12 +2,15 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from apps.book.models import Book
+from apps.mailer.tasks import send_mass_email
 
 
 @receiver(post_save, sender=Book)
-def create_book(sender, instance, created, **kwargs):
+def book_created_email(sender, instance, created, **kwargs):
     if created:
-        print(instance)
+        subject = f"Novo livro disponível: {instance.title}"
+        content = f"Confira nosso novo livro: {instance.title}"
+        send_mass_email.delay(subject, content)
 
 
 @receiver(pre_delete, sender=Book)

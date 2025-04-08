@@ -13,7 +13,7 @@ User = get_user_model()
 
 
 def get_user_from_instance(instance):
-    for attr in ["user", "created_by", "owner"]:
+    for attr in ["user", "created_by", "owner", "author", "instructor"]:
         if hasattr(instance, attr):
             user = getattr(instance, attr)
             if isinstance(user, User) and User.objects.filter(pk=user.pk).exists(): # noqa501
@@ -23,12 +23,20 @@ def get_user_from_instance(instance):
 
 @receiver(post_save)
 def log_save(sender, instance, created, **kwargs):
+    print(f"log_save => {instance}")
     if sender.__name__ == "AuditLog":
         return  # Evita loop
 
     user = get_user_from_instance(instance)
     action = "create" if created else "update"
-    changes = json.loads(json.dumps(model_to_dict(instance), cls=DjangoJSONEncoder)) # noqa501
+
+    changes = model_to_dict(instance)
+
+    # Serializa com DjangoJSONEncoder para tratar datetime e outros tipos
+    try:
+        changes_json = json.dumps(changes, cls=DjangoJSONEncoder)
+    except Exception:
+        changes_json = json.dumps({k: str(v) for k, v in changes.items()})
 
     AuditLog.objects.create(
         user=user if isinstance(user, AuditLog._meta.get_field('user').remote_field.model) else None, # noqa501
@@ -36,7 +44,7 @@ def log_save(sender, instance, created, **kwargs):
         model=sender.__name__,
         object_id=str(instance.pk),
         object_repr=str(instance),
-        changes=changes,
+        changes=changes_json,
         timestamp=now()
     )
 
