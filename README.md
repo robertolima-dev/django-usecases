@@ -85,13 +85,13 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Atualiza automaticamente ao criar `user`, `course`, `book`, `report` ou `notification`
 - Ideal para visualização de métricas sem recarregar a página
 
-### `mailer` - Envio de Emails Assíncronos 📬
+### `mailer` - Envio de Emails Assíncronos
 - Celery + backend SMTP
 - Envio de email para todos os usuários desacoplado via `send_email_async()`
 - Pronto para integração com templates e sistema de alertas
 - Cadastro de books e courses
 
-### `image_processing` - Upload e Processamento com Thumbnails 🖼️
+### `image_processing` - Upload e Processamento com Thumbnails
 - API para upload de imagem autenticado
 - Criação de thumbnails assíncrona com Pillow + Celery
 - Visualização de imagens do usuário
