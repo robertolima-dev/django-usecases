@@ -18,6 +18,15 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
   python manage.py populate_comments    # Gera comentários aleatórios
   ```
 
+### `chat` – Sistema de mensagens privadas 1-1 com WebSocket
+- Criação automática ou manual de uma `Room` entre dois usuários
+- Conexão em tempo real via WebSocket para troca de mensagens
+- Salvamento automático das mensagens com histórico
+- Envio de mensagens via WebSocket ou API HTTP (fallback)
+- Verificação de permissão: somente participantes da `Room` podem enviar/receber
+- Listagem de mensagens de uma sala com ordenação por tempo
+- Integração com Channels e Celery (opcional para notificações futuras)
+
 ### `ecommerce` - Concorrência e Transações Atômicas
 - Simula checkout com ajuste de estoque seguro
 - Usa `select_for_update` com `transaction.atomic()`
@@ -256,7 +265,7 @@ Ao criar um curso via `POST /api/v1/courses/`, todos os usuários conectados via
 Utilize o wscat para testar no terminal:
 
 ```bash
-wscat -c "ws://localhost:8000/ws/notifications/?token=TOKEN_AQUI"
+wscat -c "ws://localhost:8000/ws/notifications/?token=TOKEN_DO_USUARIO"
 ```
 
 ---
@@ -268,9 +277,48 @@ Uma lista usuários online no `GET /api/v1/online-users/`, todos os usuários co
 Utilize o wscat para conectar um usário:
 
 ```bash
-wscat -c "ws://localhost:8000/ws/presence/?token=TOKEN_AQUI"
+wscat -c "ws://localhost:8000/ws/presence/?token=TOKEN_DO_USUARIO"
+```
+--- 
+
+## 💬 App `chat`: mensagens privadas 1-1 em tempo real
+
+Envie mensagens entre dois usuários autenticados em tempo real via WebSocket, com fallback por API REST.
+
+O chat privado é baseado em salas (`Room`) que conectam exatamente dois usuários.
+
+### 🔧 Como funciona
+
+Crie (ou recupere) uma sala com outro usuário via:
+
+```http
+POST /api/message/rooms/
+Authorization: Token TOKEN_DO_USUARIO
+{
+  "user2_id": 5
+}
 ```
 
+```bash
+wscat -c "ws://localhost:8000/ws/chat/room/ROOM_ID/?token=TOKEN_DO_USUARIO"
+```
+
+Envie uma mensagem assim via websocket:
+
+```json
+{"message": "Olá, tudo bem?"}
+```
+
+Enviar mensagens via API REST (opcional):
+
+```http
+POST /api/message/messages/send/
+Authorization: Token TOKEN_DO_USUARIO
+{
+  "room_id": 3,
+  "content": "Mensagem via API!"
+}
+```
 ---
 
 ## 📊 App `dashboard`: Painel Administrativo em Tempo Real
@@ -284,7 +332,7 @@ Este app fornece dados agregados de forma dinâmica para um painel administrativ
 O WebSocket do painel administrativo pode ser acessado com:
 
 ```bash
-wscat -c "ws://localhost:8000/ws/dashboard/?token=TOKEN_AQUI"
+wscat -c "ws://localhost:8000/ws/dashboard/?token=TOKEN_DO_USUARIO"
 ```
 
 #### Resposta:

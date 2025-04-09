@@ -26,6 +26,9 @@ from rest_framework import permissions, routers
 
 from apps.book.api.book.viewsets import BookViewSet
 from apps.book.api.comment.viewsets import CommentViewSet
+from apps.chat.api.message.viewsets import (ListMessagesAPIView,
+                                            SendMessageAPIView)
+from apps.chat.api.room.viewsets import CreateOrGetRoomView
 from apps.course.api.course.viewsets import CourseViewSet
 from apps.dashboard.api.broadcast.viewsets import DashboardBroadcastView
 from apps.dashboard.api.dashboard.viewsets import DashboardAPIView
@@ -171,6 +174,18 @@ urlpatterns.append(
 
 urlpatterns.append(
     path("api/v1/uploads-images/", UserImageListAPIView.as_view(), name="uploads-images") # noqa501
+)
+
+urlpatterns.append(
+    path("api/v1/rooms/", CreateOrGetRoomView.as_view(), name="rooms") # noqa501
+)
+
+urlpatterns.append(
+    path("api/v1/message/send/", SendMessageAPIView.as_view(), name="messages-send") # noqa501
+)
+
+urlpatterns.append(
+    path("api/v1/messages/", ListMessagesAPIView.as_view(), name="messages-list") # noqa501
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

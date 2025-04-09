@@ -109,7 +109,7 @@ collection:
             meta:
               id: req_74a16b52aa4f468a9a514113313e6b4c
               created: 1721423557889
-              modified: 1744054107182
+              modified: 1744156058610
               isPrivate: false
               sortKey: -1709726615139
             method: POST
@@ -117,8 +117,8 @@ collection:
               mimeType: application/json
               text: |-
                 {
-                	"email":"robertolima.izphera@gmail.com",
-                	"password":"DEVroberto1979"
+                	"email":"robertolima.izphera+user3@gmail.com",
+                	"password":"123456"
                 }
             headers:
               - name: Content-Type
@@ -1976,6 +1976,116 @@ collection:
                 send: true
                 store: true
               rebuildPath: true
+      - name: chat
+        meta:
+          id: fld_1b5a650276c744f8998395122e244022
+          created: 1744154438361
+          modified: 1744154438361
+          sortKey: -1709907279622.1274
+        children:
+          - url: "{{ _.URL_V1 }}/rooms/"
+            name: create room
+            meta:
+              id: req_1ce2e8ae3d4f434eab4b07c94cdf9ee6
+              created: 1744154438363
+              modified: 1744156305468
+              isPrivate: false
+              sortKey: -1711140775304
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"user2_id": 2
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_06557023b6304dd4b12d373ca91b9e06
+              - name: User-Agent
+                value: insomnia/11.0.0
+                id: pair_dd596b51cd3e4c8d97234820eba9168d
+              - id: pair_d97ea2ff3b544757bb4515262a70c40b
+                name: Authorization
+                value: Token {{ _.TOKEN_API_CORE }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.URL_V1 }}/messages/"
+            name: list
+            meta:
+              id: req_5f8b70a5e4944c4397a5d7d0f41b0969
+              created: 1744154438363
+              modified: 1744156718908
+              isPrivate: false
+              sortKey: -1711140775254
+            method: GET
+            body:
+              mimeType: application/json
+            parameters:
+              - id: pair_1683970fbc3b43bfa5540369eba06517
+                name: room_id
+                value: "2"
+                disabled: false
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/11.0.0
+                id: pair_dd596b51cd3e4c8d97234820eba9168d
+              - id: pair_d97ea2ff3b544757bb4515262a70c40b
+                name: Authorization
+                value: Token {{ _.TOKEN_API_CORE }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.URL_V1 }}/message/send/"
+            name: create message
+            meta:
+              id: req_03aab842a7e441b3bf8e10eb724763f7
+              created: 1744155847738
+              modified: 1744156680614
+              isPrivate: false
+              sortKey: -1711140775279
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "room_id": 2,
+                  "content": "Mensagem para outra sala"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+                id: pair_b55c5b6c681744e9bdaeff1627cd30aa
+              - name: User-Agent
+                value: insomnia/11.0.0
+                id: pair_dd596b51cd3e4c8d97234820eba9168d
+              - id: pair_d97ea2ff3b544757bb4515262a70c40b
+                name: Authorization
+                value: Token {{ _.TOKEN_API_CORE }}
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
@@ -1994,13 +2104,13 @@ environments:
       meta:
         id: env_4d585d3bc2be489a95abf57a9690d2a4
         created: 1701104940230
-        modified: 1744054115758
+        modified: 1744154410610
         isPrivate: false
         sortKey: 1701104940230
       data:
         URL_V1: http://localhost:8000/api/v1
         URL_V2: http://localhost:8000/api/v2
-        TOKEN_API_CORE: e95cdc23b8641dd32a46f381b1932ca63cb4e7c9
+        TOKEN_API_CORE: d5be4507fed9489cd3351471ff7b98d343500a44
     - name: NEXT_INTAKE_PROD
       meta:
         id: env_bb3e541e05564089ae4f299b580e412c
