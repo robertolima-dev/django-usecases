@@ -105,6 +105,14 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Visualização de imagens do usuário
 - Integração com tasks, sinais e manipulação de arquivos
 
+### `scheduler` – agendamento de tarefas com Celery Beat
+- Agendamento automático de tarefas recorrentes com `django-celery-beat`
+- Task periódica para **resetar cotas diárias** do app `throttle`
+- Execução programada via `CrontabSchedule`
+- Integração com Celery Worker e Beat
+- Script automatizado no `apps.py` registra a `PeriodicTask` no primeiro load
+- Totalmente compatível com ambientes de produção no ECS
+
 ---
 
 ## ⚙️ Como rodar o projeto
@@ -136,6 +144,11 @@ docker run -d -p 6379:6379 --name redis redis
 2. Rode o worker Celery:
 ```bash
 celery -A api_core worker --loglevel=info
+```
+
+2. Rode o beat Celery:
+```bash
+celery -A api_core beat --loglevel=info
 ```
 
 ---

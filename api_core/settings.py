@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_summernote',
     'django_select2',
     "channels",
+    'django_celery_beat',
     'apps.users.apps.UsersConfig',
     'apps.book.apps.BookConfig',
     'apps.ecommerce.apps.EcommerceConfig',
@@ -63,6 +64,7 @@ INSTALLED_APPS = [
     'apps.dashboard.apps.DashboardConfig',
     'apps.mailer.apps.MailerConfig',
     'apps.image_processing.apps.ImageProcessingConfig',
+    'apps.scheduler.apps.SchedulerConfig',
 ]
 
 
@@ -112,6 +114,9 @@ SECURE_SSL_REDIRECT = False  # is_not_localhost()
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
 
 # URLCONF
 ROOT_URLCONF = "api_core.urls"
@@ -166,12 +171,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # LANGUAGE_CODE = "en-us"
 LANGUAGE_CODE = "pt-br"
 
+USE_TZ = True
 TIME_ZONE = 'UTC'
 # TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
-USE_TZ = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

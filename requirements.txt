@@ -1,6 +1,6 @@
 amqp==5.3.1
 annotated-types==0.6.0
-anyio==4.3.0
+anyio==3.7.1
 asgiref==3.7.2
 async-timeout==4.0.3
 attrs==25.3.0
@@ -21,11 +21,13 @@ click-didyoumean==0.3.1
 click-plugins==1.1.1
 click-repl==0.3.0
 constantly==23.10.4
+cron-descriptor==1.4.5
 cryptography==44.0.2
 daphne==4.1.2
 distro==1.9.0
 Django==5.0.3
 django-appconf==1.0.6
+django-celery-beat==2.7.0
 django-compat==1.0.15
 django-cors-headers==4.3.1
 django-filter==23.5
@@ -33,6 +35,7 @@ django-redis==5.4.0
 django-select2==8.1.2
 django-storages==1.14.2
 django-summernote==0.8.20.0
+django-timezone-field==7.1
 djangorestframework==3.14.0
 drf-yasg==1.21.8
 Faker==37.1.0
@@ -45,12 +48,14 @@ icalendar==5.0.12
 idna==3.6
 incremental==24.7.2
 inflection==0.5.1
+iniconfig==2.1.0
 jmespath==1.0.1
 kombu==5.5.2
 msgpack==1.0.8
 openai==1.23.6
 packaging==24.0
 pillow==10.3.0
+pluggy==1.5.0
 prompt_toolkit==3.0.50
 psycopg==3.2.4
 psycopg2==2.9.9
@@ -60,6 +65,9 @@ pycparser==2.22
 pydantic==2.7.1
 pydantic_core==2.18.2
 pyOpenSSL==25.0.0
+pytest==8.3.5
+pytest-django==4.11.1
+python-crontab==3.2.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.1

@@ -1,21 +1,19 @@
 #!/bin/bash
 
-# Collect static files
-echo "Collect static files"
+echo "📦 Coletando arquivos estáticos..."
 python manage.py collectstatic --noinput
 
-# Apply database migrations
-echo "Apply database migrations"
+echo "🛠️ Aplicando migrações..."
 python manage.py migrate
 
-# Inicia o Daphne (ASGI)
+echo "🚀 Iniciando Daphne (ASGI)..."
 daphne -b 0.0.0.0 -p 8000 api_core.asgi:application &
 
-# Inicia o Celery Worker
+echo "⚙️ Iniciando Celery Worker..."
 celery -A api_core worker --loglevel=info &
 
-# (Opcional) Inicia o Celery Beat
-# celery -A api_core beat --loglevel=info &
+echo "⏰ Iniciando Celery Beat..."
+celery -A api_core beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler &
 
-# Fica em foreground para manter o container vivo
+# Mantém o container vivo
 tail -f /dev/null
