@@ -120,10 +120,20 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 ```bash
 python -m venv .env
 source .env/bin/activate
+```
+
+Crie um arquivo venv.sh baseado no venv_example.sh e rode:
+```bash
+chmod +x venv.sh
+source venv.sh
+```
+
+```bash
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
 ```
+
 
 ### Rodar com WebSocket (Daphne):
 ```bash
