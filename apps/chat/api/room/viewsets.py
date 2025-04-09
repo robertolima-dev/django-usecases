@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -6,30 +5,29 @@ from rest_framework.views import APIView
 
 from apps.chat.models import Room
 
-from .serializers import RoomSerializer
-
-User = get_user_model()
+from .serializers import RoomCreateSerializer, RoomListSerializer
 
 
-class CreateOrGetRoomView(APIView):
+class CreateRoomAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        user1 = request.user
-        user2_id = request.data.get('user2_id')
+        serializer = RoomCreateSerializer(data=request.data, context={'request': request}) # noqa501
+        if serializer.is_valid():
+            room = serializer.save()
+            return Response({
+                "id": room.id,
+                "name": room.name,
+                "user_ids": list(room.users.values_list('id', flat=True)),
+                "created_at": room.created_at
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if not user2_id:
-            return Response({"detail": "user2_id é obrigatório."}, status=status.HTTP_400_BAD_REQUEST) # noqa501
 
-        try:
-            user2 = User.objects.get(id=user2_id)
-        except User.DoesNotExist:
-            return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND) # noqa501
+class ListRoomsAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
-        # Ordena por id para manter consistência
-        u1, u2 = sorted([user1, user2], key=lambda u: u.id)
-
-        room, created = Room.objects.get_or_create(user1=u1, user2=u2)
-        serializer = RoomSerializer(room)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK) # noqa501
+    def get(self, request):
+        rooms = Room.objects.filter(users=request.user).prefetch_related("users", "messages") # noqa501
+        serializer = RoomListSerializer(rooms, many=True)
+        return Response(serializer.data)

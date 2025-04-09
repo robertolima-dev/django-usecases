@@ -5,32 +5,31 @@ User = get_user_model()
 
 
 class Room(models.Model):
-    user1 = models.ForeignKey(User, related_name='chat_user1', on_delete=models.CASCADE, null=True, blank=True) # noqa501
-    user2 = models.ForeignKey(User, related_name='chat_user2', on_delete=models.CASCADE, null=True, blank=True) # noqa501
+    name = models.CharField(max_length=100, blank=True, null=True) # noqa501
+    users = models.ManyToManyField(User, related_name='rooms')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_rooms') # noqa501
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # class Meta:
-    #     unique_together = ('user1', 'user2')
+    @property
+    def is_private(self):
+        return self.users.count() == 2
 
     def __str__(self):
-        return f"Chat: {self.user1.username} <-> {self.user2.username}"
-
-    def get_room_name(self):
-        return f"room_{min(self.user1.id, self.user2.id)}_{max(self.user1.id, self.user2.id)}" # noqa501
+        return self.name or f"Private chat ({', '.join(u.username for u in self.users.all())})" # noqa501
 
 
 class Message(models.Model):
+    TYPE_CHOICES = [
+        ('text', 'Texto'),
+        ('image', 'Imagem'),
+        ('link', 'Link'),
+        ('file', 'Arquivo'),
+        ('system', 'Sistema'),
+    ]
+
     room = models.ForeignKey(Room, related_name='messages', on_delete=models.CASCADE) # noqa501
-    sender = models.ForeignKey(
-        User,
-        related_name='sent_messages',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
-    content = models.TextField()
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    type_message = models.CharField(max_length=10, choices=TYPE_CHOICES, default='text') # noqa501
+    content = models.JSONField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
-
-    class Meta:
-        ordering = ['timestamp']

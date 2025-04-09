@@ -13,15 +13,12 @@ User = get_user_model()
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = await self.get_user_from_token()
-        if not self.user:
-            await self.close()
-            return
+        self.room_id = self.scope['url_route']['kwargs']['room_id']
+        self.room_group_name = f"chat_room_{self.room_id}"
 
-        self.room_id = self.scope["url_route"]["kwargs"]["room_id"]
-        self.room_group_name = f"private_chat_room_{self.room_id}"
         self.room = await self.get_room(self.room_id)
 
-        if self.room and await self.is_participant(self.room, self.user): # noqa501
+        if self.user and await self.user_in_room(self.user, self.room):
             await self.channel_layer.group_add(self.room_group_name, self.channel_name) # noqa501
             await self.accept()
         else:
@@ -32,41 +29,43 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        message = data.get("message")
+        content = data.get("content")
+        type_message = data.get("type_message", "text")  # default = text
 
-        msg = await self.create_message(self.user, self.room, message)
+        message = await self.create_message(self.user, self.room, type_message, content) # noqa501
 
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 "type": "chat_message",
-                "message": msg.content,
-                "sender_id": msg.sender.id,
-                "sender_username": msg.sender.username,
-                "timestamp": str(msg.timestamp)
+                "message_id": message.id,
+                "sender_id": self.user.id,
+                "sender_username": self.user.username,
+                "content": message.content,
+                "type_message": message.type_message,
+                "timestamp": str(message.timestamp),
             }
         )
 
     async def chat_message(self, event):
         await self.send(text_data=json.dumps({
-            "message": event["message"],
+            "message_id": event["message_id"],
             "sender_id": event["sender_id"],
             "sender_username": event["sender_username"],
+            "content": event["content"],
+            "type_message": event["type_message"],
             "timestamp": event["timestamp"]
         }))
 
-    # ============================
-    # Métodos auxiliares
-    # ============================
+    # ===== Métodos auxiliares =====
 
     @database_sync_to_async
     def get_user_from_token(self):
         try:
-            query_string = self.scope["query_string"].decode()
-            token_key = query_string.split("token=")[-1]
+            token_key = self.scope["query_string"].decode().split("token=")[-1] # noqa501
             token = Token.objects.get(key=token_key)
             return token.user
-        except Exception:
+        except Token.DoesNotExist:
             return None
 
     @database_sync_to_async
@@ -77,9 +76,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return None
 
     @database_sync_to_async
-    def is_participant(self, room, user):
-        return user == room.user1 or user == room.user2
+    def user_in_room(self, user, room):
+        return room.users.filter(id=user.id).exists()
 
     @database_sync_to_async
-    def create_message(self, sender, room, content):
-        return Message.objects.create(sender=sender, room=room, content=content) # noqa501
+    def create_message(self, sender, room, type_message, content):
+        return Message.objects.create(
+            room=room,
+            sender=sender,
+            type_message=type_message,
+            content=content
+        )

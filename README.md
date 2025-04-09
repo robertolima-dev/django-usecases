@@ -1,12 +1,12 @@
 # Projeto Django
 
-## Estudos Avançados com Celery, Concorrência, Filtros, Permissões, WebSocket, Logs e Throttle
+## Estudos Avançados com Celery, Concorrência, Chat, Filtros, Permissões, WebSocket, Logs e Throttle
 
 Este projeto é um repositório de estudos organizados em 7 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
 
 ## 📁 Estrutura dos Apps
 
-### `book` 📚 - Consultas Otimizadas, Comentários e Agregações
+### `book` - Consultas Otimizadas, Comentários e Agregações
 - Modela livros com autor, tags e comentários
 - Usa `select_related`, `prefetch_related` e `annotate` para otimizar queries
 - Permite filtros por título, autor, tags e número de comentários
@@ -18,14 +18,13 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
   python manage.py populate_comments    # Gera comentários aleatórios
   ```
 
-### `chat` – Sistema de mensagens privadas 1-1 com WebSocket
-- Criação automática ou manual de uma `Room` entre dois usuários
-- Conexão em tempo real via WebSocket para troca de mensagens
-- Salvamento automático das mensagens com histórico
-- Envio de mensagens via WebSocket ou API HTTP (fallback)
-- Verificação de permissão: somente participantes da `Room` podem enviar/receber
-- Listagem de mensagens de uma sala com ordenação por tempo
-- Integração com Channels e Celery (opcional para notificações futuras)
+### `chat` - sistema de mensagens em tempo real com salas privadas e em grupo
+- Salas privadas (1-1) ou em grupo (2+ usuários)
+- Envio de mensagens via WebSocket e fallback por API REST
+- Histórico completo por sala
+- Suporte a diferentes tipos de mensagem (`text`, `image`, `link`, etc.)
+- Avatar dos usuários no retorno das mensagens e salas
+- Integração com Channels (WebSocket) e Celery (opcional para notificações)
 
 ### `ecommerce` - Concorrência e Transações Atômicas
 - Simula checkout com ajuste de estoque seguro
@@ -141,7 +140,7 @@ celery -A api_core worker --loglevel=info
 
 ---
 
-## 💳 App `ecommerce`: concorrência com `select_for_update`
+### 💳 App `ecommerce`: concorrência com `select_for_update`
 
 ### Objetivo:
 Simular compras simultâneas com ajuste seguro de estoque.
@@ -167,7 +166,7 @@ threading.Thread(target=comprar, args=(token2,)).start()
 
 ---
 
-## 📊 App `report`: tarefas assíncronas com Celery
+### 📊 App `report`: tarefas assíncronas com Celery
 
 ### Objetivo:
 Gerar relatórios de usuários ativos em background
@@ -187,7 +186,7 @@ Gerar relatórios de usuários ativos em background
 
 ---
 
-## 📖 App `book`: consultas com relacionamentos
+### 📖 App `book`: consultas com relacionamentos
 
 ### Errado:
 ```python
@@ -223,7 +222,7 @@ Evite `SerializerMethodField` com queries internas. Use dados pré-carregados ou
 
 ---
 
-## 🚦 App `throttle`: limites de requisições
+### 🚦 App `throttle`: limites de requisições
 
 ```python
 from apps.throttle.utils import check_and_increment_quota
@@ -242,7 +241,7 @@ class UploadViewSet(ModelViewSet):
 
 ---
 
-## 🎓 App `course`: filtros avançados
+### 🎓 App `course`: filtros avançados
 
 ### Filtros suportados:
 - `title=django` (icontains)
@@ -258,7 +257,7 @@ GET /api/courses/?price_min=50&tags=1,3&is_free=false&ordering=-price
 
 ---
 
-### 🔔 Notificações automáticas:
+### 🔔 App `notifications`: Notificações automáticas:
 
 Ao criar um curso via `POST /api/v1/courses/`, todos os usuários conectados via `/ws/notifications/` recebem notificações em tempo real com o título do curso!
 
@@ -270,7 +269,7 @@ wscat -c "ws://localhost:8000/ws/notifications/?token=TOKEN_DO_USUARIO"
 
 ---
 
-## 👥 App `presence`: lista de presença de usuários online
+### 👥 App `presence`: lista de presença de usuários online
 
 Uma lista usuários online no `GET /api/v1/online-users/`, todos os usuários conectados via `/ws/presence/` entram numa lista de users online!
 
@@ -281,11 +280,11 @@ wscat -c "ws://localhost:8000/ws/presence/?token=TOKEN_DO_USUARIO"
 ```
 --- 
 
-## 💬 App `chat`: mensagens privadas 1-1 em tempo real
+### 💬 App `chat`: sistema de mensagens em tempo real com salas privadas e em grupo
 
-Envie mensagens entre dois usuários autenticados em tempo real via WebSocket, com fallback por API REST.
+Envie mensagens entre usuários autenticados em tempo real via WebSocket, com fallback por API REST.
 
-O chat privado é baseado em salas (`Room`) que conectam exatamente dois usuários.
+O chat privado é baseado em salas (`Room`) que conectam N usuários.
 
 ### 🔧 Como funciona
 
@@ -295,7 +294,8 @@ Crie (ou recupere) uma sala com outro usuário via:
 POST /api/message/rooms/
 Authorization: Token TOKEN_DO_USUARIO
 {
-  "user2_id": 5
+  "user_ids": [4, 5],
+  "name": "Grupo de Estudos"
 }
 ```
 
@@ -306,7 +306,12 @@ wscat -c "ws://localhost:8000/ws/chat/room/ROOM_ID/?token=TOKEN_DO_USUARIO"
 Envie uma mensagem assim via websocket:
 
 ```json
-{"message": "Olá, tudo bem?"}
+{
+  "type_message": "text",
+  "content": {
+    "text": "Olá, tudo bem?"
+  }
+}
 ```
 
 Enviar mensagens via API REST (opcional):
@@ -315,13 +320,17 @@ Enviar mensagens via API REST (opcional):
 POST /api/message/messages/send/
 Authorization: Token TOKEN_DO_USUARIO
 {
-  "room_id": 3,
-  "content": "Mensagem via API!"
+  "room_id": 12,
+  "type_message": "image",
+  "content": {
+    "url": "https://meu-bucket.s3.amazonaws.com/foto.jpg",
+    "caption": "Foto da reunião"
+  }
 }
 ```
 ---
 
-## 📊 App `dashboard`: Painel Administrativo em Tempo Real
+### 📊 App `dashboard`: Painel Administrativo em Tempo Real
 
 Este app fornece dados agregados de forma dinâmica para um painel administrativo, usando **WebSocket** para envio de informações em tempo real.
 

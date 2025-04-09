@@ -8,30 +8,44 @@ class MessageCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ['room_id', 'content']
+        fields = ['room_id', 'type_message', 'content']
 
     def validate_room_id(self, value):
-        request_user = self.context['request'].user
+        user = self.context['request'].user
         try:
             room = Room.objects.get(id=value)
-            if request_user != room.user1 and request_user != room.user2: # noqa501
-                raise serializers.ValidationError("Você não tem permissão para enviar mensagens nesta sala.") # noqa501
-            return value
         except Room.DoesNotExist:
-            raise serializers.ValidationError("Sala não encontrada.") # noqa501
+            raise serializers.ValidationError("Sala não encontrada.")
+
+        if not room.users.filter(id=user.id).exists():
+            raise serializers.ValidationError("Você não faz parte desta sala.") # noqa501
+        return value
 
     def create(self, validated_data):
-        room = Room.objects.get(id=validated_data['room_id']) # noqa501
+        room = Room.objects.get(id=validated_data['room_id'])
+        sender = self.context['request'].user
         return Message.objects.create(
             room=room,
-            sender=self.context['request'].user,
+            sender=sender,
+            type_message=validated_data.get('type_message', 'text'),
             content=validated_data['content']
         )
 
 
 class MessageSerializer(serializers.ModelSerializer):
     sender_username = serializers.CharField(source='sender.username', read_only=True) # noqa501
+    sender_avatar = serializers.CharField(source='sender.profile.avatar', read_only=True) # noqa501
 
     class Meta:
         model = Message
-        fields = ['id', 'room', 'sender', 'sender_username', 'content', 'timestamp', 'is_read'] # noqa501
+        fields = [
+            'id',
+            'room',
+            'sender_id',
+            'sender_username',
+            'sender_avatar',
+            'type_message',
+            'content',
+            'timestamp',
+            'is_read',
+        ]

@@ -13,7 +13,7 @@ User = get_user_model()
 
 
 def get_user_from_instance(instance):
-    for attr in ["user", "created_by", "owner", "author", "instructor"]:
+    for attr in ["user", "created_by", "owner", "author", "instructor", "sender"]: # noqa501
         if hasattr(instance, attr):
             user = getattr(instance, attr)
             if isinstance(user, User) and User.objects.filter(pk=user.pk).exists(): # noqa501

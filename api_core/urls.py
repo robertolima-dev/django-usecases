@@ -28,7 +28,7 @@ from apps.book.api.book.viewsets import BookViewSet
 from apps.book.api.comment.viewsets import CommentViewSet
 from apps.chat.api.message.viewsets import (ListMessagesAPIView,
                                             SendMessageAPIView)
-from apps.chat.api.room.viewsets import CreateOrGetRoomView
+from apps.chat.api.room.viewsets import CreateRoomAPIView, ListRoomsAPIView
 from apps.course.api.course.viewsets import CourseViewSet
 from apps.dashboard.api.broadcast.viewsets import DashboardBroadcastView
 from apps.dashboard.api.dashboard.viewsets import DashboardAPIView
@@ -177,7 +177,11 @@ urlpatterns.append(
 )
 
 urlpatterns.append(
-    path("api/v1/rooms/", CreateOrGetRoomView.as_view(), name="rooms") # noqa501
+    path("api/v1/rooms/", CreateRoomAPIView.as_view(), name="rooms") # noqa501
+)
+
+urlpatterns.append(
+    path("api/v1/rooms/list/", ListRoomsAPIView.as_view(), name="rooms-list") # noqa501
 )
 
 urlpatterns.append(
