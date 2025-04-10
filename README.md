@@ -38,8 +38,10 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 
 ### `course` - Filtros Avançados com Django Filter
 - Filtros por textos, datas, números, booleanos, relacionamentos
-- Filtros combináveis e ordenação flexível
+- Filtros combináveis e ordenações dinâmicas por avaliação e compras
 - Integração com `django-filter` + DRF
+- Ordenações: `order_by=rating`, `order_by=purchases`, `ordering=-price`, etc.
+- **Filtros especiais**: `avg_rating_min`, `min_purchases`, `only_free`, `is_featured`
 - **Notificações em tempo real** quando um novo curso é criado, usando WebSocket
 
 ### `permissions` - Sistema de Permissões por Perfil de Acesso
@@ -264,18 +266,35 @@ class UploadViewSet(ModelViewSet):
 
 ---
 
-### 🎓 App `course`: filtros avançados
+### 🎓 App `course`: filtros avançados e ordenações inteligentes
+
+Listagem de cursos com suporte completo a filtros dinâmicos, relacionamentos e ordenação por popularidade ou avaliação.
 
 ### Filtros suportados:
-- `title=django` (icontains)
+- `title=django` (busca no título)
+- `description=avançado` (busca na descrição)
 - `price_min=100&price_max=300`
-- `start_date_from=2025-04-01`
-- `tags=1,2`
-- `ordering=-created_at`
+- `start_date_from=2025-04-01&start_date_to=2025-04-30`
+- `workload_min=10&workload_max=40`
+- `tags=1,3` ou `tag=python`
+- `is_active=true`, `is_free=false`, `is_featured=true`
+- `category=2`, `instructor=1`
+- `avg_rating_min=4` (média mínima de avaliação)
+- `min_purchases=10` (mínimo de compras pagas)
+- `only_free=true` (gratuitos apenas)
+
+### 📊 Ordenações especiais:
+
+Use o parâmetro `order_by` ou `ordering`:
+
+- `order_by=rating` → cursos com melhor avaliação média
+- `order_by=purchases` → cursos mais comprados
+- `ordering=-created_at` → mais recentes
+- `ordering=-price` → mais caros primeiro
 
 ### Exemplo:
 ```http
-GET /api/courses/?price_min=50&tags=1,3&is_free=false&ordering=-price
+GET /api/courses/?price_min=50&tags=1,3&is_free=false&order_by=rating
 ```
 
 ---

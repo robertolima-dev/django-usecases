@@ -43,6 +43,9 @@ class CourseSerializer(serializers.ModelSerializer):
         queryset=Tag.objects.all(), many=True, source="tags", write_only=True
     )
 
+    avg_rating = serializers.FloatField(read_only=True)
+    paid_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Course
         fields = [
@@ -55,6 +58,10 @@ class CourseSerializer(serializers.ModelSerializer):
             "workload",
             "start_date",
             "created_at",
+
+            # combine
+            "avg_rating",
+            "paid_count",
 
             # read
             "category", "instructor", "tags",

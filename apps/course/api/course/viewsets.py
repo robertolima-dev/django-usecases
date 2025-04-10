@@ -2,6 +2,8 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
+# from django.contrib.postgres.search import SearchVector
+from django.db.models import Avg, Count, Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.viewsets import ModelViewSet
@@ -23,8 +25,25 @@ class CourseViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = CourseFilter
     search_fields = ["title", "description"]
-    ordering_fields = ["price", "workload", "start_date", "created_at"]
-    ordering = ["-created_at"]
+    ordering_fields = ["price", "workload", "start_date", "created_at", "avg_rating", "paid_count",] # noqa501
+    ordering = ["-created_at", "-avg_rating"]
+
+    def get_queryset(self):
+
+        # qs = Course.objects.annotate(
+        #     search=SearchVector("title", "description")
+        # )
+
+        # q = self.request.query_params.get("q")
+        # if q:
+        #     qs = qs.filter(search=q)
+
+        # return qs
+
+        return Course.objects.annotate(
+            avg_rating=Avg("ratings__rating"),
+            paid_count=Count("payments", filter=Q(payments__status="paid"))
+        )
 
     def perform_create(self, serializer):
         course = serializer.save()
