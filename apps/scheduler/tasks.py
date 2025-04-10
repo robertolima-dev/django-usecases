@@ -4,7 +4,7 @@ from django.utils.timezone import localdate
 from apps.throttle.models import UserQuota
 
 
-@shared_task
+@shared_task(name='throttle.reset_user_quotas')
 def reset_user_quotas():
     today = localdate()
     restarted = 0

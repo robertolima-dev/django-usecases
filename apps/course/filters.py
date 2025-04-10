@@ -1,4 +1,3 @@
-# course/filters.py
 import django_filters
 from django.db.models import Avg, Count, Q
 from django_filters import BaseInFilter, CharFilter

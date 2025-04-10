@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django_select2',
     "channels",
     'django_celery_beat',
+    'django_celery_results',
     'apps.users.apps.UsersConfig',
     'apps.book.apps.BookConfig',
     'apps.ecommerce.apps.EcommerceConfig',
@@ -65,6 +66,7 @@ INSTALLED_APPS = [
     'apps.mailer.apps.MailerConfig',
     'apps.image_processing.apps.ImageProcessingConfig',
     'apps.scheduler.apps.SchedulerConfig',
+    'apps.monitor.apps.MonitorConfig',
 ]
 
 
@@ -116,6 +118,8 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TASK_RESULT_EXTENDED = True
 
 
 # URLCONF

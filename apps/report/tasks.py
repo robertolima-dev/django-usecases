@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from apps.report.models import ReportRequest
 
 
-@shared_task
+@shared_task(name='report.generate_user_report')
 def generate_user_report(report_id):
     report = None
 

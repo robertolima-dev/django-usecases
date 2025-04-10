@@ -11,7 +11,7 @@ from PIL import Image
 from .models import UploadedImage
 
 
-@shared_task
+@shared_task(name='image_processing.create_thumbnail')
 def create_thumbnail(image_id):
 
     try:

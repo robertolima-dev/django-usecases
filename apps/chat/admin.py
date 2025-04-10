@@ -1,6 +1,31 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 
 from .models import Message, Room
+from .tasks import process_room
+
+
+@admin.action(description="Disparar processamento assíncrono das salas")
+def trigger_async_process(modeladmin, request, queryset):
+    task_count = 0
+    for room in queryset:
+        process_room.delay(room.id)
+        task_count += 1
+
+    if task_count > 0:
+        messages.success(request, f"{task_count} tarefas foram enviadas para o Celery!") # noqa501
+    else:
+        messages.warning(request, "Nenhuma tarefa foi enviada para o Celery.")
+
+
+class MessageInline(admin.TabularInline):
+    model = Message
+    extra = 0
+    fields = ['id', 'sender', 'type_message', 'content', 'timestamp']
+    readonly_fields = ['id', 'sender', 'type_message', 'content', 'timestamp']
+    ordering = ['-timestamp']
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(Room)
@@ -9,6 +34,8 @@ class RoomAdmin(admin.ModelAdmin):
     search_fields = ('name', 'users__username')
     list_filter = ('created_at',)
     ordering = ('-created_at',)
+    inlines = [MessageInline]
+    actions = [trigger_async_process]
 
     def user_list(self, obj):
         return ", ".join(user.username for user in obj.users.all())

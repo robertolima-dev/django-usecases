@@ -36,6 +36,7 @@ django-select2==8.1.2
 django-storages==1.14.2
 django-summernote==0.8.20.0
 django-timezone-field==7.1
+django_celery_results==2.6.0
 djangorestframework==3.14.0
 drf-yasg==1.21.8
 Faker==37.1.0

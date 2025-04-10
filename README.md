@@ -115,6 +115,15 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Script automatizado no `apps.py` registra a `PeriodicTask` no primeiro load
 - Totalmente compatível com ambientes de produção no ECS
 
+### `monitor` – Painel de monitoramento de tarefas Celery no Django Admin
+
+- Visualização completa do histórico de execuções de tarefas Celery
+- Exibe: `task_id`, `task_name`, `status`, tempo de execução (`runtime`), data de criação e conclusão
+- Filtros por status (`SUCCESS`, `FAILURE`, `PENDING`, etc.) e busca por nome ou ID
+- Integração com `django-celery-results`, com backend de resultados armazenados no banco de dados
+- Task fallback inteligente: preenche automaticamente o `task_name` se ausente
+- Ideal para ambientes com múltiplas workers e tarefas periódicas programadas
+
 ---
 
 ## ⚙️ Como rodar o projeto
