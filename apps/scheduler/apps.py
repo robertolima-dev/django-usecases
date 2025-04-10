@@ -13,15 +13,15 @@ class SchedulerConfig(AppConfig):
 
         task_name = "apps.scheduler.tasks.reset_user_quotas"
         schedule, _ = CrontabSchedule.objects.update_or_create(
-            minute='*',
-            hour='*',
+            minute='0',
+            hour='0',
             day_of_week='*',
             day_of_month='*',
             month_of_year='*',
             timezone='UTC',
         )
 
-        PeriodicTask.objects.update_or_create(
+        PeriodicTask.objects.get_or_create(
             name='Reset User Quotas',
             defaults={
                 'task': task_name,

@@ -23,8 +23,8 @@ def get_user_from_instance(instance):
 
 @receiver(post_save)
 def log_save(sender, instance, created, **kwargs):
-    print(f"log_save => {instance}")
-    if sender.__name__ == "AuditLog":
+    print(f'log_save => {instance}')
+    if sender.__name__ in ["AuditLog", "PeriodicTasks", "PeriodicTask"]: # noqa501
         return  # Evita loop
 
     user = get_user_from_instance(instance)
