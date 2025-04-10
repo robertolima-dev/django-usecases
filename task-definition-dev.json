@@ -1,0 +1,71 @@
+{
+    "family": "api-usecases",
+    "taskRoleArn": "arn:aws:iam::877367888718:role/ecs-access",
+    "executionRoleArn": "arn:aws:iam::877367888718:role/ecs-access",
+    "networkMode": "bridge",
+    "containerDefinitions": [
+        {
+            "name": "web",
+            "essential": true,
+            "image": "YOUR_API_IMAGE",
+            "memory": 512,
+            "portMappings": [
+                {
+                    "containerPort": 8000,
+                    "protocol": "tcp"
+                }
+            ],
+            "command": [
+                "./start_server.sh",
+                "web"
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/api-usecases",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "web"
+                }
+            }
+        },
+        {
+            "name": "worker",
+            "image": "YOUR_API_IMAGE",
+            "memory": 512,
+            "command": [
+                "./start_server.sh",
+                "worker"
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/api-usecases",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "worker"
+                }
+            }
+        },
+        {
+            "name": "beat",
+            "image": "YOUR_API_IMAGE",
+            "memory": 256,
+            "command": [
+                "./start_server.sh",
+                "beat"
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/api-usecases",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "beat"
+                }
+            }
+        }
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "memory": "1024",
+    "cpu": "512"
+}
