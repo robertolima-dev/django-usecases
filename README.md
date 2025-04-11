@@ -102,10 +102,17 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Cadastro de books e courses
 
 ### `image_processing` - Upload e Processamento com Thumbnails
-- API para upload de imagem autenticado
-- Criação de thumbnails assíncrona com Pillow + Celery
-- Visualização de imagens do usuário
-- Integração com tasks, sinais e manipulação de arquivos
+- Upload de imagens vinculado ao usuário autenticado
+- **Validação automática** no upload:
+  - Formatos permitidos: `JPEG`, `JPG`, `PNG`, `WEBP`
+  - Tamanho máximo: 5MB
+  - Dimensões mínimas: 300x300 px
+- **Processamento assíncrono com Celery** após upload:
+  - Geração de 3 tamanhos: `thumbnail` (150x150), `medium` (600px), `large` (1200px)
+  - Conversão automática da imagem para `JPEG` ou `WEBP`
+- Campo `output_format` para o usuário escolher o formato de saída
+- Campos disponíveis:
+  - `original_image`, `thumbnail`, `medium`, `large`, `output_format`, `uploaded_at`
 
 ### `scheduler` – agendamento de tarefas com Celery Beat
 - Agendamento automático de tarefas recorrentes com `django-celery-beat`
@@ -206,7 +213,7 @@ threading.Thread(target=comprar, args=(token2,)).start()
 Gerar relatórios de usuários ativos em background
 
 ### Como usar:
-- `POST /api/reports/` com payload vazio
+- `POST /api/v1/reports/` com payload vazio
 - Task Celery é disparada: `generate_user_report`
 - Gera CSV em `media/reports/` e atualiza o campo `file_path`
 
@@ -303,7 +310,7 @@ Use o parâmetro `order_by` ou `ordering`:
 
 ### Exemplo:
 ```http
-GET /api/courses/?price_min=50&tags=1,3&is_free=false&order_by=rating
+GET /api/v1/courses/?price_min=50&tags=1,3&is_free=false&order_by=rating
 ```
 
 ---
@@ -316,6 +323,19 @@ Utilize o wscat para testar no terminal:
 
 ```bash
 wscat -c "ws://localhost:8000/ws/notifications/?token=TOKEN_DO_USUARIO"
+```
+
+---
+
+### 📤 App `image_processing`: Upload de imagem
+
+```http
+POST /api/v1/uploads-images/
+Authorization: Token SEU_TOKEN
+
+FormData:
+- original_image: arquivo (.jpg, .png, .webp, etc.)
+- output_format: JPEG ou WEBP (opcional, padrão: JPEG)
 ```
 
 ---
@@ -342,7 +362,7 @@ O chat privado é baseado em salas (`Room`) que conectam N usuários.
 Crie (ou recupere) uma sala com outro usuário via:
 
 ```http
-POST /api/message/rooms/
+POST /api/v1/rooms/
 Authorization: Token TOKEN_DO_USUARIO
 {
   "user_ids": [4, 5],
@@ -368,7 +388,7 @@ Envie uma mensagem assim via websocket:
 Enviar mensagens via API REST (opcional):
 
 ```http
-POST /api/message/messages/send/
+POST /api/v1/message/send/
 Authorization: Token TOKEN_DO_USUARIO
 {
   "room_id": 12,
@@ -415,6 +435,8 @@ wscat -c "ws://localhost:8000/ws/dashboard/?token=TOKEN_DO_USUARIO"
 python manage.py populate_books           # Cria 100 livros aleatórios
 python manage.py populate_comments        # Cria comentários aleatórios nos livros
 python manage.py populate_courses         # Cria 30 cursos aleatórios
+python manage.py populate_raiting         # Cria avaliações para cursos
+python manage.py populate_payment         # Cria pagamentos de cursos
 python manage.py populate_tenants         # Cria tenants com usuários
 python manage.py populate_projects        # Cria projetos associados aos tenants
 ```
