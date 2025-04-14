@@ -208,12 +208,11 @@ Este projeto aplica diversos **Design Patterns** clássicos da engenharia de sof
 - **Exemplo**: `UserMiniSerializer`, `Room.last_message` (no `chat`)
 - **Descrição**: Encapsula acesso a objetos complexos com interface simplificada.
 
+---
 
 ## 🎯 Decorators personalizados
 
 Este projeto implementa o **Decorator Pattern** para encapsular comportamentos reutilizáveis em torno de views, tasks, actions administrativas e consumers WebSocket.
-
----
 
 ### ✅ Lista de decorators aplicados
 
