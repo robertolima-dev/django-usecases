@@ -1,9 +1,12 @@
 from django.contrib import admin, messages
 
+from common.decorators.admin import admin_action_log
+
 from .models import Message, Room
 from .tasks import process_room
 
 
+@admin_action_log("Disparo processamento assíncrono das salas com sucesso!")
 @admin.action(description="Disparar processamento assíncrono das salas")
 def trigger_async_process(modeladmin, request, queryset):
     task_count = 0
@@ -14,7 +17,7 @@ def trigger_async_process(modeladmin, request, queryset):
     if task_count > 0:
         messages.success(request, f"{task_count} tarefas foram enviadas para o Celery!") # noqa501
     else:
-        messages.warning(request, "Nenhuma tarefa foi enviada para o Celery.")
+        messages.warning(request, "Nenhuma tarefa foi enviada para o Celery.") # noqa501
 
 
 class MessageInline(admin.TabularInline):

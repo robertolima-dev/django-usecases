@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from apps.report.api.report.serializers import ReportRequestSerializer
 from apps.throttle.utils import check_and_increment_quota
+from common.decorators.quota import check_quota
 
 
 class UploadViewSet(ModelViewSet):
@@ -12,6 +13,7 @@ class UploadViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     http_method_names = ['post']
 
+    @check_quota(action="upload")
     def create(self, request, *args, **kwargs):
 
         try:

@@ -5,6 +5,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 
+from common.decorators.websocket import ensure_room_participant
+
 from .models import Message, Room
 
 User = get_user_model()
@@ -24,6 +26,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         else:
             await self.close()
 
+    @ensure_room_participant(lambda scope: scope["url_route"]["kwargs"]["room_id"]) # noqa501
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name) # noqa501
 

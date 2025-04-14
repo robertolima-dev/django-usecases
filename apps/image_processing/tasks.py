@@ -7,10 +7,13 @@ from django.core.files.base import ContentFile
 from django.utils.text import slugify
 from PIL import Image
 
+from common.decorators.logging import log_task_execution
+
 from .models import UploadedImage
 
 
 @shared_task(name='image_processing.create_thumbnail')
+@log_task_execution
 def create_thumbnail(image_id):
     try:
         image_instance = UploadedImage.objects.get(id=image_id) # noqa501

@@ -20,6 +20,10 @@ def check_and_increment_quota(user, action):
         }
     )
 
+    print(quota)
+    print(quota.used)
+    print(quota.limit)
+
     if quota.reset_date != date.today():
         quota.used = 0
         quota.reset_date = date.today()
