@@ -179,6 +179,64 @@ celery -A api_core worker --loglevel=info
 celery -A api_core beat --loglevel=info
 ```
 
+## 🧩 Design Patterns no projeto `django-usecases`
+
+Este projeto aplica diversos **Design Patterns** clássicos da engenharia de software, tanto de forma implícita (como boas práticas do Django) quanto explicitamente por meio da organização modular, tasks assíncronas e arquitetura desacoplada.
+
+### 1. **Factory Pattern**
+- **Onde**: Serializers (`serializer.create()`)
+- **Exemplo**: `UploadedImageSerializer`, `CourseSerializer`
+- **Descrição**: Os serializers funcionam como fábricas para criação de objetos com lógica de validação e instanciamento encapsulada.
+
+### 2. **Observer Pattern**
+- **Onde**: Celery + Django Signals
+- **Exemplo**: `create_thumbnail` (task assíncrona), `monitor.signals.fill_task_name_if_missing`
+- **Descrição**: Eventos disparam ações subsequentes como notificações ou transformações de dados, desacopladas da lógica principal.
+
+### 3. **Command Pattern**
+- **Onde**: `manage.py` custom commands
+- **Exemplo**: `python manage.py reset_user_quotas`
+- **Descrição**: Lógica encapsulada em comandos reutilizáveis e automatizáveis.
+
+### 4. **Strategy Pattern**
+- **Onde**: Filtros dinâmicos, Permissões, WebSocket Consumers
+- **Exemplo**: `CourseFilter`, `IsOwnerPermission`, `ChatConsumer`
+- **Descrição**: Algoritmos intercambiáveis selecionados em tempo de execução com base no contexto.
+
+### 5. **Proxy Pattern**
+- **Onde**: Serializers com campos computados e propriedades em models
+- **Exemplo**: `UserMiniSerializer`, `Room.last_message` (no `chat`)
+- **Descrição**: Encapsula acesso a objetos complexos com interface simplificada.
+
+
+## 🎯 Decorators personalizados
+
+Este projeto implementa o **Decorator Pattern** para encapsular comportamentos reutilizáveis em torno de views, tasks, actions administrativas e consumers WebSocket.
+
+---
+
+### ✅ Lista de decorators aplicados
+
+| Decorator | Objetivo | Aplicado em |
+|----------|----------|-------------|
+| `@log_task_execution` | Loga início/fim/erro de tasks Celery | `image_processing`, `scheduler` |
+| `@check_quota(action="...")` | Valida se o usuário tem cota para realizar a ação | `throttle`, `chat`, `upload` |
+| `@admin_action_log("msg")` | Registra e notifica actions feitas no Django Admin | `admin.py` de qualquer app |
+| `@ensure_room_participant` | Garante que o usuário está em uma `Room` antes de conectar via WebSocket | `chat/consumers.py` |
+
+---
+
+### 📌 Exemplos de uso
+
+#### 📦 `log_task_execution`
+
+```python
+@shared_task(name='image_processing.create_thumbnail')
+@log_task_execution
+def create_thumbnail(image_id):
+  pass
+```
+
 ---
 
 ### 💳 App `ecommerce`: concorrência com `select_for_update`
