@@ -4,8 +4,6 @@ import os
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import UniqueConstraint
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 ACCESS_LEVEL_CHOICES = (
@@ -60,17 +58,6 @@ class Profile(BaseModel):
 
     def __str__(self) -> str:
         return str(self.user.email)
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
 
 
 class Hash(models.Model):

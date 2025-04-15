@@ -24,7 +24,7 @@ def get_user_from_instance(instance):
 @receiver(post_save)
 def log_save(sender, instance, created, **kwargs):
     print(f'log_save => {instance}')
-    if sender.__name__ in ["AuditLog", "PeriodicTasks", "PeriodicTask"]: # noqa501
+    if sender.__name__ in ["AuditLog", "PeriodicTasks", "PeriodicTask", "TaskResult"]: # noqa501
         return  # Evita loop
 
     user = get_user_from_instance(instance)
@@ -32,7 +32,6 @@ def log_save(sender, instance, created, **kwargs):
 
     changes = model_to_dict(instance)
 
-    # Serializa com DjangoJSONEncoder para tratar datetime e outros tipos
     try:
         changes_json = json.dumps(changes, cls=DjangoJSONEncoder)
     except Exception:
