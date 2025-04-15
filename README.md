@@ -489,7 +489,7 @@ wscat -c "ws://localhost:8000/ws/dashboard/?token=TOKEN_DO_USUARIO"
 ## 📆 Populando dados
 
 ```bash
-python manage.py script_to_create_users       # Cria 100 usuarios com faker
+python manage.py populate_users               # Cria 100 usuarios com faker
 python manage.py populate_books               # Cria 100 livros aleatórios
 python manage.py populate_comments            # Cria comentários aleatórios nos livros
 python manage.py populate_courses             # Cria 30 cursos aleatórios
