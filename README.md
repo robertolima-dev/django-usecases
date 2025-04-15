@@ -497,7 +497,6 @@ python manage.py populate_rating              # Cria avaliações para cursos
 python manage.py populate_payment             # Cria pagamentos de cursos
 python manage.py populate_tenants             # Cria tenants com usuários
 python manage.py populate_projects            # Cria projetos associados aos tenants
-python manage.py populate_quotas              # Cria limites de acesso aos usuarios
 python manage.py populate_rooms_and_messages  # Cria rooms e messages aleatórias
 ```
 
