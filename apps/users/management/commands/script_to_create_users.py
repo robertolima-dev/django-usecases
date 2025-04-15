@@ -5,9 +5,9 @@ REGISTER_URL = "http://localhost:8000/api/v1/register-user/"  # Se usar JWT
 
 
 class Command(BaseCommand):
-    help = "Cadastra 50 usuarios"
+    help = "Cadastra 100 usuarios"
 
     def handle(self, *args, **kwargs):
 
-        for i in list(range(1, 50)):
+        for i in list(range(1, 100)):
             requests.post(REGISTER_URL, data={"email": "robertolima.izphera+user" + str(i) + "@gmail.com", "password": "123456", "name": "Roberto Lima"}) # noqa501

@@ -126,7 +126,7 @@ class UserDataManager:
 
             UserModel.objects.create_user(
                 email=email,
-                username=f"{request.data.get('name').replace(' ', '').lower().strip()}_{str(random.randrange(99))}", # noqa501
+                username=f"{request.data.get('name').replace(' ', '').lower().strip()}_{str(random.randrange(999))}", # noqa501
                 password=request.data.get('password'),
                 first_name=request.data.get('name').split(' ')[0],
                 last_name=request.data.get('name').split(' ')[1] if len(request.data.get('name').split(' ')) > 1 else '' # noqa501
