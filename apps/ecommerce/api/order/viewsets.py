@@ -1,12 +1,8 @@
-import time
-
-from django.db import transaction
-from django.db.models import F
-from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from apps.ecommerce.models import Order, Product
+from apps.ecommerce.managers.order_manager import OrderManager
+from apps.ecommerce.models import Order
 
 from .serializers import OrderSerializer
 
@@ -16,19 +12,40 @@ class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
-    @transaction.atomic
     def perform_create(self, serializer):
-        product = serializer.validated_data["product"]
-        quantity = serializer.validated_data["quantity"]
+        data = serializer.validated_data
+        order = OrderManager().create_order(
+            user=self.request.user,
+            product=data["product"],
+            quantity=data["quantity"]
+        )
+        serializer.instance = order
 
-        product_locked = Product.objects.select_for_update().get(pk=product.pk)
+    # @transaction.atomic
+    # def perform_create(self, serializer):
+    #     product = serializer.validated_data["product"]
+    #     quantity = serializer.validated_data["quantity"]
 
-        if product_locked.stock < quantity:
-            raise ValidationError("Estoque insuficiente para este pedido.")
+    #     updated = Product.objects.filter(
+    #         pk=product.pk,
+    #         stock__gte=quantity
+    #     ).update(stock=F("stock") - quantity)
 
-        product_locked.stock = F("stock") - quantity
+    #     time.sleep(5)
 
-        time.sleep(5)
-        product_locked.save()
+    #     if not updated:
+    #         raise ValidationError("Estoque insuficiente.")
 
-        serializer.save(user=self.request.user, paid=True)
+    #     serializer.save(user=self.request.user, paid=True)
+
+        # product_locked = Product.objects.select_for_update().get(pk=product.pk) # noqa501
+
+        # if product_locked.stock < quantity:
+        #     raise ValidationError("Estoque insuficiente para este pedido.")
+
+        # product_locked.stock = F("stock") - quantity
+
+        # time.sleep(5)
+        # product_locked.save()
+
+        # serializer.save(user=self.request.user, paid=True)

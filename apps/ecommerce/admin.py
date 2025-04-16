@@ -1,19 +1,21 @@
-# ecommerce/admin.py
 from django.contrib import admin
 
-from .models import Order, Product
+from apps.ecommerce.models import Order, Product
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "stock")
-    search_fields = ("name",)
-    list_filter = ("stock",)
+    list_display = ["id", "name", "stock", "price", "is_active"]
+    list_editable = ["stock", "price", "is_active"]
+    search_fields = ["name"]
+    list_filter = ["is_active"]
+    ordering = ["-id"]
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "product", "quantity", "paid", "created_at")
-    list_filter = ("paid", "created_at", "product")
-    search_fields = ("user__username", "product__name")
-    readonly_fields = ("created_at",)
+    list_display = ["id", "user", "product", "quantity", "total_price", "created_at"] # noqa501
+    list_filter = ["created_at"]
+    search_fields = ["user__username", "product__name"]
+    readonly_fields = ["total_price", "created_at"]
+    ordering = ["-created_at"]
