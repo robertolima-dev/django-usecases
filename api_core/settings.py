@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "channels",
     'django_celery_beat',
     'django_celery_results',
+    'django_elasticsearch_dsl',
     'apps.users.apps.UsersConfig',
     'apps.book.apps.BookConfig',
     'apps.ecommerce.apps.EcommerceConfig',
@@ -240,6 +241,15 @@ OPENAI_KEY = os.getenv('OPENAI_KEY')
 
 # CRON
 TOKEN_CRON = os.getenv('TOKEN_CRON')
+
+# ELASTIC
+USE_ELASTIC = os.environ.get("PROJECT_ENV") == "local"
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://localhost:9200'
+    }
+}
 
 # SWAGGER
 SWAGGER_SETTINGS = {

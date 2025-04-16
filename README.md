@@ -30,6 +30,12 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Simula checkout com ajuste de estoque seguro
 - Usa `select_for_update` com `transaction.atomic()`
 - Permite testes de concorrência com Celery ou scripts externos
+- Integração com `Elasticsearch` via `django-elasticsearch-dsl` somente local
+- Indexação automática de produtos ao criar, editar ou remover
+- Comando para indexação em massa:  
+  ```bash
+  python manage.py index_products
+  ```
 
 ### `report` - Processamento Assíncrono com Celery
 - Gera relatórios CSV de usuários ativos
@@ -178,6 +184,26 @@ celery -A api_core worker --loglevel=info
 ```bash
 celery -A api_core beat --loglevel=info
 ```
+
+---
+
+### 🐳 Rodando o Elasticsearch no ambiente local
+
+Para utilizar a busca com Elasticsearch localmente, execute o seguinte comando (apenas uma vez):
+
+```bash
+docker run -d \
+  --name elastic \
+  -p 9200:9200 \
+  -e "discovery.type=single-node" \
+  -e "xpack.security.enabled=false" \
+  docker.elastic.co/elasticsearch/elasticsearch:8.12.1
+```
+
+```bash
+curl http://localhost:9200
+```
+---
 
 ## 🧩 Design Patterns no projeto `django-usecases`
 

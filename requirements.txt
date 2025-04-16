@@ -39,6 +39,9 @@ django-timezone-field==7.1
 django_celery_results==2.6.0
 djangorestframework==3.14.0
 drf-yasg==1.21.8
+elastic-transport==8.17.1
+elasticsearch==8.18.0
+elasticsearch-dsl==8.18.0
 Faker==37.1.0
 gunicorn==21.2.0
 h11==0.14.0

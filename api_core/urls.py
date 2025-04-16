@@ -33,7 +33,8 @@ from apps.course.api.course.viewsets import CourseViewSet
 from apps.dashboard.api.broadcast.viewsets import DashboardBroadcastView
 from apps.dashboard.api.dashboard.viewsets import DashboardAPIView
 from apps.ecommerce.api.order.viewsets import OrderViewSet
-from apps.ecommerce.api.product.viewsets import ProductViewSet
+from apps.ecommerce.api.product.viewsets import (ProductSearchAPIView,
+                                                 ProductViewSet)
 from apps.image_processing.api.image.viewsets import (ImageUploadAPIView,
                                                       UserImageListAPIView)
 from apps.notifications.api.notification.viewsets import NotificationViewSet
@@ -191,5 +192,10 @@ urlpatterns.append(
 urlpatterns.append(
     path("api/v1/messages/", ListMessagesAPIView.as_view(), name="messages-list") # noqa501
 )
+
+urlpatterns.append(
+    path("api/v1/product/search/", ProductSearchAPIView.as_view(), name="product-search") # noqa501
+)
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
