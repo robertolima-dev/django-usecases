@@ -27,7 +27,6 @@ class ProductDocument(Document):
             "category",
             "is_active",
             "created_at",
-            # "owner",
         ]
 
     @classmethod
