@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import (HTTP_200_OK, HTTP_204_NO_CONTENT,
@@ -14,6 +15,9 @@ from .serializers import (ChangePasswordSerializer, ConfirmEmailSerializer,
                           UserSigninSerializer)
 
 
+@extend_schema(
+    tags=["Auth"]
+)
 class AuthenticationApiView(APIView):
     serializer_class = UserSigninSerializer
     http_method_names = ['post', ]
@@ -41,6 +45,9 @@ class AuthenticationApiView(APIView):
                 )
 
 
+@extend_schema(
+    tags=["Auth"]
+)
 class UserInfoApiView(APIView):
     serializer_class = UserSigninSerializer
     http_method_names = ['get', ]
@@ -64,6 +71,9 @@ class UserInfoApiView(APIView):
                 )
 
 
+@extend_schema(
+    tags=["Auth"]
+)
 class CreateUserView(APIView):
     serializer_class = UserSigninSerializer
     http_method_names = ['post', ]
@@ -91,6 +101,9 @@ class CreateUserView(APIView):
                 )
 
 
+@extend_schema(
+    tags=["Auth"]
+)
 class ConfirmEmailView(APIView):
     serializer_class = ConfirmEmailSerializer
     http_method_names = ['post', ]
@@ -125,6 +138,9 @@ class ConfirmEmailView(APIView):
                 )
 
 
+@extend_schema(
+    tags=["Auth"]
+)
 class ForgotPasswordView(APIView):
     serializer_class = ForgorPasswordSerializer
     http_method_names = ['post', ]
@@ -161,6 +177,9 @@ class ForgotPasswordView(APIView):
                 )
 
 
+@extend_schema(
+    tags=["Auth"]
+)
 class ChangePasswordView(APIView):
     serializer_class = ChangePasswordSerializer
     http_method_names = ['post', ]
@@ -194,6 +213,9 @@ class ChangePasswordView(APIView):
                 )
 
 
+@extend_schema(
+    tags=["Auth"]
+)
 class UserDeleteApiView(APIView):
     http_method_names = ['delete', ]
     permission_classes = [IsAuthenticated, ]
@@ -224,6 +246,9 @@ class UserDeleteApiView(APIView):
                 )
 
 
+@extend_schema(
+    tags=["Auth"]
+)
 class MfaApiView(APIView):
     serializer_class = UserSigninSerializer
     http_method_names = ['post', ]
@@ -238,6 +263,9 @@ class MfaApiView(APIView):
             )
 
 
+@extend_schema(
+    tags=["Auth"]
+)
 class UnsubscribeApiView(APIView):
     serializer_class = UnsubscribeSerializer
     http_method_names = ['post', ]

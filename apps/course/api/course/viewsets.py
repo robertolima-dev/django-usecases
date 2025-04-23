@@ -2,10 +2,15 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
-# from django.contrib.postgres.search import SearchVector
 from django.db.models import Avg, Count, Q
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (OpenApiExample, OpenApiParameter,
+                                   OpenApiResponse, extend_schema)
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from apps.course.filters import CourseFilter
@@ -16,9 +21,15 @@ from apps.notifications.models import Notification
 
 from .serializers import CourseSerializer
 
+# from django.contrib.postgres.search import SearchVector
+
+
 User = get_user_model()
 
 
+@extend_schema(
+    tags=["Courses"]
+)
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.select_related("category", "instructor__user").prefetch_related("tags") # noqa501
     serializer_class = CourseSerializer
@@ -27,6 +38,60 @@ class CourseViewSet(ModelViewSet):
     search_fields = ["title", "description"]
     ordering_fields = ["price", "workload", "start_date", "created_at", "avg_rating", "paid_count",] # noqa501
     ordering = ["-created_at", "-avg_rating"]
+
+    @swagger_auto_schema(
+        operation_description="Endpoint customizado para retornar cursos ativos", # noqa501
+        responses={200: CourseSerializer(many=True)},
+    )
+    @action(detail=False, methods=["get"], url_path="actives")
+    def active_courses(self, request):
+        courses = Course.objects.filter(is_active=True)
+        serializer = self.get_serializer(courses, many=True)
+        return Response(serializer.data)
+
+    @extend_schema(
+        summary="Listar cursos gratuitos",
+        description="Retorna todos os cursos gratuitos disponíveis na plataforma.", # noqa501
+        responses={
+            200: OpenApiResponse(
+                response=CourseSerializer(many=True),
+                description="Lista de cursos com `is_free=True`"
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                name="ordering",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                description="Campo para ordenação. Ex: `ordering=-created_at`"
+            ),
+        ],
+        examples=[
+            OpenApiExample(
+                name="Exemplo de resposta",
+                value=[
+                    {
+                        "id": 1,
+                        "title": "Curso Django Básico",
+                        "description": "Aprenda o básico de Django",
+                        "is_free": True,
+                        "price": "0.00",
+                        "category": {"id": 1, "name": "Tecnologia"},
+                        "instructor": {"id": 2, "user": "prof@curso.com", "bio": "Dev backend"}, # noqa501
+                        "tags": [{"id": 1, "name": "python"}],
+                        "created_at": "2025-04-15T12:34:56Z",
+                    }
+                ],
+                response_only=True
+            )
+        ],
+        tags=["Courses"],
+    )
+    @action(detail=False, methods=["get"], url_path="free")
+    def free_courses(self, request):
+        courses = Course.objects.filter(is_free=True)
+        serializer = self.get_serializer(courses, many=True)
+        return Response(serializer.data)
 
     def get_queryset(self):
 

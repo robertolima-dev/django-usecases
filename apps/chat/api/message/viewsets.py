@@ -1,5 +1,6 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,6 +11,9 @@ from apps.chat.models import Message, Room
 from .serializers import MessageCreateSerializer, MessageSerializer
 
 
+@extend_schema(
+    tags=["Chats"]
+)
 class SendMessageAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -47,6 +51,9 @@ class SendMessageAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    tags=["Chats"]
+)
 class ListMessagesAPIView(APIView):
     permission_classes = [IsAuthenticated]
 

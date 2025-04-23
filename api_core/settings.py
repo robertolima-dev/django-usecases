@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django_filters",
     'rest_framework',
     'drf_yasg',
+    "drf_spectacular",
     'rest_framework.authtoken',
     'corsheaders',
     'django_summernote',
@@ -281,7 +282,8 @@ REST_FRAMEWORK = {
     },
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
-    ]
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 PROJECT_ENV = os.getenv("PROJECT_ENV")

@@ -205,6 +205,50 @@ curl http://localhost:9200
 ```
 ---
 
+## 📝 Documentação da API – `django-usecases`
+
+O projeto está integrado com dois geradores de documentação OpenAPI para APIs REST:
+
+- 🔍 **Swagger UI e ReDoc com drf-spectacular**
+- 📄 **Swagger UI com drf-yasg**
+
+### 🔗 Endpoints de documentação
+
+- **drf-spectacular**
+  - `/schema/` → OpenAPI JSON
+  - `/schema/swagger/` → Swagger UI
+  - `/schema/redoc/` → ReDoc
+
+- **drf-yasg**
+  - `/swagger/` → Swagger UI
+  - `/redoc/` → ReDoc
+  - `/swagger.json` → JSON do schema
+
+### ✅ Organização por módulos
+
+Os endpoints estão organizados por aplicação no Swagger e ReDoc através da propriedade `tags`, permitindo fácil navegação por áreas da plataforma:
+
+- `Books` → Endpoints de livros (`/api/v1/books/`)
+- `Courses` → Endpoints de cursos (`/api/v1/courses/`)
+- `Chat` → Sistema de mensagens privadas (`/api/v1/message/`)
+- `Ecommerce` → Produtos e pedidos com controle de estoque (`/api/v1/ecommerce/`)
+- `Throttle` → Limites de uso da API (`/api/v1/throttle/`)
+- `Scheduler` → Agendamentos periódicos com Celery Beat
+- `Image Processing` → Upload e conversão de imagens
+- `Monitor` → Painel de tarefas assíncronas com Celery
+- ...entre outros módulos
+
+### 🛠️ Anotações nos endpoints
+
+A documentação foi incrementada com:
+
+- `@extend_schema` (`drf-spectacular`) para descrições, exemplos e parâmetros
+- `@swagger_auto_schema` (`drf-yasg`) para personalização individual de métodos
+- Exemplo de resposta (`OpenApiExample`)
+- Parâmetros de consulta (`OpenApiParameter`), como `?ordering=-created_at`
+
+---
+
 ## 🧩 Design Patterns no projeto `django-usecases`
 
 Este projeto aplica diversos **Design Patterns** clássicos da engenharia de software, tanto de forma implícita (como boas práticas do Django) quanto explicitamente por meio da organização modular, tasks assíncronas e arquitetura desacoplada.

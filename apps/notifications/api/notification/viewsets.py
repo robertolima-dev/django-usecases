@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -10,6 +11,9 @@ from apps.notifications.models import (Notification, UserNotificationDeleted,
                                        UserNotificationRead)
 
 
+@extend_schema(
+    tags=["Notifications"]
+)
 class NotificationViewSet(ReadOnlyModelViewSet):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]

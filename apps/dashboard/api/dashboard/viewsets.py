@@ -1,5 +1,6 @@
 # from django.db.models import Q
 from django.utils.dateparse import parse_date
+from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -9,6 +10,9 @@ from apps.notifications.models import Notification
 from apps.throttle.models import UserQuota
 
 
+@extend_schema(
+    tags=["Dashboard"]
+)
 class DashboardAPIView(APIView):
     def get(self, request):
         date_from_str = request.GET.get("date_from")

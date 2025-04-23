@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -10,6 +11,9 @@ from apps.image_processing.tasks import create_thumbnail
 from .serializers import UploadedImageSerializer
 
 
+@extend_schema(
+    tags=["Image processing"]
+)
 class ImageUploadAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -38,6 +42,9 @@ class ImageUploadAPIView(APIView):
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST) # noqa501
 
 
+@extend_schema(
+    tags=["Image processing"]
+)
 class UserImageListAPIView(ListAPIView):
     serializer_class = UploadedImageSerializer
     permission_classes = [IsAuthenticated]

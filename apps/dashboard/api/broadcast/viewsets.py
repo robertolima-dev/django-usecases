@@ -1,10 +1,14 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
+@extend_schema(
+    tags=["Dashboard"]
+)
 class DashboardBroadcastView(APIView):
     permission_classes = [IsAdminUser]
 

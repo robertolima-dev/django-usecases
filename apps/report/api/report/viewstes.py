@@ -1,4 +1,5 @@
 # reports/views.py
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -8,6 +9,9 @@ from apps.report.tasks import generate_user_report
 from .serializers import ReportRequestSerializer
 
 
+@extend_schema(
+    tags=["Reports"]
+)
 class ReportRequestViewSet(ModelViewSet):
     queryset = ReportRequest.objects.select_related("user").order_by("-created_at") # noqa501
     serializer_class = ReportRequestSerializer

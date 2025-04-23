@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,6 +9,9 @@ from apps.chat.models import Room
 from .serializers import RoomCreateSerializer, RoomListSerializer
 
 
+@extend_schema(
+    tags=["Chats"]
+)
 class CreateRoomAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -24,6 +28,9 @@ class CreateRoomAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    tags=["Chats"]
+)
 class ListRoomsAPIView(APIView):
     permission_classes = [IsAuthenticated]
 

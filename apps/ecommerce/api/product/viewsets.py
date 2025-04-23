@@ -2,6 +2,7 @@ import os
 
 from django.conf import settings
 from django.db.models import Q
+from drf_spectacular.utils import extend_schema
 from elasticsearch import Elasticsearch
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
@@ -19,6 +20,9 @@ if USE_ELASTIC:
     es = Elasticsearch(["http://localhost:9200"])
 
 
+@extend_schema(
+    tags=["E-commerce"]
+)
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -64,6 +68,9 @@ class ProductViewSet(ModelViewSet):
         instance.delete()
 
 
+@extend_schema(
+    tags=["E-commerce"]
+)
 class ProductSearchAPIView(APIView):
     permission_classes = [AllowAny]
 

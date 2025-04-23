@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,6 +9,9 @@ from apps.throttle.utils import check_and_increment_quota
 from common.decorators.quota import check_quota
 
 
+@extend_schema(
+    tags=["Throttles"]
+)
 class UploadViewSet(ModelViewSet):
     serializer_class = ReportRequestSerializer
     permission_classes = [IsAuthenticated]

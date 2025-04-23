@@ -20,6 +20,8 @@ from django.conf.urls.static import static
 # from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
+from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
+                                   SpectacularSwaggerView)
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
@@ -51,20 +53,15 @@ from apps.users.api.auth.viewsets import (ChangePasswordView, ConfirmEmailView,
                                           MfaApiView, UnsubscribeApiView,
                                           UserDeleteApiView, UserInfoApiView)
 from apps.users.api.healthcheck.viewsets import HealthcheckViewSet
-from apps.users.api.profile.viewsets import (ProfessionalApiView,
-                                             ProfessionalParamApiView,
-                                             ProfileApiView,
-                                             ProfileDataApiView)
+from apps.users.api.profile.viewsets import ProfileApiView, ProfileDataApiView
 from apps.users.api.upload.viewsets import FileUploadApiView
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Emannar API",
-        default_version='v1',
-        description="API da aplicação Emannar",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="robertolima.izphera@gmail.com"),
-        license=openapi.License(name="BSD License"),
+        title="Django Usecases API",
+        default_version="v1",
+        description="Documentação da API com drf-yasg",
+        contact=openapi.Contact(email="suporte@seudominio.com"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
@@ -83,6 +80,10 @@ urlpatterns = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'), # noqa501
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'), # noqa501
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'), # noqa501
+
+    path("schema/", SpectacularAPIView.as_view(), name="schema"), # noqa501
+    path("schema/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"), # noqa501
+    path("schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"), # noqa501
 ]
 
 # + static(settings.MEDIA_URL, document_root=settings.STATIC_URL)
@@ -139,12 +140,6 @@ urlpatterns.append(
 )
 urlpatterns.append(
     path('api/v1/profile-data/', ProfileDataApiView.as_view(), name='profile-data'), # noqa E501
-)
-urlpatterns.append(
-    path('api/v1/profile-professionals/', ProfessionalApiView.as_view(), name='profile-professionals'), # noqa E501
-)
-urlpatterns.append(
-    path('api/v1/professional/<int:user_id>/', ProfessionalParamApiView.as_view(), name='professional'), # noqa E501
 )
 
 urlpatterns.append(

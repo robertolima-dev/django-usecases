@@ -4,6 +4,7 @@ import boto3
 import botocore
 from django.conf import settings
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -12,6 +13,9 @@ from rest_framework.status import (HTTP_201_CREATED, HTTP_400_BAD_REQUEST,
 from rest_framework.views import APIView
 
 
+@extend_schema(
+    tags=["Upload"]
+)
 class FileUploadApiView(APIView):
     parser_classes = (MultiPartParser,)
     http_method_names = ['post', ]
