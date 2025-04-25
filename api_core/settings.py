@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -120,8 +121,18 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TASK_RESULT_EXTENDED = True
+# CELERY_RESULT_BACKEND = 'django-db'
+
+IS_TESTING = 'test' in sys.argv
+
+CELERY_TASK_ALWAYS_EAGER = IS_TESTING
+CELERY_TASK_EAGER_PROPAGATES = IS_TESTING
+
+if IS_TESTING:
+    CELERY_RESULT_BACKEND = None
+else:
+    CELERY_RESULT_BACKEND = 'django-db'
 
 
 # URLCONF
