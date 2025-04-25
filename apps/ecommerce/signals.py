@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from apps.ecommerce.documents import ProductDocument
 from apps.ecommerce.models import Product
 
-USE_ELASTIC = settings.PROJECT_ENV == "local"
+USE_ELASTIC = settings.PROJECT_ENV == "develop_local"
 
 if USE_ELASTIC:
     @receiver(post_save, sender=Product)

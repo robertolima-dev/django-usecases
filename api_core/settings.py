@@ -243,8 +243,6 @@ OPENAI_KEY = os.getenv('OPENAI_KEY')
 # CRON
 TOKEN_CRON = os.getenv('TOKEN_CRON')
 
-# ELASTIC
-USE_ELASTIC = os.environ.get("PROJECT_ENV") == "local"
 
 ELASTICSEARCH_DSL = {
     'default': {
@@ -296,22 +294,22 @@ PROJECT_URL = os.getenv('PROJECT_URL')
 if PROJECT_ENV == "local":
     DEBUG = True
     URL_BASE = "0.0.0.0:8000"
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.sqlite3",
-    #         "NAME": BASE_DIR / "db.sqlite3",
-    #     }
-    # }
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("DB_NAME"),
-            "USER": os.getenv("DB_USER"),
-            "PASSWORD": os.getenv("DB_PASSWORD"),
-            "HOST": os.getenv("DB_HOST"),
-            "PORT": os.getenv("DB_PORT"),
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.postgresql",
+    #         "NAME": os.getenv("DB_NAME"),
+    #         "USER": os.getenv("DB_USER"),
+    #         "PASSWORD": os.getenv("DB_PASSWORD"),
+    #         "HOST": os.getenv("DB_HOST"),
+    #         "PORT": os.getenv("DB_PORT"),
+    #     }
+    # }
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
     STATIC_URL = "/static/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")

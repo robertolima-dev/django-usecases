@@ -18,7 +18,7 @@ from apps.ecommerce.documents import ProductDocument
 from apps.ecommerce.models import Product
 from common.elastisearch_pagination import ElasticsearchLimitOffsetPagination
 
-USE_ELASTIC = settings.PROJECT_ENV == "local"
+USE_ELASTIC = settings.PROJECT_ENV == "develop_local"
 
 
 @extend_schema(
@@ -26,9 +26,17 @@ USE_ELASTIC = settings.PROJECT_ENV == "local"
 )
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
-    serializer_class = ProductCustomSerializer if USE_ELASTIC else ProductSerializer # noqa501
     permission_classes = [IsAuthenticatedOrReadOnly]
-    pagination_class = ElasticsearchLimitOffsetPagination if USE_ELASTIC else LimitOffsetPagination # noqa501
+
+    def get_serializer_class(self):
+        if USE_ELASTIC and self.action == "list":
+            return ProductCustomSerializer
+        return ProductSerializer
+
+    def get_pagination_class(self):
+        if USE_ELASTIC and self.action == "list":
+            return ElasticsearchLimitOffsetPagination
+        return LimitOffsetPagination
 
     def list(self, request, *args, **kwargs):
         search_query = request.query_params.get("search")
@@ -114,7 +122,7 @@ class ProductSearchAPIView(APIView):
 
         products = []
 
-        if os.environ.get("PROJECT_ENV") == "local":
+        if os.environ.get("PROJECT_ENV") == "develop_local":
             s = ProductDocument.search().query("multi_match", query=query, fields=["name", "description"]) # noqa501
             search_results = s.execute()
 

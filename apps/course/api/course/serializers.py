@@ -27,12 +27,10 @@ class InstructorSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    # leitura
     category = CategorySerializer(read_only=True)
     instructor = InstructorSerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
 
-    # escrita
     category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), source="category", write_only=True
     )
@@ -69,7 +67,7 @@ class CourseSerializer(serializers.ModelSerializer):
             # write
             "category_id", "instructor_id", "tag_ids",
         ]
-        read_only_fields = ["created_at"]
+        read_only_fields = ["id", "created_at"]
 
 
 class CourseSearchSerializer(serializers.Serializer):

@@ -75,3 +75,13 @@ class CourseDocument(Document):
     @classmethod
     def delete_document(cls, course: Course):
         cls().delete(course)
+
+    def get_instances_from_related(self, related_instance):
+        if isinstance(related_instance, Category):
+            return Course.objects.filter(category=related_instance)
+
+        if isinstance(related_instance, Instructor):
+            return Course.objects.filter(instructor=related_instance)
+
+        if isinstance(related_instance, Tag):
+            return Course.objects.filter(tags=related_instance)

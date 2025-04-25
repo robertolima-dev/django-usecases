@@ -154,3 +154,5 @@ setup_model.py
 setup_basemodel.py
 
 .vscode/
+
+tests_template/

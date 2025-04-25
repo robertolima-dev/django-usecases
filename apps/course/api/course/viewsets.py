@@ -27,7 +27,7 @@ from common.elastisearch_pagination import ElasticsearchLimitOffsetPagination
 
 from .serializers import CourseSearchSerializer, CourseSerializer
 
-USE_ELASTIC = settings.PROJECT_ENV == "local"
+USE_ELASTIC = settings.PROJECT_ENV == "develop_local"
 
 # from django.contrib.postgres.search import SearchVector
 
@@ -40,15 +40,21 @@ User = get_user_model()
 )
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.select_related("category", "instructor__user").prefetch_related("tags") # noqa501
-    # serializer_class = CourseSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = CourseFilter
     search_fields = ["title", "description"]
     ordering_fields = ["price", "workload", "start_date", "created_at", "avg_rating", "paid_count",] # noqa501
-    ordering = ["-created_at", "-avg_rating"]
+    ordering = ["-created_at", "title", "price", ]
 
-    serializer_class = CourseSearchSerializer if USE_ELASTIC else CourseSerializer # noqa501
-    pagination_class = ElasticsearchLimitOffsetPagination if USE_ELASTIC else LimitOffsetPagination # noqa501
+    def get_serializer_class(self):
+        if USE_ELASTIC and self.action == "list":
+            return CourseSearchSerializer
+        return CourseSerializer
+
+    def get_pagination_class(self):
+        if USE_ELASTIC and self.action == "list":
+            return ElasticsearchLimitOffsetPagination
+        return LimitOffsetPagination
 
     @swagger_auto_schema(
         operation_description="Endpoint customizado para retornar cursos ativos", # noqa501
@@ -176,14 +182,12 @@ class CourseViewSet(ModelViewSet):
                 else:
                     s = s.sort(ordering)
 
-            # Paginação
             pages = self.paginate_queryset(s)
             if pages:
                 data = [hit.to_dict() for hit in pages]
                 serializer = CourseSearchSerializer(data, many=True)
                 return self.get_paginated_response(serializer.data)
 
-            # Sem paginação (fallback)
             results = [hit.to_dict() for hit in s.execute()]
             serializer = CourseSearchSerializer(results, many=True)
             return self.get_paginated_response(serializer.data)
@@ -209,23 +213,6 @@ class CourseViewSet(ModelViewSet):
                     {'detail': str(e)},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-
-    # def get_queryset(self):
-
-    #     # qs = Course.objects.annotate(
-    #     #     search=SearchVector("title", "description")
-    #     # )
-
-    #     # q = self.request.query_params.get("q")
-    #     # if q:
-    #     #     qs = qs.filter(search=q)
-
-    #     # return qs
-
-        # return Course.objects.annotate(
-        #     avg_rating=Avg("ratings__rating"),
-        #     paid_count=Count("payments", filter=Q(payments__status="paid"))
-        # )
 
     def perform_create(self, serializer):
         course = serializer.save()

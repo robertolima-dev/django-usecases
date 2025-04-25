@@ -7,7 +7,7 @@ from apps.mailer.tasks import send_mass_email
 
 from .models import Course  # Ou Book
 
-USE_ELASTIC = settings.PROJECT_ENV == "local"
+USE_ELASTIC = settings.PROJECT_ENV == "develop_local"
 
 
 @receiver(post_save, sender=Course)
