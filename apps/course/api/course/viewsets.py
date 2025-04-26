@@ -113,22 +113,31 @@ class CourseViewSet(ModelViewSet):
     def list(self, request, *args, **kwargs):
 
         ordering = request.query_params.get("ordering")
+        search = request.query_params.get("search")
+        title = request.query_params.get("title")
+        description = request.query_params.get("description")
+        ordering = request.query_params.get("ordering")
 
         if USE_ELASTIC:
-            search = request.query_params.get("search")
-            title = request.query_params.get("title")
-            description = request.query_params.get("description")
-            ordering = request.query_params.get("ordering")
 
             s = CourseDocument.search()
-            filters = [Q("term", is_active=True)]  # Sempre ativo
+            filters = [Q("term", is_active=True)]
 
-            # Filtros full-text
+            # Filtros full-text aplicando boost
             if search:
-                filters.append(Q("multi_match", query=search, fields=["title", "description"])) # noqa501
+                filters.append(Q(
+                    "multi_match",
+                    query=search,
+                    fields=[
+                        "title^3",
+                        "description"
+                    ],
+                    operator="and"
+                ))
 
             if title:
-                filters.append(Q("multi_match", query=title, fields=["title",])) # noqa501
+                # aplicado edge_ngram para auto complete
+                filters.append(Q("match", title_autocomplete={"query": title, "operator": "and"})) # noqa501
 
             if description:
                 filters.append(Q("multi_match", query=description, fields=["description",])) # noqa501

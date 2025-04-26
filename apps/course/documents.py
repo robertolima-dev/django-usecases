@@ -1,12 +1,34 @@
 from django.db.models import Avg
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
+# edge_ngram => automplete # noqa501
+from elasticsearch_dsl import analyzer, token_filter
 
 from apps.course.models import Category, Course, Instructor, Tag
+
+# edge_ngram => automplete
+autocomplete_analyzer = analyzer(
+    'autocomplete',
+    tokenizer="standard",
+    filter=["lowercase", token_filter("edge_ngram_filter", type="edge_ngram", min_gram=1, max_gram=20)], # noqa501
+)
+# edge_ngram => automplete
+autocomplete_search_analyzer = analyzer(
+    'autocomplete_search',
+    tokenizer="standard",
+    filter=["lowercase"],
+)
 
 
 @registry.register_document
 class CourseDocument(Document):
+
+    # edge_ngram => automplete
+    title_autocomplete = fields.TextField(
+        analyzer=autocomplete_analyzer,
+        search_analyzer=autocomplete_search_analyzer,
+    )
+
     category = fields.ObjectField(properties={
         "id": fields.IntegerField(),
         "name": fields.TextField(),
@@ -42,6 +64,10 @@ class CourseDocument(Document):
             'created_at'
         ]
         related_models = [Category, Instructor, Tag]
+
+    # edge_ngram => automplete
+    def prepare_title_autocomplete(self, instance):
+        return instance.title
 
     def prepare_category(self, instance):
         if instance.category:
