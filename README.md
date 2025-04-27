@@ -6,12 +6,18 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 
 ## 📁 Estrutura dos Apps
 
-### `book` - Consultas Otimizadas, Comentários e Agregações
+### `book` – Consultas Otimizadas, Comentários, Agregações e Cache Redis
 - Modela livros com autor, tags e comentários
 - Usa `select_related`, `prefetch_related` e `annotate` para otimizar queries
 - Permite filtros por título, autor, tags e número de comentários
 - Conta e ordena livros por número de comentários (`comments_count`)
 - Utiliza `SerializerMethodField` apenas quando necessário
+- **Integração com Cache Redis**:
+  - Cacheia listagem de livros (`/books/`) sensível a filtros, ordenação e paginação
+  - Cacheia detalhes de livros individuais (`/books/{id}/`)
+  - Geração automática de chaves únicas de cache baseadas nos parâmetros da URL
+  - Expiração automática dos caches em 5 minutos
+  - Invalidação de cache nas operações de criação e atualização de livros
 - Comandos para gerar dados fictícios:
   ```bash
   python manage.py populate_books       # Cria livros com tags e autores
@@ -42,13 +48,17 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Executa a geração de arquivos via Celery + Redis
 - Atualiza status (`pending`, `processing`, `done`, `failed`)
 
-### `course` - Filtros Avançados com Django Filter
-- Filtros por textos, datas, números, booleanos, relacionamentos
-- Filtros combináveis e ordenações dinâmicas por avaliação e compras
-- Integração com `django-filter` + DRF
-- Ordenações: `order_by=rating`, `order_by=purchases`, `ordering=-price`, etc.
-- **Filtros especiais**: `avg_rating_min`, `min_purchases`, `only_free`, `is_featured`
-- **Notificações em tempo real** quando um novo curso é criado, usando WebSocket
+### `course` - Filtros Avançados, Busca Otimizada e Integração com Elasticsearch
+- Filtros completos: textos, datas, números, booleanos e relacionamentos
+- Ordenações dinâmicas: order_by=rating, order_by=purchases, ordering=-price, etc.
+- **Filtros especiais**: avg_rating_min, min_purchases, only_free, is_featured
+- Busca full-text otimizada usando Elasticsearch:
+- Busca léxica com multi_match (boost em title)
+- Autocomplete inteligente (edge_ngram) no título dos cursos
+- Facets dinâmicos (agregações) para categorias, tags e faixas de preço
+- Integração flexível local com Elasticsearch apenas em ambiente de desenvolvimento(USE_ELASTIC configurado via settings.PROJECT_ENV)
+- Fallback automático para consultas Django ORM em ambientes sem Elasticsearch
+- **Notificações em tempo real** para novos cursos publicados, usando WebSocket (Django Channels)
 
 ### `permissions` - Sistema de Permissões por Perfil de Acesso
 - Baseado no campo `access_level` do model `Profile`
@@ -186,6 +196,15 @@ celery -A api_core beat --loglevel=info
 ```
 
 ---
+## 🚀 Integração Elasticsearch – Ambiente Local
+
+Este projeto utiliza **Elasticsearch** para otimizar buscas avançadas no app `course`, disponível **apenas em ambiente de desenvolvimento** (`USE_ELASTIC` configurado via `settings.PROJECT_ENV`).
+
+### 📦 Requisitos para uso local
+
+- Docker instalado
+- Compose disponível (`docker-compose`)
+- Elasticsearch 8.x ou superior
 
 ### 🐳 Rodando o Elasticsearch no ambiente local
 
@@ -203,6 +222,48 @@ docker run -d \
 ```bash
 curl http://localhost:9200
 ```
+
+### ⚙️ Configuração no Django
+
+**settings.py**
+
+```python
+# Usar Elastic apenas em ambiente local
+USE_ELASTIC = PROJECT_ENV == "local"
+
+# Config Elasticsearch
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200'
+    },
+}
+```
+
+### 📚 Comandos Úteis para Gerenciar o Índice
+
+#### 1. Deletar índice
+```bash
+python manage.py search_index --delete --models course.Course
+```
+
+#### 2. Criar índice
+```bash
+python manage.py search_index --create --models course.Course
+```
+
+#### 3. Reindexar cursos
+```bash
+python manage.py index_courses
+```
+
+Esses comandos garantem que o índice `courses` esteja atualizado conforme o `CourseDocument`.
+
+### 🔍 Funcionalidades Ativadas com Elasticsearch
+
+- Busca **full-text** (`multi_match`) com boost para `title`
+- **Autocomplete** inteligente com `edge_ngram`
+- Fallback automático para consultas ORM caso `USE_ELASTIC = False`
+
 ---
 
 ## 📝 Documentação da API – `django-usecases`

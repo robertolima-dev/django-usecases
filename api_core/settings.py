@@ -115,8 +115,18 @@ CSRF_COOKIE_SECURE = True  # is_not_localhost()
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # is_not_localhost()
 SECURE_SSL_REDIRECT = False  # is_not_localhost()
 
+# REDIS
+REDIS_HOST = os.getenv("REDIS_HOST", "127.0.0.1")
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
+
+if REDIS_PASSWORD:
+    redis_url = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
+else:
+    redis_url = f"redis://{REDIS_HOST}:{REDIS_PORT}"
+
 # CELERY
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BROKER_URL = f"{redis_url}/0"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
@@ -133,6 +143,16 @@ if IS_TESTING:
     CELERY_RESULT_BACKEND = None
 else:
     CELERY_RESULT_BACKEND = 'django-db'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"{redis_url}/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 
 # URLCONF
@@ -214,20 +234,6 @@ PASSWORD_HASHERS = [
 # DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 # DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
-
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-#     }
-# }
-# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-#         "LOCATION": os.getenv('REDIS_HOST'),
-#     }
-# }
 
 # S3
 AWS_BUCKET = os.getenv('AWS_BUCKET')

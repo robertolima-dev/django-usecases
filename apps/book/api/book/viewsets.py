@@ -1,9 +1,13 @@
+import hashlib
+
+from django.core.cache import cache
 from django.db.models import Count
 from django_filters.rest_framework import (CharFilter, DjangoFilterBackend,
                                            FilterSet, NumberFilter)
 from drf_spectacular.utils import extend_schema
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from apps.book.api.book.serializers import BookSerializer
@@ -47,6 +51,8 @@ class BookViewSet(ModelViewSet):
     def perform_create(self, serializer):
         book = serializer.save(author=self.request.user)
 
+        cache.delete_pattern("book_list_*")
+
         send_dashboard_data()
 
         send_admin_event("book_created", {
@@ -54,3 +60,54 @@ class BookViewSet(ModelViewSet):
             "title": book.title,
             "author": book.author.username,
         })
+
+    def perform_update(self, serializer):
+        book = serializer.save()
+        cache.delete(f"book_detail_{book.id}")
+        cache.delete_pattern("book_list_*")
+        return book
+
+    def perform_destroy(self, instance):
+        cache.delete(f"book_detail_{instance.id}")
+        cache.delete_pattern("book_list_*")
+        instance.delete()
+
+    def retrieve(self, request, *args, **kwargs):
+        book_id = self.kwargs.get('pk')
+        cache_key = f"book_detail_{book_id}"
+
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return Response(cached_data)
+
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+
+        cache.set(cache_key, serializer.data, timeout=300)
+        return Response(serializer.data)
+
+    def generate_list_cache_key(self, request):
+        """Gera uma cache_key única para cada combinação de parâmetros da listagem.""" # noqa501
+        query_string = request.GET.urlencode()
+        hashed_query = hashlib.md5(query_string.encode('utf-8')).hexdigest()
+        return f"book_list_{hashed_query}"
+
+    def list(self, request, *args, **kwargs):
+        cache_key = self.generate_list_cache_key(request)
+        cached_data = cache.get(cache_key)
+
+        if cached_data:
+            return Response(cached_data)
+
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            paginated_response = self.get_paginated_response(serializer.data)
+            cache.set(cache_key, paginated_response.data, timeout=300)
+            return paginated_response
+
+        serializer = self.get_serializer(queryset, many=True)
+        cache.set(cache_key, serializer.data, timeout=300)
+        return Response(serializer.data)
