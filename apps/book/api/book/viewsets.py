@@ -51,7 +51,7 @@ class BookViewSet(ModelViewSet):
     def perform_create(self, serializer):
         book = serializer.save(author=self.request.user)
 
-        cache.delete_pattern("book_list_*")
+        self.clear_book_cache()
 
         send_dashboard_data()
 
@@ -63,13 +63,11 @@ class BookViewSet(ModelViewSet):
 
     def perform_update(self, serializer):
         book = serializer.save()
-        cache.delete(f"book_detail_{book.id}")
-        cache.delete_pattern("book_list_*")
+        self.clear_book_cache(book_id=book.id)
         return book
 
     def perform_destroy(self, instance):
-        cache.delete(f"book_detail_{instance.id}")
-        cache.delete_pattern("book_list_*")
+        self.clear_book_cache(book_id=instance.id)
         instance.delete()
 
     def retrieve(self, request, *args, **kwargs):
@@ -111,3 +109,17 @@ class BookViewSet(ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         cache.set(cache_key, serializer.data, timeout=300)
         return Response(serializer.data)
+
+    def clear_book_cache(self, book_id=None):
+        """Função para limpar caches de livros."""
+        client = cache.client.get_client()
+        backend = cache.client
+
+        if book_id:
+            cache.delete(f"book_detail_{book_id}")
+
+        prefix = backend.make_key("")
+        keys = client.keys(f"{prefix}book_list_*")
+
+        if keys:
+            client.delete(*keys)
