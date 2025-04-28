@@ -20,8 +20,9 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
   - Invalidação de cache nas operações de criação e atualização de livros
 - Comandos para gerar dados fictícios:
   ```bash
-  python manage.py populate_books       # Cria livros com tags e autores
-  python manage.py populate_comments    # Gera comentários aleatórios
+  python manage.py populate_books          # Cria livros com tags e autores
+  python manage.py populate_comments       # Gera comentários aleatórios
+  python manage.py reindex_semantic_books  # Gera indice busca semantica
   ```
 
 ### `chat` - sistema de mensagens em tempo real com salas privadas e em grupo
@@ -146,6 +147,20 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Integração com `django-celery-results`, com backend de resultados armazenados no banco de dados
 - Task fallback inteligente: preenche automaticamente o `task_name` se ausente
 - Ideal para ambientes com múltiplas workers e tarefas periódicas programadas
+
+### `search` - Busca Semântica Avançada com Elastic e Dense Vectors
+- Implementa **busca semântica** baseada em **Dense Vectors** usando `cosine similarity`
+- Integração local com **`sentence-transformers`** (`all-MiniLM-L6-v2`) para geração de embeddings
+- Utiliza **ElasticSearch 8+** para suporte a `dense_vector` nativo
+- Cria um índice dedicado `semantic_books` para armazenar vetores de significado
+- **Busca híbrida** combinando:
+  - **Semântica** (similaridade de vetores)
+  - **Lexical** (`multi_match` textual) com boost no título
+- Filtro automático para retornar apenas resultados relevantes (`score ≥ 6.0`)
+- APIs disponíveis:
+  ```bash
+  GET /api/semantic-search/?q=termo_de_busca
+  ```
 
 ---
 
@@ -307,6 +322,48 @@ A documentação foi incrementada com:
 - `@swagger_auto_schema` (`drf-yasg`) para personalização individual de métodos
 - Exemplo de resposta (`OpenApiExample`)
 - Parâmetros de consulta (`OpenApiParameter`), como `?ordering=-created_at`
+
+
+---
+
+## 📚 `search` - Busca Semântica Avançada com Elastic e Dense Vectors
+
+### Exemplo de resposta
+
+```json
+[
+  {
+    "id": 94,
+    "title": "Métodos Django",
+    "score": 8.92
+  },
+  {
+    "id": 95,
+    "title": "Django Queries",
+    "score": 8.94
+  },
+  {
+    "id": 96,
+    "title": "Django OOP",
+    "score": 9.05
+  }
+]
+```
+
+### Tecnologias utilizadas
+- ElasticSearch 8.11+
+- Kibana 8.11+
+- Django REST Framework
+- django-elasticsearch-dsl
+- sentence-transformers (Hugging Face)
+
+### Comando de reindexação
+
+```bash
+python manage.py reindex_semantic_books
+```
+
+- Gera embeddings e reindexa todos os livros semanticamente no Elastic.
 
 ---
 
@@ -629,6 +686,9 @@ python manage.py populate_payment             # Cria pagamentos de cursos
 python manage.py populate_tenants             # Cria tenants com usuários
 python manage.py populate_projects            # Cria projetos associados aos tenants
 python manage.py populate_rooms_and_messages  # Cria rooms e messages aleatórias
+python manage.py reindex_semantic_books       # Cria indice de busca semantica
+python manage.py index_courses                # Cria indice de cursos ElasticSearch
+python manage.py index_products               # Cria indice de produtos ElasticSearch
 ```
 
 ---

@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'apps.image_processing.apps.ImageProcessingConfig',
     'apps.scheduler.apps.SchedulerConfig',
     'apps.monitor.apps.MonitorConfig',
+    'apps.search.apps.SearchConfig'
 ]
 
 
@@ -124,6 +125,11 @@ if REDIS_PASSWORD:
     redis_url = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
 else:
     redis_url = f"redis://{REDIS_HOST}:{REDIS_PORT}"
+
+# ELASTICSEARCH
+ELASTICSEARCH_HOST = os.getenv("ELASTICSEARCH_HOST")
+ELASTICSEARCH_USERNAME = os.getenv("ELASTICSEARCH_USERNAME")
+ELASTICSEARCH_PASSWORD = os.getenv("ELASTICSEARCH_PASSWORD")
 
 # CELERY
 CELERY_BROKER_URL = f"{redis_url}/0"
@@ -260,12 +266,17 @@ OPENAI_KEY = os.getenv('OPENAI_KEY')
 # CRON
 TOKEN_CRON = os.getenv('TOKEN_CRON')
 
+if ELASTICSEARCH_USERNAME and ELASTICSEARCH_PASSWORD:
+    host_with_auth = ELASTICSEARCH_HOST.replace("://", f"://{ELASTICSEARCH_USERNAME}:{ELASTICSEARCH_PASSWORD}@") # noqa501
+else:
+    host_with_auth = ELASTICSEARCH_HOST
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'http://localhost:9200'
+        'hosts': host_with_auth
     }
 }
+
 
 # SWAGGER
 SWAGGER_SETTINGS = {
