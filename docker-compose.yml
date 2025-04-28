@@ -24,5 +24,21 @@ services:
     depends_on:
       - elasticsearch
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:host.docker.internal:6379
+    restart: unless-stopped
+
 volumes:
   esdata:
