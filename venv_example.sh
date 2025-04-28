@@ -52,3 +52,13 @@ export ALLOWED_HOSTS="localhost, 127.0.0.1"
 
 # CRON
 export TOKEN_CRON=""
+
+# REDIS
+export REDIS_HOST="127.0.0.1"
+export REDIS_PORT="6379"
+export REDIS_PASSWORD=""
+
+# ELASTICSEARCH
+export ELASTICSEARCH_HOST="http://localhost:9200"
+export ELASTICSEARCH_USERNAME=""
+export ELASTICSEARCH_PASSWORD=""
