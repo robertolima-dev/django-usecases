@@ -81,7 +81,7 @@ class BookViewSet(ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
 
-        cache.set(cache_key, serializer.data, timeout=300)
+        cache.set(cache_key, serializer.data, timeout=3600)
         return Response(serializer.data)
 
     def generate_list_cache_key(self, request):
@@ -103,11 +103,11 @@ class BookViewSet(ModelViewSet):
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             paginated_response = self.get_paginated_response(serializer.data)
-            cache.set(cache_key, paginated_response.data, timeout=300)
+            cache.set(cache_key, paginated_response.data, timeout=3600)
             return paginated_response
 
         serializer = self.get_serializer(queryset, many=True)
-        cache.set(cache_key, serializer.data, timeout=300)
+        cache.set(cache_key, serializer.data, timeout=3600)
         return Response(serializer.data)
 
     def clear_book_cache(self, book_id=None):
