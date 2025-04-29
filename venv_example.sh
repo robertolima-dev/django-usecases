@@ -62,3 +62,8 @@ export REDIS_PASSWORD=""
 export ELASTICSEARCH_HOST="http://localhost:9200"
 export ELASTICSEARCH_USERNAME=""
 export ELASTICSEARCH_PASSWORD=""
+
+# KAFKA
+export KAFKA_BROKER_URL="localhost:9092"
+export KAFKA_COURSE_TOPIC="course_created"
+export KAFKA_BOOK_TOPIC="book_created"

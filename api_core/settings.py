@@ -70,7 +70,8 @@ INSTALLED_APPS = [
     'apps.image_processing.apps.ImageProcessingConfig',
     'apps.scheduler.apps.SchedulerConfig',
     'apps.monitor.apps.MonitorConfig',
-    'apps.search.apps.SearchConfig'
+    'apps.search.apps.SearchConfig',
+    'apps.kafka_events.apps.KafkaEventsConfig',
 ]
 
 
@@ -130,6 +131,11 @@ else:
 ELASTICSEARCH_HOST = os.getenv("ELASTICSEARCH_HOST")
 ELASTICSEARCH_USERNAME = os.getenv("ELASTICSEARCH_USERNAME")
 ELASTICSEARCH_PASSWORD = os.getenv("ELASTICSEARCH_PASSWORD")
+
+# KAFKA
+KAFKA_BROKER_URL = os.getenv("KAFKA_BROKER_URL")
+KAFKA_COURSE_TOPIC = os.getenv("KAFKA_COURSE_TOPIC")
+KAFKA_BOOK_TOPIC = os.getenv("KAFKA_BOOK_TOPIC")
 
 # CELERY
 CELERY_BROKER_URL = f"{redis_url}/0"

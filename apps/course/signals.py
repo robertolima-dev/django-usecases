@@ -3,6 +3,8 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from apps.course.documents import CourseDocument
+from apps.kafka_events.producers.course_producer import \
+    send_course_created_event
 from apps.mailer.tasks import send_mass_email
 
 from .models import Course  # Ou Book
@@ -15,6 +17,7 @@ def course_created_email(sender, instance, created, **kwargs):
     if created:
         subject = f"Novo curso disponível: {instance.title}"
         content = f"Confira nosso novo curso: {instance.title}"
+        send_course_created_event(instance)
         send_mass_email.delay(subject, content)
 
 
