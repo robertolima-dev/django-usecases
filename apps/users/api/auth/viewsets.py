@@ -1,18 +1,27 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import (HTTP_200_OK, HTTP_204_NO_CONTENT,
-                                   HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED,
-                                   HTTP_404_NOT_FOUND)
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
+    HTTP_404_NOT_FOUND,
+)
 from rest_framework.views import APIView
 
 from apps.users.managers.user_manage import UserDataManager
 
 from .authentication import expires_in
-from .serializers import (ChangePasswordSerializer, ConfirmEmailSerializer,
-                          CreateUserSerializer, ForgorPasswordSerializer,
-                          UnsubscribeSerializer, UserSerializer,
-                          UserSigninSerializer)
+from .serializers import (
+    ChangePasswordSerializer,
+    ConfirmEmailSerializer,
+    CreateUserSerializer,
+    ForgorPasswordSerializer,
+    UnsubscribeSerializer,
+    UserSerializer,
+    UserSigninSerializer,
+)
 
 
 @extend_schema(

@@ -8,8 +8,11 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import (HTTP_201_CREATED, HTTP_400_BAD_REQUEST,
-                                   HTTP_406_NOT_ACCEPTABLE)
+from rest_framework.status import (
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_406_NOT_ACCEPTABLE,
+)
 from rest_framework.views import APIView
 
 

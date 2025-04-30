@@ -2,8 +2,12 @@ import hashlib
 
 from django.core.cache import cache
 from django.db.models import Count
-from django_filters.rest_framework import (CharFilter, DjangoFilterBackend,
-                                           FilterSet, NumberFilter)
+from django_filters.rest_framework import (
+    CharFilter,
+    DjangoFilterBackend,
+    FilterSet,
+    NumberFilter,
+)
 from drf_spectacular.utils import extend_schema
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticated

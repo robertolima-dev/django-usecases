@@ -12,8 +12,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from apps.ecommerce.api.product.serializers import (ProductCustomSerializer,
-                                                    ProductSerializer)
+from apps.ecommerce.api.product.serializers import (
+    ProductCustomSerializer,
+    ProductSerializer,
+)
 from apps.ecommerce.documents import ProductDocument
 from apps.ecommerce.models import Product
 from common.elastisearch_pagination import ElasticsearchLimitOffsetPagination

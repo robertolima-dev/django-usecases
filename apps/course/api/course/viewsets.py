@@ -6,8 +6,12 @@ from django.db.models import Avg, Count
 from django.db.models import Q as Qdjango
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import (OpenApiExample, OpenApiParameter,
-                                   OpenApiResponse, extend_schema)
+from drf_spectacular.utils import (
+    OpenApiExample,
+    OpenApiParameter,
+    OpenApiResponse,
+    extend_schema,
+)
 from drf_yasg.utils import swagger_auto_schema
 from elasticsearch_dsl.query import Q  # type: ignore
 from rest_framework import status

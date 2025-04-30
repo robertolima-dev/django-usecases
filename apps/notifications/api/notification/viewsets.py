@@ -5,10 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from apps.notifications.api.notification.serializers import \
-    NotificationSerializer
-from apps.notifications.models import (Notification, UserNotificationDeleted,
-                                       UserNotificationRead)
+from apps.notifications.api.notification.serializers import (  # noqa501
+    NotificationSerializer,
+)
+from apps.notifications.models import (
+    Notification,
+    UserNotificationDeleted,
+    UserNotificationRead,
+)
 
 
 @extend_schema(
