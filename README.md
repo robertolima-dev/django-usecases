@@ -1,6 +1,6 @@
 # Projeto Django
 
-## Estudos Avançados com Celery, Concorrência, Chat, Filtros, Permissões, WebSocket, Logs, Redis, Kafka e Throttle
+## Estudos Avançados com Celery, Concorrência, Chat, Filtros, Permissões, WebSocket, Logs, Redis, Kafka, Throttle e Circuit Breaker 
 
 Este projeto é um repositório de estudos organizados em 7 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
 
@@ -162,21 +162,30 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
   GET /api/semantic-search/?q=termo_de_busca
   ```
 
-### `kafka_events` - Integração Django com Apache Kafka para Eventos Assíncronos
-- Implementa **envio e consumo** de eventos Kafka diretamente do Django
+### `kafka_events` - Integração Django com Apache Kafka para Eventos Assíncronos e Resilientes
+- Implementa **envio e consumo de eventos Kafka** diretamente do Django
 - Configuração dinâmica de **broker** e **tópicos** via `.env` (`KAFKA_BROKER_URL`, `KAFKA_COURSE_TOPIC`)
-- **Producer** de eventos `course_created` usando `kafka-python`
-- **Consumer** assíncrono para escutar e processar eventos de cursos
-- Integração automática com o app `course` via **Django Signals**
-- Estrutura modular:
-  - **Producers**: envio de eventos organizados por domínio
-  - **Consumers**: escuta de eventos de forma desacoplada
-  - **Utils**: cliente Kafka centralizado
-- **Tolerância a falhas** no envio de eventos com `try/except` e logging
-- APIs e fluxos disponíveis:
+- **Producer resiliente** com:
+  - `retry` com backoff exponencial (`tenacity`)
+  - `circuit breaker` com auto-recovery (`pybreaker`)
+  - **fallback local**: eventos salvos em disco se Kafka estiver offline
+- **Comando para reenviar eventos salvos** em fallback:
   ```bash
-  # Producer (interno via Signal)
+  python manage.py resend_kafka_fallback
+  ```
+- Estrutura modular:
+  - **Producers**: envio de eventos por domínio (`course`, `book`)
+  - **Consumers**: escutam tópicos de forma desacoplada
+  - **Utils**: cliente Kafka, producer resiliente, fallback
+- Integração com o app `course` via **Django Signals**
+- Fluxo completo com logs e tolerância a falhas
+- APIs e comandos disponíveis:
+  ```bash
+  # Producer interno via Signal
   send_course_created_event(course_instance)
+
+  # Envio manual em lote (teste fila Kafka)
+  python manage.py kafka_test
 
   # Consumer manual
   from kafka_events.consumers.course_consumer import consume_course_created_events
