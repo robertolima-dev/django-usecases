@@ -4,11 +4,17 @@ from django.conf import settings
 
 from apps.kafka_events.utils.kafka_client import get_kafka_producer
 
+USE_KAFKA = settings.PROJECT_ENV == "develop_local"
+
 producer = get_kafka_producer()
 logger = logging.getLogger(__name__)
 
 
 def send_book_created_event(book):
+
+    if not USE_KAFKA:
+        return
+
     event = {
         "id": book.id,
         "title": book.title,

@@ -1,10 +1,17 @@
 import json
+import time
 
 from django.conf import settings
 from kafka import KafkaConsumer
 
+USE_KAFKA = settings.PROJECT_ENV == "develop_local"
+
 
 def consume_course_created_events():
+
+    if not USE_KAFKA:
+        exit()
+
     try:
         consumer = KafkaConsumer(
             settings.KAFKA_COURSE_TOPIC,
@@ -19,6 +26,7 @@ def consume_course_created_events():
         for message in consumer:
             course_data = message.value
             print(f"📚 Novo Curso Criado: {course_data['title']} (ID: {course_data['id']})") # noqa501
+            time.sleep(5)
 
     except Exception as e:
         print(f"❌ Erro ao consumir eventos de curso: {e}")

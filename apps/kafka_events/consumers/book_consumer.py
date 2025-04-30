@@ -3,8 +3,14 @@ import json
 from django.conf import settings
 from kafka import KafkaConsumer
 
+USE_KAFKA = settings.PROJECT_ENV == "develop_local"
+
 
 def consume_book_created_events():
+
+    if not USE_KAFKA:
+        exit()
+
     try:
         consumer = KafkaConsumer(
             settings.KAFKA_BOOK_TOPIC,
