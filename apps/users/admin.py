@@ -8,13 +8,13 @@ from apps.users.models import AddressUser, Hash, Profile
 class ProfileAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'user', 'birth_date', 'phone',
-        'document', 'avatar',
+        'document', 'avatar', 'plan',
         'confirm_email', 'unsubscribe',
         'access_level',
     )
     fields = [
         'id', 'user', 'birth_date', 'phone',
-        'document', 'avatar',
+        'document', 'avatar', 'plan',
         'confirm_email', 'unsubscribe',
         'access_level',
     ]

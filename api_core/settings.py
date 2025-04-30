@@ -240,13 +240,6 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
 ]
 
-# CACHE USING REDIS
-# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-# SESSION_CACHE_ALIAS = "default"
-# DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-# DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
-
-
 # S3
 AWS_BUCKET = os.getenv('AWS_BUCKET')
 AWS_S3_LINK = os.getenv('AWS_S3_LINK')
@@ -283,7 +276,6 @@ ELASTICSEARCH_DSL = {
     }
 }
 
-
 # SWAGGER
 SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
@@ -302,15 +294,15 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination', # noqa E501
-    # 'PAGE_SIZE': int(os.getenv("PAGE_SIZE")),
     'PAGE_SIZE': 10,
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
+        # 'rest_framework.throttling.UserRateThrottle',
+        'apps.throttle.throttling.CustomUserRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '50/minute',
-        'user': '100/minute'
+        'anon': '25/minute',
+        'user': '100/minute'  # usado como fallback
     },
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
@@ -334,16 +326,6 @@ if PROJECT_ENV == "local":
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.postgresql",
-    #         "NAME": os.getenv("DB_NAME"),
-    #         "USER": os.getenv("DB_USER"),
-    #         "PASSWORD": os.getenv("DB_PASSWORD"),
-    #         "HOST": os.getenv("DB_HOST"),
-    #         "PORT": os.getenv("DB_PORT"),
-    #     }
-    # }
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
     STATIC_URL = "/static/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")

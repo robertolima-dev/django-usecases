@@ -19,6 +19,12 @@ HASH_TYPE_CHOICES = (
     ('unsubscribe', 'unsubscribe'),
 )
 
+PLAN_CHOICES = (
+    ('free', 'free'),
+    ('pro', 'pro'),
+    ('admin', 'admin'),
+)
+
 
 def get_user_format_name(self):
     return f"{self.email} / {self.first_name}"
@@ -49,6 +55,12 @@ class Profile(BaseModel):
         max_length=25,
         choices=ACCESS_LEVEL_CHOICES,
         default='user',
+        db_index=True,
+    )
+    plan = models.CharField(
+        max_length=25,
+        choices=PLAN_CHOICES,
+        default='free',
         db_index=True,
     )
 

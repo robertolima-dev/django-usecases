@@ -93,12 +93,21 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Exemplo de uso com model `Project`, vinculado ao tenant
 
 ### `throttle` - Sistema de Cotas e Limites por Usuário (Rate Limiting)
-- Criação de cotas de uso por tipo de ação (ex: `upload`)
-- Validação automática via `middleware`
-- Armazena consumo diário em `UserQuota`
+- Criação de **cotas de uso por tipo de ação** (ex: `upload`)
+- Validação automática via `middleware` e/ou `throttle` do DRF
+- **Rate Limiting com planos dinâmicos**:
+  - `free`: 50 requisições/minuto
+  - `pro`: 200 requisições/minuto
+  - `admin`: 1000 requisições/minuto
+- Implementado via `CustomUserRateThrottle` com base em `user.profile.plan`
 - Middleware consulta e bloqueia se limite for atingido
-- Customização por tipo de ação, quantidade e reset diário
-- Exemplo prático: limitar uploads por usuário autenticado
+- Armazena consumo diário em `UserQuota` (opcional)
+- Reset diário automático (se implementado com cron ou Celery)
+- Exemplo prático: limitar **acesso à API pública** ou **operações sensíveis**
+- Comando para testar limites via terminal:
+  ```bash
+  python manage.py test_throttle --token=SEU_TOKEN_JWT
+  ```
 
 ### `presence` - Presença Online com WebSocket
 - WebSocket com autenticação via token `/ws/presence/`
@@ -140,7 +149,6 @@ Este projeto é um repositório de estudos organizados em 7 apps Django distinto
 - Totalmente compatível com ambientes de produção no ECS
 
 ### `monitor` – Painel de monitoramento de tarefas Celery no Django Admin
-
 - Visualização completa do histórico de execuções de tarefas Celery
 - Exibe: `task_id`, `task_name`, `status`, tempo de execução (`runtime`), data de criação e conclusão
 - Filtros por status (`SUCCESS`, `FAILURE`, `PENDING`, etc.) e busca por nome ou ID
@@ -735,3 +743,4 @@ Desenvolvido para estudos aprofundados em Django com casos reais e foco em perfo
 - 💼 [Linkedin Roberto Lima](https://www.linkedin.com/in/roberto-lima-01/)
 - 🌐 [Website Roberto Lima](https://robertolima-developer.vercel.app/)
 - 👤 [Gravatar Roberto Lima](https://gravatar.com/deliciouslyautomaticf57dc92af0)
+
