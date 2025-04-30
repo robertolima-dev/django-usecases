@@ -1,6 +1,6 @@
 # Projeto Django
 
-## Estudos Avançados com Celery, Concorrência, Chat, Filtros, Permissões, WebSocket, Logs, Redis, Kafka, Throttle e Circuit Breaker 
+## Estudos Avançados com ElasticSearch, Concorrência, Filtros Complexos, Permissões, WebSocket, Logs (audit), Redis, Kafka, Throttle, Celery (Worker e Beat) e Circuit Breaker 
 
 Este projeto é um repositório de estudos organizados em 7 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
 
