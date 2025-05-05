@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'apps.monitor.apps.MonitorConfig',
     'apps.search.apps.SearchConfig',
     'apps.kafka_events.apps.KafkaEventsConfig',
+    'apps.knowledge.apps.KnowledgeConfig'
 ]
 
 

@@ -200,6 +200,17 @@ Este projeto é um repositório de estudos organizados em 19 apps Django distint
   consume_course_created_events()
   ```
 
+### `knowledge` - Tópicos Avançados para Django Admin
+* Modela tópicos com título, descrição, nível (`fundamental`, `intermediate`, `advanced`)
+* Admin com coloração dinâmica do campo `nível` usando `format_html`
+* Suporte a `inlines` de estudo com o modelo `KnowledgeStudy`
+* Registro de estudos realizados por usuários (com notas e data)
+* Ações em lote no admin para marcar tópicos como recomendados
+* Comando para popular tópicos avançados com `populate_knowledge`
+* Comando para simular estudos com usuários via `populate_knowledge_studies`
+* Pronto para servir como referência didática ou base para sistema de aprendizado interno
+
+
 ---
 
 ## ⚙️ Como rodar o projeto
@@ -727,6 +738,8 @@ python manage.py populate_rooms_and_messages  # Cria rooms e messages aleatória
 python manage.py reindex_semantic_books       # Cria indice de busca semantica
 python manage.py index_courses                # Cria indice de cursos ElasticSearch
 python manage.py index_products               # Cria indice de produtos ElasticSearch
+python manage.py populate_knowledge           # Cria lista de knowledge
+python manage.py populate_knowledge_studies   # Cria alunos para knowledge (inlines)
 ```
 
 ---
