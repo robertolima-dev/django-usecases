@@ -14,17 +14,31 @@ User = get_user_model()
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user = await self.get_user_from_token()
-        self.room_id = self.scope['url_route']['kwargs']['room_id']
-        self.room_group_name = f"chat_room_{self.room_id}"
+        try:
+            self.user = await self.get_user_from_token()
+            self.room_id = self.scope['url_route']['kwargs'].get('room_id')
+            self.room_group_name = f"chat_room_{self.room_id}"
 
-        self.room = await self.get_room(self.room_id)
+            if not self.user:
+                await self.close(code=4001)
+                return
 
-        if self.user and await self.user_in_room(self.user, self.room):
+            self.room = await self.get_room(self.room_id)
+            if not self.room:
+                await self.close(code=4404)
+                return
+
+            if not await self.user_in_room(self.user, self.room):
+                await self.close(code=4031)
+                return
+
             await self.channel_layer.group_add(self.room_group_name, self.channel_name) # noqa501
             await self.accept()
-        else:
-            await self.close()
+
+        except Exception:
+            import logging
+            logging.exception("Erro inesperado no connect do WebSocket")
+            await self.close(code=4500)
 
     @ensure_room_participant(lambda scope: scope["url_route"]["kwargs"]["room_id"]) # noqa501
     async def disconnect(self, close_code):
