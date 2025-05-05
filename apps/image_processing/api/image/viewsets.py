@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.image_processing.models import UploadedImage
-from apps.image_processing.tasks import create_thumbnail
 
 from .serializers import UploadedImageSerializer
 
@@ -25,8 +24,6 @@ class ImageUploadAPIView(APIView):
             if serializer.is_valid():
 
                 serializer.save()
-
-                create_thumbnail.delay(request.user.image.last().id)
 
                 return Response({
                     "message": "Imagem enviada com sucesso!",
