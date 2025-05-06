@@ -201,16 +201,28 @@ Este projeto é um repositório de estudos organizados em 19 apps Django distint
   ```
 
 ### `knowledge` - Tópicos Avançados para Django Admin
-* Modela tópicos com título, descrição, nível (`fundamental`, `intermediate`, `advanced`)
-* Admin com coloração dinâmica do campo `nível` usando `format_html`
-* Suporte a `inlines` de estudo com o modelo `KnowledgeStudy`
-* Registro de estudos realizados por usuários (com notas e data)
-* Ações em lote no admin para marcar tópicos como recomendados
-* Comando para popular tópicos avançados com `populate_knowledge`
-* Comando para simular estudos com usuários via `populate_knowledge_studies`
-* Pronto para servir como referência didática ou base para sistema de aprendizado interno
+- Modela tópicos com título, descrição, nível (`fundamental`, `intermediate`, `advanced`)
+- Admin com coloração dinâmica do campo `nível` usando `format_html`
+- Suporte a `inlines` de estudo com o modelo `KnowledgeStudy`
+- Registro de estudos realizados por usuários (com notas e data)
+- Ações em lote no admin para marcar tópicos como recomendados
+- Comando para popular tópicos avançados com `populate_knowledge`
+- Comando para simular estudos com usuários via `populate_knowledge_studies`
+- Pronto para servir como referência didática ou base para sistema de aprendizado interno
 
 
+### `security` – Middleware de Segurança com Headers HTTP
+- **Proteções ativas com headers HTTP**:
+- `X-Frame-Options: DENY` → bloqueia *clickjacking* ao proibir iframes externos
+- `X-Content-Type-Options: nosniff` → evita que o navegador interprete arquivos como scripts (MIME sniffing)
+- `Strict-Transport-Security: max-age=63072000; includeSubDomains` → força o uso de HTTPS (requer ambiente seguro)
+- `Content-Security-Policy: default-src 'self'` → impede carregamento de scripts e recursos de terceiros não autorizados (protege contra XSS)
+- **Como testar**:
+- Acesse qualquer rota autenticada
+- Verifique os headers no navegador (DevTools → Network → Headers) ou via `curl`:
+    ```bash
+    curl -I http://localhost:8000/
+    ```
 ---
 
 ## ⚙️ Como rodar o projeto

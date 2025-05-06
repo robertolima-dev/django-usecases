@@ -72,7 +72,7 @@ INSTALLED_APPS = [
     'apps.monitor.apps.MonitorConfig',
     'apps.search.apps.SearchConfig',
     'apps.kafka_events.apps.KafkaEventsConfig',
-    'apps.knowledge.apps.KnowledgeConfig'
+    'apps.knowledge.apps.KnowledgeConfig',
 ]
 
 
@@ -89,6 +89,9 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     "apps.tenants.middleware.TenantMiddleware",
+    'common.middleware.secure_headers.SecureHeadersMiddleware',
+    "common.middleware.correlation.CorrelationIDMiddleware",
+    "common.middleware.logging.RequestLoggingMiddleware"
 ]
 
 
