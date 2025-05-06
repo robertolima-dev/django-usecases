@@ -10,6 +10,7 @@ def check_and_increment_quota(user, action):
     Verifica se o usuário ainda tem cota disponível para a ação e incrementa o uso.
     Lança PermissionDenied se ultrapassado.
     """ # noqa501
+
     quota, _ = UserQuota.objects.get_or_create(
         user=user,
         action=action,
@@ -19,10 +20,6 @@ def check_and_increment_quota(user, action):
             "reset_date": date.today(),
         }
     )
-
-    print(quota)
-    print(quota.used)
-    print(quota.limit)
 
     if quota.reset_date != date.today():
         quota.used = 0

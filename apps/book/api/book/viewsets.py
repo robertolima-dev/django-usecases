@@ -2,6 +2,7 @@ import hashlib
 
 from django.core.cache import cache
 from django.db.models import Count
+from django.utils.decorators import method_decorator
 from django_filters.rest_framework import (
     CharFilter,
     DjangoFilterBackend,
@@ -18,6 +19,7 @@ from apps.book.api.book.serializers import BookSerializer
 from apps.book.models import Book
 from apps.dashboard.events import send_admin_event
 from apps.dashboard.utils import send_dashboard_data
+from common.decorators.logging import log_api_execution
 
 
 class BookFilterSet(FilterSet):
@@ -40,6 +42,7 @@ class BookFilterSet(FilterSet):
 @extend_schema(
     tags=["Books"]
 )
+@method_decorator(log_api_execution, name='dispatch')
 class BookViewSet(ModelViewSet):
     serializer_class = BookSerializer
     queryset = Book.objects.select_related("author").prefetch_related("tags", "comments").annotate( # noqa501
