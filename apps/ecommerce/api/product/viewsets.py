@@ -18,7 +18,9 @@ from apps.ecommerce.api.product.serializers import (
 )
 from apps.ecommerce.documents import ProductDocument
 from apps.ecommerce.models import Product
-from common.elastisearch_pagination import ElasticsearchLimitOffsetPagination
+from common.pagination.elastisearch_pagination import (  # noqa501
+    ElasticsearchLimitOffsetPagination,
+)
 
 USE_ELASTIC = settings.PROJECT_ENV == "develop_local"
 

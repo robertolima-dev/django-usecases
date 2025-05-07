@@ -16,43 +16,62 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls.static import static
+
 # from django.conf import settings
 # from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
-from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
-                                   SpectacularSwaggerView)
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
+from apps.analytics.api.analytics.viewsets import EventLogView
 from apps.book.api.book.viewsets import BookViewSet
 from apps.book.api.comment.viewsets import CommentViewSet
-from apps.chat.api.message.viewsets import (ListMessagesAPIView,
-                                            SendMessageAPIView)
+from apps.chat.api.message.viewsets import (  # noqa501
+    ListMessagesAPIView,
+    SendMessageAPIView,
+)
 from apps.chat.api.room.viewsets import CreateRoomAPIView, ListRoomsAPIView
 from apps.course.api.course.viewsets import CourseViewSet
 from apps.dashboard.api.broadcast.viewsets import DashboardBroadcastView
 from apps.dashboard.api.dashboard.viewsets import DashboardAPIView
 from apps.ecommerce.api.order.viewsets import OrderViewSet
-from apps.ecommerce.api.product.viewsets import (ProductSearchAPIView,
-                                                 ProductViewSet)
-from apps.image_processing.api.image.viewsets import (ImageUploadAPIView,
-                                                      UserImageListAPIView)
+from apps.ecommerce.api.product.viewsets import (  # noqa501
+    ProductSearchAPIView,
+    ProductViewSet,
+)
+from apps.image_processing.api.image.viewsets import (
+    ImageUploadAPIView,
+    UserImageListAPIView,
+)
 from apps.notifications.api.notification.viewsets import NotificationViewSet
-from apps.permissions.api.permission.viewsets import (AdminOnlyView,
-                                                      SupportOnlyView,
-                                                      UserOnlyView)
+from apps.permissions.api.permission.viewsets import (
+    AdminOnlyView,
+    SupportOnlyView,
+    UserOnlyView,
+)
 from apps.presence.api.presence.viewsets import OnlineUsersView
 from apps.report.api.report.viewstes import ReportRequestViewSet
 from apps.search.api.search.viewsets import SemanticSearchViewSet
 from apps.tenants.api.project.viewsets import ProjectViewSet
 from apps.throttle.api.viewsets import UploadViewSet
 from apps.users.api.auth.viewsets import AuthenticationApiView  # noqa501
-from apps.users.api.auth.viewsets import (ChangePasswordView, ConfirmEmailView,
-                                          CreateUserView, ForgotPasswordView,
-                                          MfaApiView, UnsubscribeApiView,
-                                          UserDeleteApiView, UserInfoApiView)
+from apps.users.api.auth.viewsets import (
+    ChangePasswordView,
+    ConfirmEmailView,
+    CreateUserView,
+    ForgotPasswordView,
+    MfaApiView,
+    UnsubscribeApiView,
+    UserDeleteApiView,
+    UserInfoApiView,
+)
 from apps.users.api.healthcheck.viewsets import HealthcheckViewSet
 from apps.users.api.profile.viewsets import ProfileApiView, ProfileDataApiView
 from apps.users.api.upload.viewsets import FileUploadApiView
@@ -194,5 +213,8 @@ urlpatterns.append(
     path("api/v1/product/search/", ProductSearchAPIView.as_view(), name="product-search") # noqa501
 )
 
+urlpatterns.append(
+    path("api/v1/analytics/", EventLogView.as_view(), name="analytics") # noqa501
+)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

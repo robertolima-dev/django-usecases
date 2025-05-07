@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'apps.search.apps.SearchConfig',
     'apps.kafka_events.apps.KafkaEventsConfig',
     'apps.knowledge.apps.KnowledgeConfig',
+    'apps.analytics.apps.AnalyticsConfig',
 ]
 
 
@@ -140,6 +141,9 @@ ELASTICSEARCH_PASSWORD = os.getenv("ELASTICSEARCH_PASSWORD")
 KAFKA_BROKER_URL = os.getenv("KAFKA_BROKER_URL")
 KAFKA_COURSE_TOPIC = os.getenv("KAFKA_COURSE_TOPIC")
 KAFKA_BOOK_TOPIC = os.getenv("KAFKA_BOOK_TOPIC")
+
+# MONGO
+MONGO_URI = os.getenv("MONGO_URI")
 
 # CELERY
 CELERY_BROKER_URL = f"{redis_url}/0"

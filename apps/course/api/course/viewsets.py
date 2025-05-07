@@ -27,7 +27,9 @@ from apps.course.models import Course
 from apps.dashboard.events import send_admin_event
 from apps.dashboard.utils import send_dashboard_data
 from apps.notifications.models import Notification
-from common.elastisearch_pagination import ElasticsearchLimitOffsetPagination
+from common.pagination.elastisearch_pagination import (  # noqa501
+    ElasticsearchLimitOffsetPagination,
+)
 
 from .serializers import CourseSearchSerializer, CourseSerializer
 

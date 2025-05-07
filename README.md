@@ -210,7 +210,6 @@ Este projeto é um repositório de estudos organizados em 19 apps Django distint
 - Comando para simular estudos com usuários via `populate_knowledge_studies`
 - Pronto para servir como referência didática ou base para sistema de aprendizado interno
 
-
 ### `security` – Middleware de Segurança com Headers HTTP
 - **Proteções ativas com headers HTTP**:
 - `X-Frame-Options: DENY` → bloqueia *clickjacking* ao proibir iframes externos
@@ -254,14 +253,15 @@ daphne api_core.asgi:application
 
 ---
 
-## 🚀 Como rodar o Celery + Redis
+## 🚀 Rode o docker compose
 
-1. Suba o Redis:
 ```bash
-docker run -d -p 6379:6379 --name redis redis
+docker-compose up -d
 ```
 
-2. Rode o worker Celery:
+## 🚀 Como rodar o Celery + Redis
+
+1. Rode o worker Celery:
 ```bash
 celery -A api_core worker --loglevel=info
 ```
@@ -752,6 +752,7 @@ python manage.py index_courses                # Cria indice de cursos ElasticSea
 python manage.py index_products               # Cria indice de produtos ElasticSearch
 python manage.py populate_knowledge           # Cria lista de knowledge
 python manage.py populate_knowledge_studies   # Cria alunos para knowledge (inlines)
+python manage.py populate_analytics           # Cria 1000 dados no mongodb
 ```
 
 ---
