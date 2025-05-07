@@ -1,6 +1,6 @@
 # Projeto Django
 
-## Estudos Avançados com ElasticSearch, Concorrência, Filtros Complexos, Permissões, WebSocket, Logs, Redis, Kafka, Throttle, Security Headers, Celery Worker, Celery Beat e Circuit Breaker 
+## Estudos Avançados com ElasticSearch, Concorrência, Filtros Complexos, Permissões, WebSocket, Logs, Redis, Kafka, MongoDB, Throttle, Security Headers, Celery Worker, Celery Beat e Circuit Breaker 
 
 Este projeto é um repositório de estudos organizados em 19 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
 
@@ -222,6 +222,15 @@ Este projeto é um repositório de estudos organizados em 19 apps Django distint
     ```bash
     curl -I http://localhost:8000/
     ```
+
+### `analytics` - Monitoramento de Eventos com MongoDB
+- Armazenamento eficiente de eventos usando MongoDB
+- Paginação padrão DRF com suporte a grandes volumes de dados
+- API REST para listagem e consulta de eventos
+- Integração com o projeto Django utilizando o driver pymongo
+- Paginação customizada utilizando o padrão LimitOffsetPagination
+- Suporte a ordenação por campos específicos
+
 ---
 
 ## ⚙️ Como rodar o projeto
