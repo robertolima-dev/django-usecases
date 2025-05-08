@@ -7,6 +7,9 @@ from api_core.models import BaseModel
 class Tag(BaseModel):
     name = models.CharField(max_length=50, db_index=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Book(BaseModel):
     title = models.CharField(max_length=100, db_index=True)
@@ -28,3 +31,6 @@ class Comment(BaseModel):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='comments', db_index=True, ) # noqa501
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content[:50] + ("..." if len(self.content) > 50 else "") # noqa501

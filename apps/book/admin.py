@@ -4,6 +4,17 @@ from django.contrib import admin
 from apps.book.models import Book, Comment, Tag
 
 
+class CommentInline(admin.TabularInline):
+    model = Comment
+    extra = 0
+    fields = ['id', 'book', 'content', ]
+    readonly_fields = ['id', 'book', 'content', ]
+    ordering = ['-id']
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ["id", "name"]
@@ -16,6 +27,7 @@ class BookAdmin(admin.ModelAdmin):
     list_filter = ["tags", "author"]
     search_fields = ["title", "author__name"]
     filter_horizontal = ["tags"]
+    inlines = [CommentInline]
 
     def author_name(self, obj):
         return obj.author.email
@@ -24,14 +36,3 @@ class BookAdmin(admin.ModelAdmin):
     def tag_list(self, obj):
         return ", ".join([tag.name for tag in obj.tags.all()])
     tag_list.short_description = "Tags"
-
-
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ["id", "book", "short_content", "created_at"]
-    search_fields = ["content", "book__title"]
-    list_filter = ["created_at"]
-
-    def short_content(self, obj):
-        return obj.content[:50] + ("..." if len(obj.content) > 50 else "")
-    short_content.short_description = "Comment"
