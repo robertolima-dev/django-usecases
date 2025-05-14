@@ -261,6 +261,9 @@ AWS_S3_LINK = os.getenv('AWS_S3_LINK')
 AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
+# SQS
+SQS_QUEUE_URL = os.getenv('SQS_QUEUE_URL')
+
 # SEND EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
@@ -365,6 +368,7 @@ elif PROJECT_ENV == "develop_local":
     MEDIA_URL = "/media/"
 else:
     DEBUG = False
+    URL_BASE = ''
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",

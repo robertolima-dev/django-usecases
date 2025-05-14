@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.image_processing.models import UploadedImage
+from apps.image_processing.permissions import IsSqsAuthenticated
 
 from .serializers import UploadedImageSerializer
 
@@ -48,3 +49,10 @@ class UserImageListAPIView(ListAPIView):
 
     def get_queryset(self):
         return UploadedImage.objects.filter(user=self.request.user).order_by("-uploaded_at") # noqa501
+
+
+class ImageProcessingSyncApiView(APIView):
+    permission_classes = [IsSqsAuthenticated]
+
+    def post(self, request):
+        print(request.data)

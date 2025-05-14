@@ -47,6 +47,7 @@ from apps.ecommerce.api.product.viewsets import (  # noqa501
     ProductViewSet,
 )
 from apps.image_processing.api.image.viewsets import (
+    ImageProcessingSyncApiView,
     ImageUploadAPIView,
     UserImageListAPIView,
 )
@@ -215,6 +216,10 @@ urlpatterns.append(
 
 urlpatterns.append(
     path("api/v1/analytics/", EventLogView.as_view(), name="analytics") # noqa501
+)
+
+urlpatterns.append(
+    path("api/v1/image-processing-sync/", ImageProcessingSyncApiView.as_view(), name="image-processing-sync") # noqa501
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
