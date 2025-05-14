@@ -150,6 +150,13 @@ CELERY_BROKER_URL = f"{redis_url}/0"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
+# SUMMERNOTE
+# SUMMERNOTE_CONFIG = {
+#     'iframe': True,
+#     'width': '100%',
+#     'height': '400px',
+# }
+
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_TASK_RESULT_EXTENDED = True
 # CELERY_RESULT_BACKEND = 'django-db'
@@ -352,7 +359,7 @@ elif PROJECT_ENV == "develop_local":
             "PORT": os.getenv("DB_PORT"),
         }
     }
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
     STATIC_URL = "/static/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
     MEDIA_URL = "/media/"

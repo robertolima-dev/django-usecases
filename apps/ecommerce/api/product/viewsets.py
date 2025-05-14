@@ -1,4 +1,5 @@
 import os
+from decimal import Decimal
 
 from django.conf import settings
 from django.db.models import Q as Qdjango
@@ -18,6 +19,7 @@ from apps.ecommerce.api.product.serializers import (
 )
 from apps.ecommerce.documents import ProductDocument
 from apps.ecommerce.models import Product
+from apps.mailer.tasks import send_admin_emails
 from common.pagination.elastisearch_pagination import (  # noqa501
     ElasticsearchLimitOffsetPagination,
 )
@@ -99,7 +101,18 @@ class ProductViewSet(ModelViewSet):
                 )
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        instance = serializer.save(owner=self.request.user)
+        if instance and instance.is_active:
+
+            price = Decimal(instance.price)
+            context = {
+                'product': instance.name,
+                'value': str(price)
+            }
+            send_admin_emails.delay(
+                template_name='create_product',
+                context=context
+            )
 
     def perform_update(self, serializer):
         if serializer.instance.owner != self.request.user:

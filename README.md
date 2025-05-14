@@ -122,10 +122,18 @@ Este projeto é um repositório de estudos organizados em 19 apps Django distint
 - Ideal para visualização de métricas sem recarregar a página
 
 ### `mailer` - Envio de Emails Assíncronos
-- Celery + backend SMTP
-- Envio de email para todos os usuários desacoplado via `send_email_async()`
-- Pronto para integração com templates e sistema de alertas
-- Cadastro de books e courses
+- Tecnologias Utilizadas:
+  - Celery para tarefas assíncronas
+  - Backend SMTP (AWS SES) para envio seguro e confiável
+  - Django EmailMessage para construção e envio dos e-mails
+  - Banco de Dados para armazenamento dos templates de e-mail
+
+- Funcionalidades:
+  - Envio de e-mail para todos os usuários desacoplado via send_email()
+  - Integração com templates dinâmicos, permitindo o uso de variáveis no corpo do e-mail
+  - Pronto para integração com sistemas de alertas e notificações
+  - Cadastro de Books e Courses com notificações automáticas
+  - Encadeamento de Tarefas: Chamadas de uma task para outra, como no caso do envio d e-mail para todos os administradores após um evento.
 
 ### `image_processing` - Upload e Processamento com Thumbnails
 - Upload de imagens vinculado ao usuário autenticado

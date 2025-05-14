@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from rest_framework.authtoken.models import Token
 
+from apps.mailer.tasks import send_email
 from apps.users.api.auth.authentication import expires_in, token_expire_handler
 from apps.users.api.auth.serializers import UserSerializer
 from apps.users.models import Hash, Profile
@@ -203,6 +204,14 @@ class UserDataManager:
             user=user,
             type='change_password'
             )
+
+        reset_url = "https://meusite.com/reset-password?token=" + str(hash_change_password) # noqa501
+        context = {
+            'username': user.first_name,
+            'url': reset_url
+        }
+
+        send_email.delay(user.email, 'change_password', context)
 
         return
 

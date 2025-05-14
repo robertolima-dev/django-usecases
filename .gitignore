@@ -118,3 +118,5 @@ tests_template/
 
 isort.cfg
 editorconfig
+
+staticfiles/
