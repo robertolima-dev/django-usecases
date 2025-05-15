@@ -1,6 +1,6 @@
 # Projeto Django
 
-## Estudos Avançados com ElasticSearch, Concorrência, Filtros Complexos, Permissões, WebSocket, Logs, Redis, Kafka, MongoDB, Throttle, Security Headers, Celery Worker, Celery Beat e Circuit Breaker 
+## Estudos Avançados com ElasticSearch, Concorrência, Filtros Complexos, Permissões, WebSocket, Logs, Redis, Kafka, SQS, MongoDB, Throttle, Security Headers, Celery Worker, Celery Beat e Circuit Breaker 
 
 Este projeto é um repositório de estudos organizados em 19 apps Django distintos, com foco em soluções reais de performance, concorrência e boas práticas.
 
@@ -147,6 +147,7 @@ Este projeto é um repositório de estudos organizados em 19 apps Django distint
 - Campo `output_format` para o usuário escolher o formato de saída
 - Campos disponíveis:
   - `original_image`, `thumbnail`, `medium`, `large`, `output_format`, `uploaded_at`
+- Integração com SQS, não é possível testar localmente.
 
 ### `scheduler` – agendamento de tarefas com Celery Beat
 - Agendamento automático de tarefas recorrentes com `django-celery-beat`
