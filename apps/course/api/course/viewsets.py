@@ -1,5 +1,5 @@
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
+# from asgiref.sync import async_to_sync
+# from channels.layers import get_channel_layer
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db.models import Avg, Count
@@ -24,6 +24,7 @@ from rest_framework.viewsets import ModelViewSet
 from apps.course.documents import CourseDocument
 from apps.course.filters import CourseFilter
 from apps.course.models import Course
+from apps.course.tasks import notification_users_course
 from apps.dashboard.events import send_admin_event
 from apps.dashboard.utils import send_dashboard_data
 from apps.notifications.models import Notification
@@ -248,18 +249,4 @@ class CourseViewSet(ModelViewSet):
             obj_id=None,
         )
 
-        channel_layer = get_channel_layer()
-        from django.contrib.auth import get_user_model
-        User = get_user_model()
-        for user in User.objects.all():
-            async_to_sync(channel_layer.group_send)(
-                f"user_{user.id}",
-                {
-                    "type": "send_notification",
-                    "title": notification.title,
-                    "message": notification.message,
-                    "created_at": str(notification.created_at),
-                    "obj_code": notification.obj_code,
-                    "obj_id": notification.obj_id,
-                }
-            )
+        notification_users_course(notification.id)
