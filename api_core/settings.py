@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
+from google.oauth2 import service_account
 
 load_dotenv()
 
@@ -74,6 +75,7 @@ INSTALLED_APPS = [
     'apps.kafka_events.apps.KafkaEventsConfig',
     'apps.knowledge.apps.KnowledgeConfig',
     'apps.analytics.apps.AnalyticsConfig',
+    'apps.mediahub.apps.MediahubConfig'
 ]
 
 
@@ -307,6 +309,24 @@ ELASTICSEARCH_DSL = {
     }
 }
 
+# DJANGO STORAGE
+FILE_PROVIDER = os.getenv("FILE_PROVIDER", "aws").lower()
+
+if FILE_PROVIDER == 'aws':
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+    AWS_S3_REGION_NAME = os.getenv("AWS_REGION_NAME", "us-east-1")
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_CUSTOM_DOMAIN = os.getenv("CDN_URL")
+else:
+    DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+    GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME")
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    )
+
 # SWAGGER
 SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
@@ -324,7 +344,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination', # noqa E501
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # noqa: E501
     'PAGE_SIZE': 10,
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',

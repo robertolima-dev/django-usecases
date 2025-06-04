@@ -240,6 +240,16 @@ Este projeto é um repositório de estudos organizados em 19 apps Django distint
 - Paginação customizada utilizando o padrão LimitOffsetPagination
 - Suporte a ordenação por campos específicos
 
+
+### `mediahub` – Armazenamento de arquivos com suporte a múltiplos providers - Django Storage
+* Upload de arquivos de forma desacoplada, segura e escalável
+* Suporte a múltiplos storages: **AWS S3** ou **Google Cloud Storage**
+* Escolha do provedor via variável de ambiente (`USE_AWS`)
+* Geração de nomes de arquivos com **hash único** via `upload_to`
+* URLs automáticas compatíveis com CDN (`CloudFront`, `GCP CDN`)
+* Extensível para uso de `signed URLs` e integração com cache
+* Preparado para produção com **storages externos desacoplados do backend**
+
 ---
 
 ## ⚙️ Como rodar o projeto

@@ -51,6 +51,7 @@ from apps.image_processing.api.image.viewsets import (
     ImageUploadAPIView,
     UserImageListAPIView,
 )
+from apps.mediahub.api.viewsets import MediaFileUploadView, MediaFileViewSet
 from apps.notifications.api.notification.viewsets import NotificationViewSet
 from apps.permissions.api.permission.viewsets import (
     AdminOnlyView,
@@ -94,7 +95,7 @@ admin.site.site_header = 'Template Admin'
 #  ADMIN
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('api/v1/health-check/', HealthcheckViewSet.as_view(), name='health-check'), # noqa E501
+    path('api/v1/health-check/', HealthcheckViewSet.as_view(), name='health-check'),  # noqa: E501
     path("summernote/", include("django_summernote.urls")),
     path("select2/", include("django_select2.urls")),
 
@@ -111,71 +112,72 @@ urlpatterns = [
 #  ADMIN
 
 route_api_v1 = routers.DefaultRouter()
-route_api_v1.register(r'books', BookViewSet, basename='books')  # noqa E501
-route_api_v1.register(r'comments', CommentViewSet, basename='comments')  # noqa E501
-route_api_v1.register(r'orders', OrderViewSet, basename='orders')  # noqa E501
-route_api_v1.register(r'products', ProductViewSet, basename='products')  # noqa E501
-route_api_v1.register(r'reports', ReportRequestViewSet, basename='reports')  # noqa E501
-route_api_v1.register(r'courses', CourseViewSet, basename='courses')  # noqa E501
-route_api_v1.register(r'projects', ProjectViewSet, basename='projects')  # noqa E501
-route_api_v1.register(r'uploads', UploadViewSet, basename='uploads')  # noqa E501
-route_api_v1.register(r'notifications', NotificationViewSet, basename='notifications')  # noqa E501
-route_api_v1.register(r'semantic-search', SemanticSearchViewSet, basename='semantic-search')  # noqa E501
+route_api_v1.register(r'books', BookViewSet, basename='books')   # noqa: E501
+route_api_v1.register(r'comments', CommentViewSet, basename='comments')   # noqa: E501
+route_api_v1.register(r'orders', OrderViewSet, basename='orders')   # noqa: E501
+route_api_v1.register(r'products', ProductViewSet, basename='products')   # noqa: E501
+route_api_v1.register(r'reports', ReportRequestViewSet, basename='reports')   # noqa: E501
+route_api_v1.register(r'courses', CourseViewSet, basename='courses')   # noqa: E501
+route_api_v1.register(r'projects', ProjectViewSet, basename='projects')   # noqa: E501
+route_api_v1.register(r'uploads', UploadViewSet, basename='uploads')   # noqa: E501
+route_api_v1.register(r'notifications', NotificationViewSet, basename='notifications')   # noqa: E501
+route_api_v1.register(r'semantic-search', SemanticSearchViewSet, basename='semantic-search')   # noqa: E501
+route_api_v1.register(r'mediafiles', MediaFileViewSet, basename='mediafiles')   # noqa: E501
 
 urlpatterns.append(path("api/v1/", include(route_api_v1.urls)))
 
 #  AUTH
 urlpatterns.append(
-    path("api/v1/register-user/", CreateUserView.as_view(), name='register-user') # noqa E501
+    path("api/v1/register-user/", CreateUserView.as_view(), name='register-user')  # noqa: E501
 )
 urlpatterns.append(
-    path('api/v1/auth-user/', AuthenticationApiView.as_view(), name='auth-user'), # noqa E501
+    path('api/v1/auth-user/', AuthenticationApiView.as_view(), name='auth-user'),  # noqa: E501
 )
 urlpatterns.append(
-    path('api/v1/auth-mfa/', MfaApiView.as_view(), name='auth-mfa'), # noqa E501
+    path('api/v1/auth-mfa/', MfaApiView.as_view(), name='auth-mfa'),  # noqa: E501
 )
 urlpatterns.append(
-    path('api/v1/me/', UserInfoApiView.as_view(), name='me'), # noqa E501
+    path('api/v1/me/', UserInfoApiView.as_view(), name='me'),  # noqa: E501
 )
 urlpatterns.append(
-    path('api/v1/confirm-email/', ConfirmEmailView.as_view(), name='confirm-email'), # noqa E501
+    path('api/v1/confirm-email/', ConfirmEmailView.as_view(), name='confirm-email'),  # noqa: E501
 )
 urlpatterns.append(
-    path('api/v1/forgot-password/', ForgotPasswordView.as_view(), name='forgot-password'), # noqa E501
+    path('api/v1/forgot-password/', ForgotPasswordView.as_view(), name='forgot-password'),  # noqa: E501
 )
 urlpatterns.append(
-    path('api/v1/change-password/', ChangePasswordView.as_view(), name='change-password'), # noqa E501
+    path('api/v1/change-password/', ChangePasswordView.as_view(), name='change-password'),  # noqa: E501
 )
 urlpatterns.append(
-    path('api/v1/unsubscribe/', UnsubscribeApiView.as_view(), name='unsubscribe'), # noqa E501
+    path('api/v1/unsubscribe/', UnsubscribeApiView.as_view(), name='unsubscribe'),  # noqa: E501
 )
 urlpatterns.append(
-    path('api/v1/delete-user/<int:user_id>/', UserDeleteApiView.as_view(), name='delete-user'), # noqa E501
+    path('api/v1/delete-user/<int:user_id>/', UserDeleteApiView.as_view(), name='delete-user'),  # noqa: E501
 )
 urlpatterns.append(
-    path('api/v1/upload-file/', FileUploadApiView.as_view(), name='upload-file'), # noqa E501
+    path('api/v1/upload-file/', FileUploadApiView.as_view(), name='upload-file'),  # noqa: E501
 )
 
 #  PROFILE
 urlpatterns.append(
-    path('api/v1/profile/', ProfileApiView.as_view(), name='profile'), # noqa E501
+    path('api/v1/profile/', ProfileApiView.as_view(), name='profile'),  # noqa: E501
 )
 urlpatterns.append(
-    path('api/v1/profile-data/', ProfileDataApiView.as_view(), name='profile-data'), # noqa E501
-)
-
-urlpatterns.append(
-    path("api/v1/admin-only/", AdminOnlyView.as_view(), name='admin-only') # noqa E501
-)
-urlpatterns.append(
-    path("api/v1/user-only/", UserOnlyView.as_view(), name='user-only') # noqa E501
-)
-urlpatterns.append(
-    path("api/v1/support-only/", SupportOnlyView.as_view(), name='support-only') # noqa E501
+    path('api/v1/profile-data/', ProfileDataApiView.as_view(), name='profile-data'),  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/online-users/", OnlineUsersView.as_view(), name='online-users') # noqa E501
+    path("api/v1/admin-only/", AdminOnlyView.as_view(), name='admin-only')  # noqa: E501
+)
+urlpatterns.append(
+    path("api/v1/user-only/", UserOnlyView.as_view(), name='user-only')  # noqa: E501
+)
+urlpatterns.append(
+    path("api/v1/support-only/", SupportOnlyView.as_view(), name='support-only')  # noqa: E501
+)
+
+urlpatterns.append(
+    path("api/v1/online-users/", OnlineUsersView.as_view(), name='online-users')  # noqa: E501
 )
 
 urlpatterns.append(
@@ -220,6 +222,10 @@ urlpatterns.append(
 
 urlpatterns.append(
     path("api/v1/image-processing-sync/", ImageProcessingSyncApiView.as_view(), name="image-processing-sync") # noqa501
+)
+
+urlpatterns.append(
+    path("api/v1/upload-storage/", MediaFileUploadView.as_view(), name="upload-storage") # noqa501
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
