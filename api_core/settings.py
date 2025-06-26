@@ -75,7 +75,8 @@ INSTALLED_APPS = [
     'apps.kafka_events.apps.KafkaEventsConfig',
     'apps.knowledge.apps.KnowledgeConfig',
     'apps.analytics.apps.AnalyticsConfig',
-    'apps.mediahub.apps.MediahubConfig'
+    'apps.mediahub.apps.MediahubConfig',
+    'apps.integrations.apps.IntegrationsConfig',
 ]
 
 
@@ -151,6 +152,9 @@ MONGO_URI = os.getenv("MONGO_URI")
 CELERY_BROKER_URL = f"{redis_url}/0"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
+
+# OPENAI
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # SUMMERNOTE
 # SUMMERNOTE_CONFIG = {

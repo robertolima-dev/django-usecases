@@ -51,6 +51,7 @@ from apps.image_processing.api.image.viewsets import (
     ImageUploadAPIView,
     UserImageListAPIView,
 )
+from apps.integrations.api.viewsets import OpenAITestView, TestHttpClientView
 from apps.mediahub.api.viewsets import MediaFileUploadView, MediaFileViewSet
 from apps.notifications.api.notification.viewsets import NotificationViewSet
 from apps.permissions.api.permission.viewsets import (
@@ -226,6 +227,14 @@ urlpatterns.append(
 
 urlpatterns.append(
     path("api/v1/upload-storage/", MediaFileUploadView.as_view(), name="upload-storage") # noqa501
+)
+
+urlpatterns.append(
+    path("api/v1/retry-tests/", OpenAITestView.as_view(), name="retry-tests") # noqa501
+)
+
+urlpatterns.append(
+    path("api/v1/test-http-client/", TestHttpClientView.as_view(), name="test-http-client") # noqa501
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

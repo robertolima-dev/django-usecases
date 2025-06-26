@@ -250,6 +250,14 @@ Este projeto é um repositório de estudos organizados em 19 apps Django distint
 * Extensível para uso de `signed URLs` e integração com cache
 * Preparado para produção com **storages externos desacoplados do backend**
 
+### `integrations` – Integração com APIs externas e Logs HTTP
+* Cliente HTTP robusto com suporte a **retries automáticos** e **exponencial backoff**
+* Registro completo de chamadas HTTP: método, URL, tempo de resposta, status e payload
+* Suporte nativo a headers customizados e payloads JSON
+* Centraliza interações com serviços externos (ex: OpenAI, APIs públicas, webhooks)
+* Armazena falhas para auditoria e facilita troubleshooting
+* Integração fácil com `requests` + `Retry` do `urllib3`
+
 ---
 
 ## ⚙️ Como rodar o projeto
@@ -453,6 +461,17 @@ python manage.py reindex_semantic_books
 ```
 
 - Gera embeddings e reindexa todos os livros semanticamente no Elastic.
+
+---
+
+### Casos de uso típicos de retries (integrations)
+
+* 📡 **Chamada a APIs com instabilidade**: como GPT-4 ou serviços externos que demandam tolerância a falhas
+* 🔁 **Retentativas seguras** em chamadas que podem retornar 500, 502 ou 429
+* 📊 **Observabilidade**: monitoramento de latência e análise de padrões de erro
+* 🔐 **Interação com serviços autenticados**, como envio de payloads via `Authorization Bearer`
+* 🛠️ **Ambiente de testes**: integração com endpoints de simulação como `httpbin.org` para validação de lógica HTTP
+* 🔍 **Auditoria**: armazenar requisições feitas e seus resultados para futura análise, especialmente em operações críticas
 
 ---
 
