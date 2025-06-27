@@ -6,7 +6,7 @@ admin.site.unregister(TaskResult)
 
 @admin.register(TaskResult)
 class TaskResultAdmin(admin.ModelAdmin):
-    list_display = ('task_id', 'task_name', 'status', 'date_created', 'date_done', 'worker',) # noqa501
+    list_display = ('task_id', 'task_name', 'status', 'date_created', 'date_done', 'worker',)  # noqa: E501
     list_filter = ('status', 'task_name', 'date_created')
     search_fields = ('task_id', 'task_name', 'result', 'traceback')
     readonly_fields = [f.name for f in TaskResult._meta.fields]

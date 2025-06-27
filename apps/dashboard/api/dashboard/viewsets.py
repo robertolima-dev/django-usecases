@@ -36,19 +36,19 @@ class DashboardAPIView(APIView):
             upload_filter = {**date_filter}
             if user_id:
                 upload_filter["user_id"] = user_id
-            data["uploads"] = UserQuota.objects.filter(action="upload", **upload_filter).count() # noqa501
+            data["uploads"] = UserQuota.objects.filter(action="upload", **upload_filter).count()  # noqa: E501
 
         if not action_type or action_type == "book":
             book_filter = {**date_filter}
             if user_id:
                 book_filter["author_id"] = user_id
-            data["books"] = Book.objects.filter(**book_filter).count() # noqa501
+            data["books"] = Book.objects.filter(**book_filter).count()  # noqa: E501
 
         if not action_type or action_type == "notification":
             notif_filter = {**date_filter}
             if user_id:
                 notif_filter["obj_id"] = user_id
-            data["notifications"] = Notification.objects.filter(**notif_filter).count() # noqa501
+            data["notifications"] = Notification.objects.filter(**notif_filter).count()  # noqa: E501
 
         return Response(data)
- # noqa501
+  # noqa: E501

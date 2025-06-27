@@ -8,8 +8,8 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notification
-        fields = ['id', 'message', 'obj_code', 'obj_id', 'created_at', 'read'] # noqa501
+        fields = ['id', 'message', 'obj_code', 'obj_id', 'created_at', 'read']  # noqa: E501
 
     def get_read(self, obj):
         user = self.context['request'].user
-        return UserNotificationRead.objects.filter(user=user, notification=obj).exists() # noqa501
+        return UserNotificationRead.objects.filter(user=user, notification=obj).exists()  # noqa: E501

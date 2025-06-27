@@ -29,4 +29,4 @@ class Command(BaseCommand):
                 )
                 total += 1
 
-        self.stdout.write(self.style.SUCCESS(f'{total} projetos criados com sucesso!')) # noqa501
+        self.stdout.write(self.style.SUCCESS(f'{total} projetos criados com sucesso!'))  # noqa: E501

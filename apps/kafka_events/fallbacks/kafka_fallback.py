@@ -15,7 +15,7 @@ def save_event_to_fallback(topic, event):
         fallback_file = FALLBACK_DIR / f"{topic}.log"
 
         with open(fallback_file, "a") as f:
-            f.write(json.dumps({"timestamp": timestamp, "event": event}) + "\\n") # noqa501
+            f.write(json.dumps({"timestamp": timestamp, "event": event}) + "\\n")  # noqa: E501
 
         logger.warning(f"📦 Evento salvo em fallback: {event}")
     except Exception as e:

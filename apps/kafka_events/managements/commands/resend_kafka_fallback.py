@@ -15,7 +15,7 @@ class Command(BaseCommand):
         fallback_file = FALLBACK_DIR / f"{settings.KAFKA_COURSE_TOPIC}.log"
 
         if not fallback_file.exists():
-            self.stdout.write(self.style.WARNING("⚠️ Nenhum fallback encontrado.")) # noqa501
+            self.stdout.write(self.style.WARNING("⚠️ Nenhum fallback encontrado."))  # noqa: E501
             return
 
         with open(fallback_file, "r") as f:
@@ -25,7 +25,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING("📂 Fallback está vazio."))
             return
 
-        self.stdout.write(self.style.NOTICE(f"🔄 Reenviando {len(lines)} eventos...")) # noqa501
+        self.stdout.write(self.style.NOTICE(f"🔄 Reenviando {len(lines)} eventos..."))  # noqa: E501
 
         sent = 0
         for line in lines:
@@ -35,8 +35,8 @@ class Command(BaseCommand):
                 safe_send_kafka_event(settings.KAFKA_COURSE_TOPIC, event)
                 sent += 1
             except Exception as e:
-                self.stderr.write(self.style.ERROR(f"Erro ao reenviar evento: {e}")) # noqa501
+                self.stderr.write(self.style.ERROR(f"Erro ao reenviar evento: {e}"))  # noqa: E501
 
         # Limpa o arquivo após sucesso
         Path(fallback_file).unlink()
-        self.stdout.write(self.style.SUCCESS(f"✅ {sent} eventos reenviados com sucesso.")) # noqa501
+        self.stdout.write(self.style.SUCCESS(f"✅ {sent} eventos reenviados com sucesso."))  # noqa: E501

@@ -30,4 +30,4 @@ class Command(BaseCommand):
                 )
                 created += 1
 
-        self.stdout.write(self.style.SUCCESS(f"{created} avaliações criadas.")) # noqa501
+        self.stdout.write(self.style.SUCCESS(f"{created} avaliações criadas."))  # noqa: E501

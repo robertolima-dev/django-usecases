@@ -15,10 +15,10 @@ User = get_user_model()
 
 
 def get_user_from_instance(instance):
-    for attr in ["user", "created_by", "owner", "author", "instructor", "sender"]: # noqa501
+    for attr in ["user", "created_by", "owner", "author", "instructor", "sender"]:  # noqa: E501
         if hasattr(instance, attr):
             user = getattr(instance, attr)
-            if isinstance(user, User) and User.objects.filter(pk=user.pk).exists(): # noqa501
+            if isinstance(user, User) and User.objects.filter(pk=user.pk).exists():  # noqa: E501
                 return user
     return None
 
@@ -26,7 +26,7 @@ def get_user_from_instance(instance):
 @receiver(post_save)
 def log_save(sender, instance, created, **kwargs):
     print(f'log_save => {instance}')
-    if sender.__name__ in ["AuditLog", "PeriodicTasks", "PeriodicTask", "TaskResult"]: # noqa501
+    if sender.__name__ in ["AuditLog", "PeriodicTasks", "PeriodicTask", "TaskResult"]:  # noqa: E501
         return  # Evita loop
 
     user = get_user_from_instance(instance)
@@ -42,7 +42,7 @@ def log_save(sender, instance, created, **kwargs):
     try:
         if 'auditlog_auditlog' in connection.introspection.table_names():
             AuditLog.objects.create(
-                user=user if isinstance(user, AuditLog._meta.get_field('user').remote_field.model) else None, # noqa501
+                user=user if isinstance(user, AuditLog._meta.get_field('user').remote_field.model) else None,  # noqa: E501
                 action=action,
                 model=sender.__name__,
                 object_id=str(instance.pk),
@@ -60,7 +60,7 @@ def log_delete(sender, instance, **kwargs):
         return
 
     user = get_user_from_instance(instance)
-    user = user if isinstance(user, User) and User.objects.filter(pk=user.pk).exists() else None # noqa501
+    user = user if isinstance(user, User) and User.objects.filter(pk=user.pk).exists() else None  # noqa: E501
 
     if user:
 

@@ -16,7 +16,7 @@ class Command(BaseCommand):
         topics = KnowledgeTopic.objects.all()
 
         if not users.exists():
-            self.stdout.write(self.style.WARNING("⚠️ Nenhum usuário encontrado. Crie usuários primeiro.")) # noqa501
+            self.stdout.write(self.style.WARNING("⚠️ Nenhum usuário encontrado. Crie usuários primeiro."))  # noqa: E501
             return
 
         count = 0
@@ -26,9 +26,9 @@ class Command(BaseCommand):
                 study, created = KnowledgeStudy.objects.get_or_create(
                     topic=topic,
                     user=user,
-                    defaults={"notes": f"Estudo automático sobre {topic.title}."} # noqa501
+                    defaults={"notes": f"Estudo automático sobre {topic.title}."}  # noqa: E501
                 )
                 if created:
                     count += 1
 
-        self.stdout.write(self.style.SUCCESS(f"✅ {count} registros de estudo criados.")) # noqa501
+        self.stdout.write(self.style.SUCCESS(f"✅ {count} registros de estudo criados."))  # noqa: E501

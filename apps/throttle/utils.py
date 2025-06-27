@@ -9,7 +9,7 @@ def check_and_increment_quota(user, action):
     """
     Verifica se o usuário ainda tem cota disponível para a ação e incrementa o uso.
     Lança PermissionDenied se ultrapassado.
-    """ # noqa501
+    """  # noqa: E501
 
     quota, _ = UserQuota.objects.get_or_create(
         user=user,
@@ -27,7 +27,7 @@ def check_and_increment_quota(user, action):
         quota.save()
 
     if quota.used >= quota.limit:
-        raise ValidationError("Cota excedida para {0}. Limite diário atingido.".format(action)) # noqa501
+        raise ValidationError("Cota excedida para {0}. Limite diário atingido.".format(action))  # noqa: E501
 
     quota.used += 1
     quota.save()

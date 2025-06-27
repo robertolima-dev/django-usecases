@@ -33,10 +33,10 @@ class BookFilterSet(FilterSet):
         fields = ["title", "author_id", "min_comments", "max_comments"]
 
     def filter_min_comments(self, queryset, name, value):
-        return queryset.annotate(comments_count=Count("comments")).filter(comments_count__gte=value) # noqa501
+        return queryset.annotate(comments_count=Count("comments")).filter(comments_count__gte=value)  # noqa: E501
 
     def filter_max_comments(self, queryset, name, value):
-        return queryset.annotate(comments_count=Count("comments")).filter(comments_count__lte=value) # noqa501
+        return queryset.annotate(comments_count=Count("comments")).filter(comments_count__lte=value)  # noqa: E501
 
 
 @extend_schema(
@@ -45,7 +45,7 @@ class BookFilterSet(FilterSet):
 @method_decorator(log_api_execution, name='dispatch')
 class BookViewSet(ModelViewSet):
     serializer_class = BookSerializer
-    queryset = Book.objects.select_related("author").prefetch_related("tags", "comments").annotate( # noqa501
+    queryset = Book.objects.select_related("author").prefetch_related("tags", "comments").annotate(  # noqa: E501
         comments_count=Count("comments")
     )
     permission_classes = [IsAuthenticated]
@@ -92,7 +92,7 @@ class BookViewSet(ModelViewSet):
         return Response(serializer.data)
 
     def generate_list_cache_key(self, request):
-        """Gera uma cache_key única para cada combinação de parâmetros da listagem.""" # noqa501
+        """Gera uma cache_key única para cada combinação de parâmetros da listagem."""  # noqa: E501
         query_string = request.GET.urlencode()
         hashed_query = hashlib.md5(query_string.encode('utf-8')).hexdigest()
         return f"book_list_{hashed_query}"

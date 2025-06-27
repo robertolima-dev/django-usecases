@@ -10,7 +10,7 @@ from apps.report.tasks import generate_user_report
 
 class ReportRequestTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="user1", password="pass123") # noqa501
+        self.user = User.objects.create_user(username="user1", password="pass123")  # noqa: E501
         self.report = ReportRequest.objects.create(
             user=self.user,
             status="pending"
@@ -35,7 +35,7 @@ class ReportRequestTestCase(TestCase):
 class ReportAPITestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(username="teste", password="123456") # noqa501
+        self.user = User.objects.create_user(username="teste", password="123456")  # noqa: E501
         self.client.force_authenticate(user=self.user)
         self.report = ReportRequest.objects.create(
             user=self.user,

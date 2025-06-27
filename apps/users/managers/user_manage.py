@@ -52,11 +52,11 @@ class UserDataManager:
         password = signin_serializer.data['password']
 
         try:
-            user = UserModel.objects.get(email=email) # noqa501
+            user = UserModel.objects.get(email=email)  # noqa: E501
 
             if user.check_password(raw_password='deafult_emannar_sync_2024'):
 
-                url = 'https://api-nova-emannar.emannar.com/api/v1/auth/login' # noqa501
+                url = 'https://api-nova-emannar.emannar.com/api/v1/auth/login'  # noqa: E501
                 mp_encoder = MultipartEncoder(fields={
                         'username': email,
                         'password': password,
@@ -78,10 +78,10 @@ class UserDataManager:
                         module='login'
                     )
 
-                raise Exception('E-mail ou senha inválidos') # noqa501
+                raise Exception('E-mail ou senha inválidos')  # noqa: E501
 
-            if not user or not user.is_active or not user.check_password(raw_password=password): # noqa501
-                raise Exception('E-mail ou senha inválidos') # noqa501
+            if not user or not user.is_active or not user.check_password(raw_password=password):  # noqa: E501
+                raise Exception('E-mail ou senha inválidos')  # noqa: E501
 
             if user.profile.access_level != 'user':
                 self.handle_onboarding_login(user=user)
@@ -92,13 +92,13 @@ class UserDataManager:
             )
 
         except UserModel.DoesNotExist:
-            raise Exception('E-mail ou senha inválidos') # noqa501
+            raise Exception('E-mail ou senha inválidos')  # noqa: E501
 
     def user_is_authenticated(self, user, module, ):
 
         token, _ = Token.objects.get_or_create(user=user)
 
-        is_expired, token = token_expire_handler(token) # noqa501
+        is_expired, token = token_expire_handler(token)  # noqa: E501
         user_serialized = UserSerializer(user)
 
         response = {
@@ -127,13 +127,13 @@ class UserDataManager:
 
             UserModel.objects.create_user(
                 email=email,
-                username=f"{request.data.get('name').replace(' ', '').lower().strip()}_{str(random.randrange(999))}", # noqa501
+                username=f"{request.data.get('name').replace(' ', '').lower().strip()}_{str(random.randrange(999))}",  # noqa: E501
                 password=request.data.get('password'),
                 first_name=request.data.get('name').split(' ')[0],
-                last_name=request.data.get('name').split(' ')[1] if len(request.data.get('name').split(' ')) > 1 else '' # noqa501
+                last_name=request.data.get('name').split(' ')[1] if len(request.data.get('name').split(' ')) > 1 else ''  # noqa: E501
             )
 
-            user = UserModel.objects.get(email=email) # noqa501
+            user = UserModel.objects.get(email=email)  # noqa: E501
 
             # invite = Invite.objects.filter(
             #    email_invited=email
@@ -149,7 +149,7 @@ class UserDataManager:
             )
 
         except UserModel.DoesNotExist:
-            raise Exception('E-mail ou senha inválidos') # noqa501
+            raise Exception('E-mail ou senha inválidos')  # noqa: E501
 
     def html_new_user(self, user, ):
         html: any = """
@@ -205,7 +205,7 @@ class UserDataManager:
             type='change_password'
             )
 
-        reset_url = "https://meusite.com/reset-password?token=" + str(hash_change_password) # noqa501
+        reset_url = "https://meusite.com/reset-password?token=" + str(hash_change_password)  # noqa: E501
         context = {
             'username': user.first_name,
             'url': reset_url
@@ -234,7 +234,7 @@ class UserDataManager:
             ).first()
 
         if jwt:
-            url = 'https://api-nova-emannar.emannar.com/api/v1/auth/me' # noqa501
+            url = 'https://api-nova-emannar.emannar.com/api/v1/auth/me'  # noqa: E501
             headers = {'Authorization': 'Bearer ' + jwt}
 
             r = requests.get(

@@ -12,7 +12,7 @@ class AuditLog(models.Model):
         ("delete", "Exclusão"),
     )
 
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True) # noqa501
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)  # noqa: E501
     action = models.CharField(max_length=10, choices=ACTION_CHOICES)
     model = models.CharField(max_length=100)
     object_id = models.CharField(max_length=100)
@@ -24,4 +24,4 @@ class AuditLog(models.Model):
         ordering = ["-timestamp"]
 
     def __str__(self):
-        return f"[{self.timestamp}] {self.user} - {self.action} em {self.model}({self.object_id})" # noqa501
+        return f"[{self.timestamp}] {self.user} - {self.action} em {self.model}({self.object_id})"  # noqa: E501

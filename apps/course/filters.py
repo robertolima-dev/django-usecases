@@ -12,16 +12,16 @@ class CharInFilter(BaseInFilter, CharFilter):
 class CourseFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(lookup_expr="icontains")
     description = django_filters.CharFilter(lookup_expr="icontains")
-    price_min = django_filters.NumberFilter(field_name="price", lookup_expr="gte") # noqa501
-    price_max = django_filters.NumberFilter(field_name="price", lookup_expr="lte") # noqa501
-    start_date_from = django_filters.DateFilter(field_name="start_date", lookup_expr="gte") # noqa501
-    start_date_to = django_filters.DateFilter(field_name="start_date", lookup_expr="lte") # noqa501
-    workload_min = django_filters.NumberFilter(field_name="workload", lookup_expr="gte") # noqa501
-    workload_max = django_filters.NumberFilter(field_name="workload", lookup_expr="lte") # noqa501
-    # tags = django_filters.ModelMultipleChoiceFilter(field_name="tags__id", to_field_name="id", queryset=Course.tags.rel.model.objects.all()) # noqa501
+    price_min = django_filters.NumberFilter(field_name="price", lookup_expr="gte")  # noqa: E501
+    price_max = django_filters.NumberFilter(field_name="price", lookup_expr="lte")  # noqa: E501
+    start_date_from = django_filters.DateFilter(field_name="start_date", lookup_expr="gte")  # noqa: E501
+    start_date_to = django_filters.DateFilter(field_name="start_date", lookup_expr="lte")  # noqa: E501
+    workload_min = django_filters.NumberFilter(field_name="workload", lookup_expr="gte")  # noqa: E501
+    workload_max = django_filters.NumberFilter(field_name="workload", lookup_expr="lte")  # noqa: E501
+    # tags = django_filters.ModelMultipleChoiceFilter(field_name="tags__id", to_field_name="id", queryset=Course.tags.rel.model.objects.all())  # noqa: E501
     tag_ids = CharInFilter(field_name="tags__id", lookup_expr="in")
-    tag = django_filters.CharFilter(field_name="tags__name", lookup_expr="iexact") # noqa501
-    avg_rating_min = django_filters.NumberFilter(method="filter_avg_rating_min") # noqa501
+    tag = django_filters.CharFilter(field_name="tags__name", lookup_expr="iexact")  # noqa: E501
+    avg_rating_min = django_filters.NumberFilter(method="filter_avg_rating_min")  # noqa: E501
     min_purchases = django_filters.NumberFilter(method="filter_min_purchases")
     only_free = django_filters.BooleanFilter(method="filter_only_free")
     is_featured = django_filters.BooleanFilter()
@@ -41,7 +41,7 @@ class CourseFilter(django_filters.FilterSet):
         return queryset
 
     def filter_avg_rating_min(self, queryset, name, value):
-        return queryset.annotate(avg_rating=Avg("ratings__rating")).filter(avg_rating__gte=value) # noqa501
+        return queryset.annotate(avg_rating=Avg("ratings__rating")).filter(avg_rating__gte=value)  # noqa: E501
 
     def filter_min_purchases(self, queryset, name, value):
         return queryset.annotate(

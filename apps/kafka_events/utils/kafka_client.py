@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 def get_kafka_producer():
     if not USE_KAFKA:
-        logger.warning("⚠️ Kafka desabilitado por configuração (USE_KAFKA=False)") # noqa501
+        logger.warning("⚠️ Kafka desabilitado por configuração (USE_KAFKA=False)")  # noqa: E501
         return None
 
     if not settings.KAFKA_BROKER_URL:

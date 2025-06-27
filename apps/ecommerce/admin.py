@@ -14,7 +14,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ["id", "user", "product", "quantity", "total_price", "created_at"] # noqa501
+    list_display = ["id", "user", "product", "quantity", "total_price", "created_at"]  # noqa: E501
     list_filter = ["created_at"]
     search_fields = ["user__username", "product__name"]
     readonly_fields = ["total_price", "created_at"]

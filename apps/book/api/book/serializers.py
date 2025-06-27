@@ -20,4 +20,4 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ["id", "title", "author", "tags", "tag_ids", "comments_count", "created_at", "updated_at"] # noqa501
+        fields = ["id", "title", "author", "tags", "tag_ids", "comments_count", "created_at", "updated_at"]  # noqa: E501

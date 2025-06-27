@@ -18,7 +18,7 @@ class MessageCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Sala não encontrada.")
 
         if not room.users.filter(id=user.id).exists():
-            raise serializers.ValidationError("Você não faz parte desta sala.") # noqa501
+            raise serializers.ValidationError("Você não faz parte desta sala.")  # noqa: E501
         return value
 
     def create(self, validated_data):
@@ -33,8 +33,8 @@ class MessageCreateSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender_username = serializers.CharField(source='sender.username', read_only=True) # noqa501
-    sender_avatar = serializers.CharField(source='sender.profile.avatar', read_only=True) # noqa501
+    sender_username = serializers.CharField(source='sender.username', read_only=True)  # noqa: E501
+    sender_avatar = serializers.CharField(source='sender.profile.avatar', read_only=True)  # noqa: E501
 
     class Meta:
         model = Message

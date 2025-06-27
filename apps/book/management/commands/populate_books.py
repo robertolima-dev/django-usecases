@@ -16,8 +16,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         tags = list(Tag.objects.all())
         if not tags:
-            self.stdout.write(self.style.WARNING("Nenhuma tag encontrada. Criando algumas...")) # noqa501
-            tags = [Tag.objects.create(name=name) for name in ["Ação", "Drama", "Terror", "Fantasia", "Suspense"]] # noqa501
+            self.stdout.write(self.style.WARNING("Nenhuma tag encontrada. Criando algumas..."))  # noqa: E501
+            tags = [Tag.objects.create(name=name) for name in ["Ação", "Drama", "Terror", "Fantasia", "Suspense"]]  # noqa: E501
 
         books_created = 0
         for _ in range(100):
@@ -34,4 +34,4 @@ class Command(BaseCommand):
             book.tags.set(random.sample(tags, k=random.randint(1, 3)))
             books_created += 1
 
-        self.stdout.write(self.style.SUCCESS(f"{books_created} livros criados com sucesso.")) # noqa501
+        self.stdout.write(self.style.SUCCESS(f"{books_created} livros criados com sucesso."))  # noqa: E501

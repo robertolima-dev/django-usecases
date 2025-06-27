@@ -5,7 +5,7 @@ User = get_user_model()
 
 
 class UserPresence(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="online_status") # noqa501
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="online_status")  # noqa: E501
     is_online = models.BooleanField(default=False)
     last_seen = models.DateTimeField(auto_now=True)
 

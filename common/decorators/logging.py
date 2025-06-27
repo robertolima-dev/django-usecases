@@ -28,6 +28,6 @@ def log_api_execution(func):
         start = time.perf_counter()
         response = func(request, *args, **kwargs)
         duration = time.perf_counter() - start
-        logger.info(f"⏱ Tempo de execução: {duration:.4f} segundos | {request.path}") # noqa501
+        logger.info(f"⏱ Tempo de execução: {duration:.4f} segundos | {request.path}")  # noqa: E501
         return response
     return wrapper

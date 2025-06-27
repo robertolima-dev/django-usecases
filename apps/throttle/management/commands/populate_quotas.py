@@ -41,4 +41,4 @@ class Command(BaseCommand):
         if total_created == 0:
             self.stdout.write(self.style.WARNING("Nenhuma cota nova criada."))
         else:
-            self.stdout.write(self.style.SUCCESS(f"Total: {total_created} novas cotas criadas.")) # noqa501
+            self.stdout.write(self.style.SUCCESS(f"Total: {total_created} novas cotas criadas."))  # noqa: E501

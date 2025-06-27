@@ -7,12 +7,12 @@ from apps.search.services.embedding_service import generate_embedding
 
 
 class Command(BaseCommand):
-    help = "Reindexa todos os livros para o índice semantic_books com embeddings gerados" # noqa501
+    help = "Reindexa todos os livros para o índice semantic_books com embeddings gerados"  # noqa: E501
 
     def handle(self, *args, **kwargs):
         es = Elasticsearch(
             hosts=[settings.ELASTICSEARCH_HOST],
-            basic_auth=(settings.ELASTICSEARCH_USERNAME, settings.ELASTICSEARCH_PASSWORD), # noqa501
+            basic_auth=(settings.ELASTICSEARCH_USERNAME, settings.ELASTICSEARCH_PASSWORD),  # noqa: E501
             verify_certs=True
         )
         books = Book.objects.all()
@@ -33,7 +33,7 @@ class Command(BaseCommand):
                 document=doc
             )
 
-            self.stdout.write(self.style.SUCCESS(f"Indexado semanticamente: {book.title}")) # noqa501
+            self.stdout.write(self.style.SUCCESS(f"Indexado semanticamente: {book.title}"))  # noqa: E501
             count += 1
 
-        self.stdout.write(self.style.SUCCESS(f"✅ Total de livros indexados semanticamente: {count}")) # noqa501
+        self.stdout.write(self.style.SUCCESS(f"✅ Total de livros indexados semanticamente: {count}"))  # noqa: E501

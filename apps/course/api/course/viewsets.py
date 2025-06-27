@@ -28,7 +28,7 @@ from apps.course.tasks import notification_users_course
 from apps.dashboard.events import send_admin_event
 from apps.dashboard.utils import send_dashboard_data
 from apps.notifications.models import Notification
-from common.pagination.elastisearch_pagination import (  # noqa501
+from common.pagination.elastisearch_pagination import (  # noqa: E501
     ElasticsearchLimitOffsetPagination,
 )
 
@@ -46,11 +46,11 @@ User = get_user_model()
     tags=["Courses"]
 )
 class CourseViewSet(ModelViewSet):
-    queryset = Course.objects.select_related("category", "instructor__user").prefetch_related("tags") # noqa501
+    queryset = Course.objects.select_related("category", "instructor__user").prefetch_related("tags")  # noqa: E501
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = CourseFilter
     search_fields = ["title", "description"]
-    ordering_fields = ["price", "workload", "start_date", "created_at", "avg_rating", "paid_count",] # noqa501
+    ordering_fields = ["price", "workload", "start_date", "created_at", "avg_rating", "paid_count",]  # noqa: E501
     ordering = ["-created_at", "title", "price", ]
 
     def get_serializer_class(self):
@@ -64,7 +64,7 @@ class CourseViewSet(ModelViewSet):
         return LimitOffsetPagination
 
     @swagger_auto_schema(
-        operation_description="Endpoint customizado para retornar cursos ativos", # noqa501
+        operation_description="Endpoint customizado para retornar cursos ativos",  # noqa: E501
         responses={200: CourseSerializer(many=True)},
     )
     @action(detail=False, methods=["get"], url_path="actives")
@@ -75,7 +75,7 @@ class CourseViewSet(ModelViewSet):
 
     @extend_schema(
         summary="Listar cursos gratuitos",
-        description="Retorna todos os cursos gratuitos disponíveis na plataforma.", # noqa501
+        description="Retorna todos os cursos gratuitos disponíveis na plataforma.",  # noqa: E501
         responses={
             200: OpenApiResponse(
                 response=CourseSerializer(many=True),
@@ -101,7 +101,7 @@ class CourseViewSet(ModelViewSet):
                         "is_free": True,
                         "price": "0.00",
                         "category": {"id": 1, "name": "Tecnologia"},
-                        "instructor": {"id": 2, "user": "prof@curso.com", "bio": "Dev backend"}, # noqa501
+                        "instructor": {"id": 2, "user": "prof@curso.com", "bio": "Dev backend"},  # noqa: E501
                         "tags": [{"id": 1, "name": "python"}],
                         "created_at": "2025-04-15T12:34:56Z",
                     }
@@ -144,10 +144,10 @@ class CourseViewSet(ModelViewSet):
 
             if title:
                 # aplicado edge_ngram para auto complete
-                filters.append(Q("match", title_autocomplete={"query": title, "operator": "and"})) # noqa501
+                filters.append(Q("match", title_autocomplete={"query": title, "operator": "and"}))  # noqa: E501
 
             if description:
-                filters.append(Q("multi_match", query=description, fields=["description",])) # noqa501
+                filters.append(Q("multi_match", query=description, fields=["description",]))  # noqa: E501
 
             # Filtros booleanos e por campo simples
             if is_free := request.query_params.get("is_free"):
@@ -166,10 +166,10 @@ class CourseViewSet(ModelViewSet):
             tag_ids = [int(t) for t in tag_ids if t.isdigit()]
             if tag_ids:
                 tag_filters = [
-                    Q("nested", path="tags", query=Q("term", **{"tags.id": tag})) # noqa501
+                    Q("nested", path="tags", query=Q("term", **{"tags.id": tag}))  # noqa: E501
                     for tag in tag_ids
                 ]
-                filters.append(Q("bool", should=tag_filters, minimum_should_match=1)) # noqa501
+                filters.append(Q("bool", should=tag_filters, minimum_should_match=1))  # noqa: E501
 
             # Filtros numéricos
             if price_min := request.query_params.get("price_min"):
@@ -217,7 +217,7 @@ class CourseViewSet(ModelViewSet):
 
                 queryset = Course.objects.annotate(
                     avg_rating=Avg("ratings__rating"),
-                    paid_count=Count("payments", filter=Qdjango(payments__status="paid")) # noqa501
+                    paid_count=Count("payments", filter=Qdjango(payments__status="paid"))  # noqa: E501
                 )
 
                 page = self.paginate_queryset(queryset)

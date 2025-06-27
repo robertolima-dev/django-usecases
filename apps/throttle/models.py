@@ -11,7 +11,7 @@ class UserQuota(models.Model):
         ("report", "Geração de Relatório"),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quotas") # noqa501
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quotas")  # noqa: E501
     action = models.CharField(max_length=50, choices=ACTION_CHOICES)
     limit = models.PositiveIntegerField(default=100)
     used = models.PositiveIntegerField(default=0)

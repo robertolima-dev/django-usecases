@@ -16,4 +16,4 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f"Indexado: {product.name}"))
             count += 1
 
-        self.stdout.write(self.style.SUCCESS(f"✅ Total de produtos indexados: {count}")) # noqa501
+        self.stdout.write(self.style.SUCCESS(f"✅ Total de produtos indexados: {count}"))  # noqa: E501

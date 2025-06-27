@@ -14,6 +14,6 @@ class RequestLoggingMiddleware:
         response = self.get_response(request)
         duration = round(time() - start, 3)
 
-        logger.info(f"{now()} - {request.method} {request.path} by {getattr(request.user, 'username', 'anon')} in {duration}s") # noqa501
+        logger.info(f"{now()} - {request.method} {request.path} by {getattr(request.user, 'username', 'anon')} in {duration}s")  # noqa: E501
 
         return response

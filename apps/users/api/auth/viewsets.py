@@ -157,7 +157,7 @@ class ForgotPasswordView(APIView):
     permission_classes = []
 
     def post(self, request):
-        forgot_password_serializer = ForgorPasswordSerializer(data=request.data) # noqa501
+        forgot_password_serializer = ForgorPasswordSerializer(data=request.data)  # noqa: E501
 
         if not forgot_password_serializer.is_valid():
             return Response(
@@ -196,7 +196,7 @@ class ChangePasswordView(APIView):
     permission_classes = []
 
     def post(self, request):
-        change_password_serializer = ChangePasswordSerializer(data=request.data) # noqa501
+        change_password_serializer = ChangePasswordSerializer(data=request.data)  # noqa: E501
 
         if not change_password_serializer.is_valid():
             return Response(

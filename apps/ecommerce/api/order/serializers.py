@@ -13,5 +13,5 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["id", "user", "product", "product_id", "quantity", "paid", "created_at"] # noqa501
+        fields = ["id", "user", "product", "product_id", "quantity", "paid", "created_at"]  # noqa: E501
         read_only_fields = ["user", "paid", "created_at"]

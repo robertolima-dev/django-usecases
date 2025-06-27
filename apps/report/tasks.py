@@ -32,7 +32,7 @@ def generate_user_report(report_id):
             writer = csv.writer(csvfile)
             writer.writerow(["ID", "Username", "Email", "Data de Criação"])
             for user in users:
-                writer.writerow([user.id, user.username, user.email, user.date_joined.strftime("%Y-%m-%d %H:%M:%S")]) # noqa501
+                writer.writerow([user.id, user.username, user.email, user.date_joined.strftime("%Y-%m-%d %H:%M:%S")])  # noqa: E501
 
         report.status = "done"
         report.file_path = f"/{file_path}"

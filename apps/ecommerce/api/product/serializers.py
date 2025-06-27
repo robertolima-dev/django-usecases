@@ -7,7 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ["id", "name", "description", "stock", "price", "is_active", "owner", "created_at",] # noqa501
+        fields = ["id", "name", "description", "stock", "price", "is_active", "owner", "created_at",]  # noqa: E501
         read_only_fields = ["id", "owner"]
 
 

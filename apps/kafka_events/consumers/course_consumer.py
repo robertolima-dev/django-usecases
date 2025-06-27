@@ -21,11 +21,11 @@ def consume_course_created_events():
             group_id='course_created_group'
         )
 
-        print(f"🎯 Escutando eventos no tópico '{settings.KAFKA_COURSE_TOPIC}'...") # noqa501
+        print(f"🎯 Escutando eventos no tópico '{settings.KAFKA_COURSE_TOPIC}'...")  # noqa: E501
 
         for message in consumer:
             course_data = message.value
-            print(f"📚 Novo Curso Criado: {course_data['title']} (ID: {course_data['id']})") # noqa501
+            print(f"📚 Novo Curso Criado: {course_data['title']} (ID: {course_data['id']})")  # noqa: E501
             time.sleep(5)
 
     except Exception as e:

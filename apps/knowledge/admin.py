@@ -24,12 +24,12 @@ class KnowledgeTopicAdmin(admin.ModelAdmin):
     @admin.action(description="✅ Marcar como recomendado")
     def mark_as_recommended(self, request, queryset):
         updated = queryset.update(is_recommended=True)
-        self.message_user(request, f"{updated} tópico(s) marcados como recomendados.") # noqa501
+        self.message_user(request, f"{updated} tópico(s) marcados como recomendados.")  # noqa: E501
 
     @admin.action(description="🚫 Marcar como não recomendado")
     def mark_as_not_recommended(self, request, queryset):
         updated = queryset.update(is_recommended=False)
-        self.message_user(request, f"{updated} tópico(s) marcados como não recomendados.") # noqa501
+        self.message_user(request, f"{updated} tópico(s) marcados como não recomendados.")  # noqa: E501
 
     def colored_level(self, obj):
         color = {
@@ -40,7 +40,7 @@ class KnowledgeTopicAdmin(admin.ModelAdmin):
 
         label = obj.get_level_display().upper()
         return format_html(
-            f"<span style='background:{color}; color:#fff; padding:4px 8px; border-radius:4px;'>{label}</span>" # noqa501
+            f"<span style='background:{color}; color:#fff; padding:4px 8px; border-radius:4px;'>{label}</span>"  # noqa: E501
         )
 
     colored_level.short_description = "Nível"

@@ -32,7 +32,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.close(code=4031)
                 return
 
-            await self.channel_layer.group_add(self.room_group_name, self.channel_name) # noqa501
+            await self.channel_layer.group_add(self.room_group_name, self.channel_name)  # noqa: E501
             await self.accept()
 
         except Exception:
@@ -40,16 +40,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
             logging.exception("Erro inesperado no connect do WebSocket")
             await self.close(code=4500)
 
-    @ensure_room_participant(lambda scope: scope["url_route"]["kwargs"]["room_id"]) # noqa501
+    @ensure_room_participant(lambda scope: scope["url_route"]["kwargs"]["room_id"])  # noqa: E501
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.room_group_name, self.channel_name) # noqa501
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)  # noqa: E501
 
     async def receive(self, text_data):
         data = json.loads(text_data)
         content = data.get("content")
         type_message = data.get("type_message", "text")  # default = text
 
-        message = await self.create_message(self.user, self.room, type_message, content) # noqa501
+        message = await self.create_message(self.user, self.room, type_message, content)  # noqa: E501
 
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -79,7 +79,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_user_from_token(self):
         try:
-            token_key = self.scope["query_string"].decode().split("token=")[-1] # noqa501
+            token_key = self.scope["query_string"].decode().split("token=")[-1]  # noqa: E501
             token = Token.objects.get(key=token_key)
             return token.user
         except Token.DoesNotExist:

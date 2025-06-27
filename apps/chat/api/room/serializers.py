@@ -18,7 +18,7 @@ class RoomCreateSerializer(serializers.ModelSerializer):
 
     def validate_user_ids(self, value):
         if not value:
-            raise serializers.ValidationError("É necessário pelo menos 1 usuário.") # noqa501
+            raise serializers.ValidationError("É necessário pelo menos 1 usuário.")  # noqa: E501
         return list(set(value))  # remove duplicados
 
     def create(self, validated_data):
@@ -30,14 +30,14 @@ class RoomCreateSerializer(serializers.ModelSerializer):
         User = get_user_model()
         users = User.objects.filter(id__in=user_ids)
 
-        # Verificar se já existe uma sala privada com exatamente os mesmos usuários # noqa501
+        # Verificar se já existe uma sala privada com exatamente os mesmos usuários  # noqa: E501
         if users.count() == 2:
             existing_rooms = Room.objects.all()
             for room in existing_rooms:
-                if set(room.users.values_list('id', flat=True)) == set(user_ids): # noqa501
+                if set(room.users.values_list('id', flat=True)) == set(user_ids):  # noqa: E501
                     return room  # retorna a já existente
 
-        room = Room.objects.create(name=validated_data.get('name'), owner=request_user) # noqa501
+        room = Room.objects.create(name=validated_data.get('name'), owner=request_user)  # noqa: E501
         room.users.set(users)
         return room
 
@@ -61,7 +61,7 @@ class LastMessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ['id', 'sender_id', 'sender_username', 'type_message', 'content', 'timestamp'] # noqa501
+        fields = ['id', 'sender_id', 'sender_username', 'type_message', 'content', 'timestamp']  # noqa: E501
 
 
 class RoomListSerializer(serializers.ModelSerializer):

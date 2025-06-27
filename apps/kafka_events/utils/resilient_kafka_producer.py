@@ -19,9 +19,9 @@ USE_KAFKA = settings.PROJECT_ENV == "develop_local"
 class KafkaBreakerListener(pybreaker.CircuitBreakerListener):
     def state_change(self, cb, old_state, new_state):
         if new_state.name == "open":
-            logger.warning("🚨 Circuit Breaker Kafka ABERTO - Kafka desativado temporariamente") # noqa501
+            logger.warning("🚨 Circuit Breaker Kafka ABERTO - Kafka desativado temporariamente")  # noqa: E501
         elif new_state.name == "closed":
-            logger.info("✅ Circuit Breaker Kafka FECHADO - Kafka voltou ao normal") # noqa501
+            logger.info("✅ Circuit Breaker Kafka FECHADO - Kafka voltou ao normal")  # noqa: E501
 
 
 # ✅ Circuit Breaker com listener
@@ -32,7 +32,7 @@ kafka_breaker = pybreaker.CircuitBreaker(
 )
 
 # ✅ Retry: tenta até 3 vezes com backoff exponencial
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10)) # noqa501
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))  # noqa: E501
 @kafka_breaker
 def safe_send_kafka_event(topic, event):
     if not USE_KAFKA or not settings.KAFKA_BROKER_URL:

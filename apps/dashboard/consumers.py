@@ -22,12 +22,12 @@ class DashboardConsumer(AsyncWebsocketConsumer):
             await self.close()
         else:
             self.group_name = "dashboard"
-            await self.channel_layer.group_add(self.group_name, self.channel_name) # noqa501
+            await self.channel_layer.group_add(self.group_name, self.channel_name)  # noqa: E501
             await self.accept()
             await self.send_dashboard_data()
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.group_name, self.channel_name) # noqa501
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)  # noqa: E501
 
     async def receive(self, text_data):
         # Poderia implementar filtros ou atualizações futuras

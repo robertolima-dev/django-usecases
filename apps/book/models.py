@@ -13,7 +13,7 @@ class Tag(BaseModel):
 
 class Book(BaseModel):
     title = models.CharField(max_length=100, db_index=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='books', db_index=True, ) # noqa501
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='books', db_index=True, )  # noqa: E501
     tags = models.ManyToManyField(Tag, db_index=True, )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -28,9 +28,9 @@ class Book(BaseModel):
 
 
 class Comment(BaseModel):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='comments', db_index=True, ) # noqa501
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='comments', db_index=True, )  # noqa: E501
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.content[:50] + ("..." if len(self.content) > 50 else "") # noqa501
+        return self.content[:50] + ("..." if len(self.content) > 50 else "")  # noqa: E501

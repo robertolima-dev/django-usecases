@@ -15,9 +15,9 @@ def trigger_async_process(modeladmin, request, queryset):
         task_count += 1
 
     if task_count > 0:
-        messages.success(request, f"{task_count} tarefas foram enviadas para o Celery!") # noqa501
+        messages.success(request, f"{task_count} tarefas foram enviadas para o Celery!")  # noqa: E501
     else:
-        messages.warning(request, "Nenhuma tarefa foi enviada para o Celery.") # noqa501
+        messages.warning(request, "Nenhuma tarefa foi enviada para o Celery.")  # noqa: E501
 
 
 class MessageInline(admin.TabularInline):
@@ -51,7 +51,7 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'room', 'sender', 'type_message', 'short_content', 'timestamp', 'is_read') # noqa501
+    list_display = ('id', 'room', 'sender', 'type_message', 'short_content', 'timestamp', 'is_read')  # noqa: E501
     search_fields = ('sender__username', 'room__name', 'content')
     list_filter = ('type_message', 'timestamp', 'is_read')
     ordering = ('-timestamp',)

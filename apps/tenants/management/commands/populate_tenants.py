@@ -37,4 +37,4 @@ class Command(BaseCommand):
                 )
                 tenant.users.add(user)
 
-        self.stdout.write(self.style.SUCCESS('Tenants e usuários criados com sucesso!')) # noqa501
+        self.stdout.write(self.style.SUCCESS('Tenants e usuários criados com sucesso!'))  # noqa: E501

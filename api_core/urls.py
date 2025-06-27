@@ -33,7 +33,7 @@ from rest_framework import permissions, routers
 from apps.analytics.api.analytics.viewsets import EventLogView
 from apps.book.api.book.viewsets import BookViewSet
 from apps.book.api.comment.viewsets import CommentViewSet
-from apps.chat.api.message.viewsets import (  # noqa501
+from apps.chat.api.message.viewsets import (  # noqa: E501
     ListMessagesAPIView,
     SendMessageAPIView,
 )
@@ -42,7 +42,7 @@ from apps.course.api.course.viewsets import CourseViewSet
 from apps.dashboard.api.broadcast.viewsets import DashboardBroadcastView
 from apps.dashboard.api.dashboard.viewsets import DashboardAPIView
 from apps.ecommerce.api.order.viewsets import OrderViewSet
-from apps.ecommerce.api.product.viewsets import (  # noqa501
+from apps.ecommerce.api.product.viewsets import (  # noqa: E501
     ProductSearchAPIView,
     ProductViewSet,
 )
@@ -62,9 +62,10 @@ from apps.permissions.api.permission.viewsets import (
 from apps.presence.api.presence.viewsets import OnlineUsersView
 from apps.report.api.report.viewstes import ReportRequestViewSet
 from apps.search.api.search.viewsets import SemanticSearchViewSet
+from apps.sheet_manager.api.sheet.viewsets import SheetUploadAPIView
 from apps.tenants.api.project.viewsets import ProjectViewSet
 from apps.throttle.api.viewsets import UploadViewSet
-from apps.users.api.auth.viewsets import AuthenticationApiView  # noqa501
+from apps.users.api.auth.viewsets import AuthenticationApiView  # noqa: E501
 from apps.users.api.auth.viewsets import (
     ChangePasswordView,
     ConfirmEmailView,
@@ -100,13 +101,13 @@ urlpatterns = [
     path("summernote/", include("django_summernote.urls")),
     path("select2/", include("django_select2.urls")),
 
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'), # noqa501
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'), # noqa501
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'), # noqa501
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),  # noqa: E501
+    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),  # noqa: E501
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),  # noqa: E501
 
-    path("schema/", SpectacularAPIView.as_view(), name="schema"), # noqa501
-    path("schema/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"), # noqa501
-    path("schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"), # noqa501
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),  # noqa: E501
+    path("schema/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),  # noqa: E501
+    path("schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),  # noqa: E501
 ]
 
 # + static(settings.MEDIA_URL, document_root=settings.STATIC_URL)
@@ -182,59 +183,63 @@ urlpatterns.append(
 )
 
 urlpatterns.append(
-    path("api/v1/dashboard/overview/", DashboardAPIView.as_view(), name="dashboard-overview") # noqa501
+    path("api/v1/dashboard/overview/", DashboardAPIView.as_view(), name="dashboard-overview")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/dashboard/broadcast/", DashboardBroadcastView.as_view(), name="dashboard-broadcast") # noqa501
+    path("api/v1/dashboard/broadcast/", DashboardBroadcastView.as_view(), name="dashboard-broadcast")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/images/upload/", ImageUploadAPIView.as_view(), name="images") # noqa501
+    path("api/v1/images/upload/", ImageUploadAPIView.as_view(), name="images")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/uploads-images/", UserImageListAPIView.as_view(), name="uploads-images") # noqa501
+    path("api/v1/uploads-images/", UserImageListAPIView.as_view(), name="uploads-images")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/rooms/", CreateRoomAPIView.as_view(), name="rooms") # noqa501
+    path("api/v1/rooms/", CreateRoomAPIView.as_view(), name="rooms")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/rooms/list/", ListRoomsAPIView.as_view(), name="rooms-list") # noqa501
+    path("api/v1/rooms/list/", ListRoomsAPIView.as_view(), name="rooms-list")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/message/send/", SendMessageAPIView.as_view(), name="messages-send") # noqa501
+    path("api/v1/message/send/", SendMessageAPIView.as_view(), name="messages-send")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/messages/", ListMessagesAPIView.as_view(), name="messages-list") # noqa501
+    path("api/v1/messages/", ListMessagesAPIView.as_view(), name="messages-list")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/product/search/", ProductSearchAPIView.as_view(), name="product-search") # noqa501
+    path("api/v1/product/search/", ProductSearchAPIView.as_view(), name="product-search")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/analytics/", EventLogView.as_view(), name="analytics") # noqa501
+    path("api/v1/analytics/", EventLogView.as_view(), name="analytics")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/image-processing-sync/", ImageProcessingSyncApiView.as_view(), name="image-processing-sync") # noqa501
+    path("api/v1/image-processing-sync/", ImageProcessingSyncApiView.as_view(), name="image-processing-sync")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/upload-storage/", MediaFileUploadView.as_view(), name="upload-storage") # noqa501
+    path("api/v1/upload-storage/", MediaFileUploadView.as_view(), name="upload-storage")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/retry-tests/", OpenAITestView.as_view(), name="retry-tests") # noqa501
+    path("api/v1/retry-tests/", OpenAITestView.as_view(), name="retry-tests")  # noqa: E501
 )
 
 urlpatterns.append(
-    path("api/v1/test-http-client/", TestHttpClientView.as_view(), name="test-http-client") # noqa501
+    path("api/v1/test-http-client/", TestHttpClientView.as_view(), name="test-http-client")  # noqa: E501
+)
+
+urlpatterns.append(
+    path('api/v1/upload-sheet/', SheetUploadAPIView.as_view(), name='sheet-upload')  # noqa: E501
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

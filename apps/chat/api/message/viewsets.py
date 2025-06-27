@@ -18,7 +18,7 @@ class SendMessageAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = MessageCreateSerializer(data=request.data, context={'request': request}) # noqa501
+        serializer = MessageCreateSerializer(data=request.data, context={'request': request})  # noqa: E501
         if serializer.is_valid():
             message = serializer.save()
 
@@ -60,16 +60,16 @@ class ListMessagesAPIView(APIView):
     def get(self, request):
         room_id = request.query_params.get("room_id")
         if not room_id:
-            return Response({"detail": "Parâmetro 'room_id' é obrigatório."}, status=status.HTTP_400_BAD_REQUEST) # noqa501
+            return Response({"detail": "Parâmetro 'room_id' é obrigatório."}, status=status.HTTP_400_BAD_REQUEST)  # noqa: E501
 
         try:
             room = Room.objects.get(id=room_id)
         except Room.DoesNotExist:
-            return Response({"detail": "Sala não encontrada."}, status=status.HTTP_404_NOT_FOUND) # noqa501
+            return Response({"detail": "Sala não encontrada."}, status=status.HTTP_404_NOT_FOUND)  # noqa: E501
 
         if not room.users.filter(id=request.user.id).exists():
-            return Response({"detail": "Você não faz parte desta sala."}, status=status.HTTP_403_FORBIDDEN) # noqa501
+            return Response({"detail": "Você não faz parte desta sala."}, status=status.HTTP_403_FORBIDDEN)  # noqa: E501
 
-        messages = Message.objects.filter(room=room).order_by("timestamp") # noqa501
+        messages = Message.objects.filter(room=room).order_by("timestamp")  # noqa: E501
         serializer = MessageSerializer(messages, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK) # noqa501
+        return Response(serializer.data, status=status.HTTP_200_OK)  # noqa: E501

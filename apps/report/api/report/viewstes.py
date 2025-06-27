@@ -13,7 +13,7 @@ from .serializers import ReportRequestSerializer
     tags=["Reports"]
 )
 class ReportRequestViewSet(ModelViewSet):
-    queryset = ReportRequest.objects.select_related("user").order_by("-created_at") # noqa501
+    queryset = ReportRequest.objects.select_related("user").order_by("-created_at")  # noqa: E501
     serializer_class = ReportRequestSerializer
     permission_classes = [IsAuthenticated]
 

@@ -12,9 +12,8 @@ class SchedulerConfig(AppConfig):
 
     def ready(self):
         try:
-            if 'django_celery_beat_crontabschedule' in connection.introspection.table_names():  # noqa501
-                from django_celery_beat.models import (CrontabSchedule,
-                                                       PeriodicTask)
+            if 'django_celery_beat_crontabschedule' in connection.introspection.table_names():   # noqa: E501
+                from django_celery_beat.models import CrontabSchedule, PeriodicTask
 
                 task_name = "apps.scheduler.tasks.reset_user_quotas"
 

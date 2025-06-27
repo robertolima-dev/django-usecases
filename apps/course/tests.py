@@ -10,7 +10,7 @@ from apps.course.models import Category, Course, Instructor, Tag
 class CourseTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(username="user1", password="pass123") # noqa501
+        self.user = User.objects.create_user(username="user1", password="pass123")  # noqa: E501
 
         self.client.force_authenticate(user=self.user)
 
@@ -46,7 +46,7 @@ class CourseTestCase(TestCase):
             "tag_ids": [self.tag1.id, self.tag2.id],
         }
 
-        response = self.client.post("/api/v1/courses/", payload, format="json") # noqa501
+        response = self.client.post("/api/v1/courses/", payload, format="json")  # noqa: E501
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Course.objects.count(), 2)
         self.assertEqual(Course.objects.last().title, "Curso de Django")

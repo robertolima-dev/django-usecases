@@ -34,8 +34,8 @@ User.add_to_class("__str__", get_user_format_name)
 
 
 class BaseModel(models.Model):
-    dt_updated = models.DateTimeField(auto_now=True, db_index=True, null=True, ) # noqa501
-    dt_created = models.DateTimeField(auto_now_add=True, null=True, ) # noqa501
+    dt_updated = models.DateTimeField(auto_now=True, db_index=True, null=True, )  # noqa: E501
+    dt_created = models.DateTimeField(auto_now_add=True, null=True, )  # noqa: E501
 
     class Meta:
         abstract = True
@@ -73,7 +73,7 @@ class Profile(BaseModel):
 
 
 class Hash(models.Model):
-    hash = models.CharField(_("Key"), max_length=40, primary_key=True, db_index=True) # noqa501
+    hash = models.CharField(_("Key"), max_length=40, primary_key=True, db_index=True)  # noqa: E501
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created = models.DateTimeField(_("Created"), auto_now_add=True)
     type = models.CharField(

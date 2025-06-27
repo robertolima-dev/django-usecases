@@ -23,7 +23,7 @@ class EventLogView(APIView):
         }
 
         db.event_logs.insert_one(event_data)
-        return Response({"message": "Evento registrado com sucesso!"}, status=status.HTTP_201_CREATED) # noqa501
+        return Response({"message": "Evento registrado com sucesso!"}, status=status.HTTP_201_CREATED)  # noqa: E501
 
     def get(self, request):
         queryset = db.event_logs.find({}).sort("timestamp", -1)

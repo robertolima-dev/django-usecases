@@ -25,7 +25,7 @@ User = get_user_model()
 
 
 class KnowledgeStudy(models.Model):
-    topic = models.ForeignKey("KnowledgeTopic", on_delete=models.CASCADE, related_name="studies") # noqa501
+    topic = models.ForeignKey("KnowledgeTopic", on_delete=models.CASCADE, related_name="studies")  # noqa: E501
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     studied_at = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(blank=True)

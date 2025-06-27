@@ -20,7 +20,7 @@ from apps.ecommerce.api.product.serializers import (
 from apps.ecommerce.documents import ProductDocument
 from apps.ecommerce.models import Product
 from apps.mailer.tasks import send_admin_emails
-from common.pagination.elastisearch_pagination import (  # noqa501
+from common.pagination.elastisearch_pagination import (  # noqa: E501
     ElasticsearchLimitOffsetPagination,
 )
 
@@ -53,9 +53,9 @@ class ProductViewSet(ModelViewSet):
             s = ProductDocument.search()
 
             if search_query:
-                match_name_or_description = Q("multi_match", query=search_query, fields=["name", "description"]) # noqa501
+                match_name_or_description = Q("multi_match", query=search_query, fields=["name", "description"])  # noqa: E501
                 active_filter = Q("term", is_active=True)
-                composed_query = Q("bool", must=[match_name_or_description, active_filter]) # noqa501
+                composed_query = Q("bool", must=[match_name_or_description, active_filter])  # noqa: E501
                 s = s.query(composed_query)
             else:
                 s = s.query("term", is_active=True)
@@ -86,7 +86,7 @@ class ProductViewSet(ModelViewSet):
                 f = Qdjango(is_active=True)
 
                 if search_query:
-                    f &= Qdjango(name__icontains=search_query) | Qdjango(description__icontains=search_query) # noqa501
+                    f &= Qdjango(name__icontains=search_query) | Qdjango(description__icontains=search_query)  # noqa: E501
 
                 queryset = Product.objects.filter(f).order_by(ordering)
 
@@ -116,12 +116,12 @@ class ProductViewSet(ModelViewSet):
 
     def perform_update(self, serializer):
         if serializer.instance.owner != self.request.user:
-            raise PermissionDenied("Você não tem permissão para editar este produto.") # noqa501
+            raise PermissionDenied("Você não tem permissão para editar este produto.")  # noqa: E501
         serializer.save()
 
     def perform_destroy(self, instance):
         if instance.owner != self.request.user:
-            raise PermissionDenied("Você não tem permissão para excluir este produto.") # noqa501
+            raise PermissionDenied("Você não tem permissão para excluir este produto.")  # noqa: E501
         instance.delete()
 
 
@@ -135,12 +135,12 @@ class ProductSearchAPIView(APIView):
         query = request.query_params.get("q", "").strip()
 
         if not query:
-            return Response({"detail": "Parâmetro 'q' é obrigatório."}, status=400) # noqa501
+            return Response({"detail": "Parâmetro 'q' é obrigatório."}, status=400)  # noqa: E501
 
         products = []
 
         if os.environ.get("PROJECT_ENV") == "develop_local":
-            s = ProductDocument.search().query("multi_match", query=query, fields=["name", "description"]) # noqa501
+            s = ProductDocument.search().query("multi_match", query=query, fields=["name", "description"])  # noqa: E501
             search_results = s.execute()
 
             ids = [hit.meta.id for hit in search_results]

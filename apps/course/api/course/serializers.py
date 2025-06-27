@@ -74,7 +74,7 @@ class CourseSearchSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(read_only=True)
     description = serializers.CharField(read_only=True)
-    price = serializers.DecimalField(max_digits=8, decimal_places=2, read_only=True) # noqa501
+    price = serializers.DecimalField(max_digits=8, decimal_places=2, read_only=True)  # noqa: E501
     is_active = serializers.BooleanField(read_only=True)
     is_free = serializers.BooleanField(read_only=True)
     workload = serializers.IntegerField(read_only=True)
@@ -84,6 +84,6 @@ class CourseSearchSerializer(serializers.Serializer):
     avg_rating = serializers.FloatField(read_only=True)
     paid_count = serializers.IntegerField(read_only=True)
 
-    category = serializers.DictField(read_only=True)  # espera {"id": int, "name": str} # noqa501
-    instructor = serializers.DictField(read_only=True)  # espera {"id": int, "user": str} # noqa501
-    tags = serializers.ListField(child=serializers.DictField(), read_only=True) # noqa501
+    category = serializers.DictField(read_only=True)  # espera {"id": int, "name": str}  # noqa: E501
+    instructor = serializers.DictField(read_only=True)  # espera {"id": int, "user": str}  # noqa: E501
+    tags = serializers.ListField(child=serializers.DictField(), read_only=True)  # noqa: E501

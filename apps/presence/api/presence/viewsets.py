@@ -18,7 +18,7 @@ class OnlineUsersView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        users_online_ids = UserPresence.objects.filter(is_online=True).values_list("user_id", flat=True) # noqa501
+        users_online_ids = UserPresence.objects.filter(is_online=True).values_list("user_id", flat=True)  # noqa: E501
         users = User.objects.filter(id__in=users_online_ids)
         serializer = OnlineUserSerializer(users, many=True)
         return Response(serializer.data)

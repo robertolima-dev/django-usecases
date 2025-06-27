@@ -33,8 +33,8 @@ class Course(models.Model):
     is_active = models.BooleanField(default=True)
     is_free = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True) # noqa501
-    instructor = models.ForeignKey(Instructor, on_delete=models.SET_NULL, null=True) # noqa501
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)  # noqa: E501
+    instructor = models.ForeignKey(Instructor, on_delete=models.SET_NULL, null=True)  # noqa: E501
     tags = models.ManyToManyField(Tag, blank=True)
     workload = models.PositiveIntegerField(help_text="Carga horária em horas")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -45,7 +45,7 @@ class Course(models.Model):
 
 
 class CourseRating(models.Model):
-    course = models.ForeignKey("Course", on_delete=models.CASCADE, related_name="ratings") # noqa501
+    course = models.ForeignKey("Course", on_delete=models.CASCADE, related_name="ratings")  # noqa: E501
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField()
     comment = models.TextField(blank=True)
@@ -65,7 +65,7 @@ class CoursePayment(models.Model):
         ('failed', 'Failed'),
     )
 
-    course = models.ForeignKey("Course", on_delete=models.CASCADE, related_name="payments") # noqa501
+    course = models.ForeignKey("Course", on_delete=models.CASCADE, related_name="payments")  # noqa: E501
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     payment_date = models.DateTimeField(auto_now_add=True)

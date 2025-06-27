@@ -37,7 +37,7 @@ def send_admin_emails(template_name, context):
             context['username'] = user.username
 
             send_email.delay(user.email, template_name, context)
-            print(f"Enviado email para o admin: {user.email} - Processo: {template_name}") # noqa501
+            print(f"Enviado email para o admin: {user.email} - Processo: {template_name}")  # noqa: E501
 
 
 @shared_task(name='mailer.send_email')

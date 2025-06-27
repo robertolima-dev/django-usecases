@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         books = list(Book.objects.all())
         if not books:
-            self.stdout.write(self.style.WARNING("Nenhum livro encontrado. Execute `populate_books` primeiro.")) # noqa501
+            self.stdout.write(self.style.WARNING("Nenhum livro encontrado. Execute `populate_books` primeiro."))  # noqa: E501
             return
 
         comments_created = 0
@@ -35,4 +35,4 @@ class Command(BaseCommand):
             )
             comments_created += 1
 
-        self.stdout.write(self.style.SUCCESS(f"{comments_created} comentários criados com sucesso.")) # noqa501
+        self.stdout.write(self.style.SUCCESS(f"{comments_created} comentários criados com sucesso."))  # noqa: E501

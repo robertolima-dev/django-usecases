@@ -12,9 +12,9 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         for _ in range(1000):
             event = {
-                "event_type": fake.random_element(["login", "logout", "purchase", "error"]), # noqa501
+                "event_type": fake.random_element(["login", "logout", "purchase", "error"]),  # noqa: E501
                 "description": fake.sentence(),
                 "timestamp": fake.date_time().isoformat()
             }
             db.event_logs.insert_one(event)
-        self.stdout.write(self.style.SUCCESS("✅ 1000 eventos criados no MongoDB")) # noqa501
+        self.stdout.write(self.style.SUCCESS("✅ 1000 eventos criados no MongoDB"))  # noqa: E501

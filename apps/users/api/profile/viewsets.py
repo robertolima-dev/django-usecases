@@ -21,7 +21,7 @@ class ProfileApiView(APIView):
 
         profile_serializer = ProfileSerializer(data=request.data)
         if not profile_serializer.is_valid():
-            return Response(profile_serializer.errors, status=HTTP_400_BAD_REQUEST) # noqa501
+            return Response(profile_serializer.errors, status=HTTP_400_BAD_REQUEST)  # noqa: E501
 
         try:
 

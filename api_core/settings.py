@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY') # noqa501
+SECRET_KEY = os.getenv('SECRET_KEY')  # noqa: E501
 
 
 # HOSTS
@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     'apps.analytics.apps.AnalyticsConfig',
     'apps.mediahub.apps.MediahubConfig',
     'apps.integrations.apps.IntegrationsConfig',
+    'apps.sheet_manager.apps.SheetManagerConfig'
 ]
 
 
@@ -99,7 +100,7 @@ MIDDLEWARE = [
 ]
 
 
-AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend'] # noqa501
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']  # noqa: E501
 
 
 ASGI_APPLICATION = "api_core.asgi.application"
@@ -231,16 +232,16 @@ WSGI_APPLICATION = "api_core.wsgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator", # noqa501
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa: E501
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", # noqa501
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",  # noqa: E501
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", # noqa501
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",  # noqa: E501
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", # noqa501
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",  # noqa: E501
     },
 ]
 
@@ -303,7 +304,7 @@ OPENAI_KEY = os.getenv('OPENAI_KEY')
 TOKEN_CRON = os.getenv('TOKEN_CRON')
 
 if ELASTICSEARCH_USERNAME and ELASTICSEARCH_PASSWORD:
-    host_with_auth = ELASTICSEARCH_HOST.replace("://", f"://{ELASTICSEARCH_USERNAME}:{ELASTICSEARCH_PASSWORD}@") # noqa501
+    host_with_auth = ELASTICSEARCH_HOST.replace("://", f"://{ELASTICSEARCH_USERNAME}:{ELASTICSEARCH_PASSWORD}@")  # noqa: E501
 else:
     host_with_auth = ELASTICSEARCH_HOST
 
@@ -335,7 +336,7 @@ else:
 SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
     "SECURITY_DEFINITIONS": {
-        "api_key": {"type": "apiKey", "name": "Authorization", "in": "header"}, # noqa501
+        "api_key": {"type": "apiKey", "name": "Authorization", "in": "header"},  # noqa: E501
     },
 }
 
@@ -343,7 +344,7 @@ SWAGGER_SETTINGS = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'rest_framework.authentication.TokenAuthentication',
-        'apps.users.api.auth.authentication.ExpiringTokenAuthentication', # noqa501
+        'apps.users.api.auth.authentication.ExpiringTokenAuthentication',  # noqa: E501
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -429,7 +430,7 @@ else:
 
     # Static files settings
     STATIC_URL = f'https://{CLOUDFRONT_DOMAIN}/static/'
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # noqa501
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # noqa: E501
     # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = "static"
 

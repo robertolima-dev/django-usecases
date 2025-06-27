@@ -20,11 +20,11 @@ def consume_book_created_events():
             group_id='book_created_group'
         )
 
-        print(f"🎯 Escutando eventos no tópico '{settings.KAFKA_BOOK_TOPIC}'...") # noqa501
+        print(f"🎯 Escutando eventos no tópico '{settings.KAFKA_BOOK_TOPIC}'...")  # noqa: E501
 
         for message in consumer:
             book_data = message.value
-            print(f"📚 Novo Livro Criado: {book_data['title']} (ID: {book_data['id']})") # noqa501
+            print(f"📚 Novo Livro Criado: {book_data['title']} (ID: {book_data['id']})")  # noqa: E501
 
     except Exception as e:
         print(f"❌ Erro ao consumir eventos de livro: {e}")

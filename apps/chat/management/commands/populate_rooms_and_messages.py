@@ -18,7 +18,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         users = list(User.objects.all())
         if len(users) < 2:
-            self.stdout.write(self.style.ERROR("É necessário pelo menos 2 usuários.")) # noqa501
+            self.stdout.write(self.style.ERROR("É necessário pelo menos 2 usuários."))  # noqa: E501
             return
 
         num_rooms = 10
@@ -31,7 +31,7 @@ class Command(BaseCommand):
             room.users.set(participants)
             created_rooms.append(room)
 
-        self.stdout.write(self.style.SUCCESS(f"{len(created_rooms)} salas criadas.")) # noqa501
+        self.stdout.write(self.style.SUCCESS(f"{len(created_rooms)} salas criadas."))  # noqa: E501
 
         for room in created_rooms:
             participants = list(room.users.all())
@@ -48,4 +48,4 @@ class Command(BaseCommand):
                     timestamp=timezone.now()
                 )
 
-        self.stdout.write(self.style.SUCCESS(f"{num_rooms * num_messages_per_room} mensagens geradas.")) # noqa501
+        self.stdout.write(self.style.SUCCESS(f"{num_rooms * num_messages_per_room} mensagens geradas."))  # noqa: E501

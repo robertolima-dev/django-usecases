@@ -16,7 +16,7 @@ class CreateRoomAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = RoomCreateSerializer(data=request.data, context={'request': request}) # noqa501
+        serializer = RoomCreateSerializer(data=request.data, context={'request': request})  # noqa: E501
         if serializer.is_valid():
             room = serializer.save()
             return Response({
@@ -35,6 +35,6 @@ class ListRoomsAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        rooms = Room.objects.filter(users=request.user).prefetch_related("users", "messages") # noqa501
+        rooms = Room.objects.filter(users=request.user).prefetch_related("users", "messages")  # noqa: E501
         serializer = RoomListSerializer(rooms, many=True)
         return Response(serializer.data)

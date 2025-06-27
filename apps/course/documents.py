@@ -1,7 +1,8 @@
 from django.db.models import Avg
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-# edge_ngram => automplete # noqa501
+
+# edge_ngram => automplete  # noqa: E501
 from elasticsearch_dsl import analyzer, token_filter
 
 from apps.course.models import Category, Course, Instructor, Tag
@@ -10,7 +11,7 @@ from apps.course.models import Category, Course, Instructor, Tag
 autocomplete_analyzer = analyzer(
     'autocomplete',
     tokenizer="standard",
-    filter=["lowercase", token_filter("edge_ngram_filter", type="edge_ngram", min_gram=1, max_gram=20)], # noqa501
+    filter=["lowercase", token_filter("edge_ngram_filter", type="edge_ngram", min_gram=1, max_gram=20)],  # noqa: E501
 )
 # edge_ngram => automplete
 autocomplete_search_analyzer = analyzer(
@@ -81,18 +82,18 @@ class CourseDocument(Document):
         if instance.instructor:
             return {
                 "id": instance.instructor.id,
-                "user": str(instance.instructor.user)  # personalizável # noqa501
+                "user": str(instance.instructor.user)  # personalizável  # noqa: E501
             }
         return {}
 
     def prepare_tags(self, instance):
-        return [{"id": tag.id, "name": tag.name} for tag in instance.tags.all()] # noqa501
+        return [{"id": tag.id, "name": tag.name} for tag in instance.tags.all()]  # noqa: E501
 
     def prepare_avg_rating(self, instance):
-        return instance.ratings.aggregate(avg=Avg("rating"))["avg"] or 0.0 # noqa501
+        return instance.ratings.aggregate(avg=Avg("rating"))["avg"] or 0.0  # noqa: E501
 
     def prepare_paid_count(self, instance):
-        return instance.payments.filter(status="paid").count() # noqa501
+        return instance.payments.filter(status="paid").count()  # noqa: E501
 
     @classmethod
     def update_or_create_document(cls, course: Course):
