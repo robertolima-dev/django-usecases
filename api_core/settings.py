@@ -303,6 +303,11 @@ OPENAI_KEY = os.getenv('OPENAI_KEY')
 # CRON
 TOKEN_CRON = os.getenv('TOKEN_CRON')
 
+# APP
+APP_AUTH = os.getenv('APP_AUTH')
+APP_NAME = os.getenv('APP_NAME')
+AUTH_TOKEN = os.getenv('AUTH_TOKEN')
+
 if ELASTICSEARCH_USERNAME and ELASTICSEARCH_PASSWORD:
     host_with_auth = ELASTICSEARCH_HOST.replace("://", f"://{ELASTICSEARCH_USERNAME}:{ELASTICSEARCH_PASSWORD}@")  # noqa: E501
 else:
@@ -404,6 +409,10 @@ elif PROJECT_ENV == "develop_local":
     STATIC_URL = "/static/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
     MEDIA_URL = "/media/"
+
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_NAME = f"session_{APP_NAME}"
 else:
     DEBUG = False
     URL_BASE = ''

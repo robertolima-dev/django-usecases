@@ -3,14 +3,16 @@ export PROJECT_ENV="local"
 
 # ############################ DEV ############################
 # export DB_NAME=""
-# export GATEWAY_API_KEY=""
 # ############################ DEV ############################
 
 # ############################ PROD ############################
 export DB_NAME=""
-export GATEWAY_API_KEY=""
 # ############################ PROD ############################
 
+# AUTH URL
+export APP_AUTH="http://localhost:8080/api"
+export APP_NAME="api_template"
+export AUTH_TOKEN=""
 
 # DATA PROJECT
 export PROJECT_NAME=""
@@ -31,14 +33,6 @@ export DB_PORT="5432"
 export DB_NAME=""
 # export DB_NAME="api_core_test"
 
-# EMAIL
-export EMAIL_HOST=""
-export EMAIL_PORT=""
-export EMAIL_HOST_USER=""
-export EMAIL_HOST_PASSWORD=""
-export DEFAULT_FROM_EMAIL=""
-
-
 # S3 DATA
 export CDN_DOMAIN_PROD=""
 export AWS_ACCESS_KEY_ID=""
@@ -52,18 +46,3 @@ export ALLOWED_HOSTS="localhost, 127.0.0.1"
 
 # CRON
 export TOKEN_CRON=""
-
-# REDIS
-export REDIS_HOST="127.0.0.1"
-export REDIS_PORT="6379"
-export REDIS_PASSWORD=""
-
-# ELASTICSEARCH
-export ELASTICSEARCH_HOST="http://localhost:9200"
-export ELASTICSEARCH_USERNAME=""
-export ELASTICSEARCH_PASSWORD=""
-
-# KAFKA
-export KAFKA_BROKER_URL="localhost:9092"
-export KAFKA_COURSE_TOPIC="course_created"
-export KAFKA_BOOK_TOPIC="book_created"
