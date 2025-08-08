@@ -813,7 +813,7 @@ Desenvolvido para estudos aprofundados em Django com casos reais e foco em perfo
 **Roberto Lima**  
 - 📧 **Email**: robertolima.izphera@gmail.com
 - 🔗 [GitHub Roberto Lima](https://github.com/robertolima-dev)  
-- 💼 [Linkedin Roberto Lima](https://www.linkedin.com/in/roberto-lima-01/)
+- 💼 [Linkedin Roberto Lima](https://www.linkedin.com/in/robertolima-dev/)
 - 🌐 [Website Roberto Lima](https://robertolima-developer.vercel.app/)
 - 👤 [Gravatar Roberto Lima](https://gravatar.com/deliciouslyautomaticf57dc92af0)
 
