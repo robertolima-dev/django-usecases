@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')  # noqa: E501
-
+PROJECT_ENV = os.getenv("PROJECT_ENV")
 
 # HOSTS
 ALLOWED_HOSTS = ['*']
@@ -322,20 +322,24 @@ ELASTICSEARCH_DSL = {
 # DJANGO STORAGE
 FILE_PROVIDER = os.getenv("FILE_PROVIDER", "aws").lower()
 
-if FILE_PROVIDER == 'aws':
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-    AWS_S3_REGION_NAME = os.getenv("AWS_REGION_NAME", "us-east-1")
-    AWS_QUERYSTRING_AUTH = False
-    AWS_S3_CUSTOM_DOMAIN = os.getenv("CDN_URL")
+# Forçar storage local durante desenvolvimento
+if PROJECT_ENV in ["local", "develop_local"]:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 else:
-    DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
-    GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME")
-    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-        os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-    )
+    if FILE_PROVIDER == 'aws':
+        DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+        AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+        AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+        AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+        AWS_S3_REGION_NAME = os.getenv("AWS_REGION_NAME", "us-east-1")
+        AWS_QUERYSTRING_AUTH = False
+        AWS_S3_CUSTOM_DOMAIN = os.getenv("CDN_URL")
+    else:
+        DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+        GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME")
+        GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+            os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+        )
 
 # SWAGGER
 SWAGGER_SETTINGS = {
@@ -371,7 +375,6 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-PROJECT_ENV = os.getenv("PROJECT_ENV")
 PROJECT_NAME = os.getenv('PROJECT_NAME')
 PROJECT_EMAIL = os.getenv('PROJECT_EMAIL')
 PROJECT_IMAGE = os.getenv('PROJECT_IMAGE')
