@@ -242,4 +242,9 @@ urlpatterns.append(
     path('api/v1/upload-sheet/', SheetUploadAPIView.as_view(), name='sheet-upload')  # noqa: E501
 )
 
+# Sheet Manager URLs
+urlpatterns.append(
+    path('api/v1/sheet-manager/', include('apps.sheet_manager.urls')),
+)
+
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
